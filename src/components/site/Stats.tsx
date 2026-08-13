@@ -1,12 +1,12 @@
-import { Users, GraduationCap, Handshake, Award } from "lucide-react";
+import { Users, GraduationCap, FlaskConical, Award } from "lucide-react";
 import { Counter } from "./Counter";
 import { Reveal } from "./Reveal";
 
 const STATS = [
-  { icon: Users, value: 428, suffix: "+", label: "Mahasiswa Aktif" },
-  { icon: GraduationCap, value: 1250, suffix: "+", label: "Alumni Tersebar" },
-  { icon: Handshake, value: 65, suffix: "+", label: "Mitra DUDI & Sekolah" },
-  { icon: Award, value: 0, suffix: "", label: "Status Akreditasi", text: "Baik" },
+  { icon: Users, value: 500, suffix: "+", label: "Mahasiswa Aktif" },
+  { icon: GraduationCap, value: 1000, suffix: "+", label: "Alumni Berkarier" },
+  { icon: Award, value: 0, suffix: "", label: "Akreditasi LAMDIK", text: "Baik" },
+  { icon: FlaskConical, value: 4, suffix: "", label: "Laboratorium Modern" },
 ];
 
 export function Stats() {
