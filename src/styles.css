@@ -46,6 +46,10 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-soft: var(--accent-soft);
+  --color-primary-deep: var(--primary-deep);
+  --color-primary-soft: var(--primary-soft);
+  --color-slate-surface: var(--slate-surface);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
@@ -161,5 +165,52 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@utility glass-header {
+  background: oklch(1 0 0 / 0.72);
+  backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid oklch(0.28 0.088 264 / 0.08);
+  box-shadow: 0 8px 30px -18px oklch(0.28 0.088 264 / 0.3);
+}
+
+@utility card-elevated {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-card);
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+
+  &:hover {
+    transform: translateY(-6px) scale(1.015);
+    box-shadow: var(--shadow-lift);
+    border-color: oklch(0.79 0.15 78 / 0.55);
+  }
+}
+
+@utility text-gradient-gold {
+  background: var(--gradient-gold);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+@utility bg-hero-gradient {
+  background-image: var(--gradient-hero);
+}
+
+@utility tech-grid {
+  background-image:
+    linear-gradient(oklch(1 0 0 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(1 0 0 / 0.07) 1px, transparent 1px);
+  background-size: 56px 56px;
 }
