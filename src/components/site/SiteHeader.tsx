@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Menu, X, ChevronDown, GraduationCap } from "lucide-react";
+import {
+  Menu,
+  X,
+  ChevronDown,
+  GraduationCap,
+  MonitorPlay,
+  Library,
+  ShieldCheck,
+  LayoutDashboard,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo-ivet.png";
@@ -13,21 +22,59 @@ const NAV: NavItem[] = [
     label: "Profil",
     href: "#profil",
     children: [
-      { label: "Visi & Misi", href: "#profil" },
-      { label: "Dosen & Staf", href: "#dosen" },
+      { label: "Visi, Misi & Tujuan", href: "#profil" },
+      { label: "Struktur Organisasi", href: "#dosen" },
+      { label: "Dosen & Tenaga Kependidikan", href: "#dosen" },
+      { label: "Akreditasi (LAMDIK Baik)", href: "#statistik" },
+      { label: "Fasilitas & Laboratorium", href: "#fasilitas" },
     ],
   },
   {
     label: "Akademik",
-    href: "#akademik",
+    href: "#kurikulum",
     children: [
-      { label: "Kurikulum", href: "#akademik" },
-      { label: "Akreditasi", href: "#statistik" },
+      { label: "Kurikulum & CPL", href: "#kurikulum" },
+      { label: "Profil Lulusan", href: "#kurikulum" },
+      { label: "Kalender Akademik", href: "#berita" },
+      { label: "Panduan Skripsi & Tugas Akhir", href: "#berita" },
+      { label: "Unduh Berkas / Formulir", href: "#berita" },
     ],
   },
-  { label: "Kemahasiswaan", href: "#alumni" },
-  { label: "Berita & Kegiatan", href: "#berita" },
+  {
+    label: "Tridharma & Riset",
+    href: "#akademik",
+    children: [
+      { label: "Jurnal & Publikasi Ilmiah", href: "#berita" },
+      { label: "Pengabdian Masyarakat (PkM)", href: "#berita" },
+      { label: "Kelompok Riset EdTech, IoT & AI", href: "#dosen" },
+    ],
+  },
+  {
+    label: "Kemahasiswaan & Alumni",
+    href: "#alumni",
+    children: [
+      { label: "Himpunan Mahasiswa (HIMA)", href: "#alumni" },
+      { label: "Prestasi Mahasiswa", href: "#berita" },
+      { label: "Tracer Study & Alumni", href: "#alumni" },
+    ],
+  },
+  {
+    label: "Berita & Informasi",
+    href: "#berita",
+    children: [
+      { label: "Berita Terbaru", href: "#berita" },
+      { label: "Pengumuman Akademik", href: "#berita" },
+      { label: "Agenda Kegiatan", href: "#berita" },
+    ],
+  },
   { label: "Kontak", href: "#kontak" },
+];
+
+const PORTALS = [
+  { label: "SIAKAD", icon: LayoutDashboard, href: "https://siakad.ivet.ac.id" },
+  { label: "E-Learning", icon: MonitorPlay, href: "https://elearning.ivet.ac.id" },
+  { label: "E-Library", icon: Library, href: "https://library.ivet.ac.id" },
+  { label: "SPMI Mutu", icon: ShieldCheck, href: "https://spmi.ivet.ac.id" },
 ];
 
 export function SiteHeader() {
@@ -48,6 +95,32 @@ export function SiteHeader() {
         scrolled ? "glass-header py-2" : "bg-transparent py-4",
       )}
     >
+      <AnimatePresence initial={false}>
+        {!scrolled ? (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25 }}
+            className="overflow-hidden"
+          >
+            <div className="mx-auto mb-3 hidden max-w-7xl items-center justify-end gap-2 px-4 sm:px-6 md:flex lg:px-8">
+              {PORTALS.map((p) => (
+                <a
+                  key={p.label}
+                  href={p.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-primary-foreground/15 bg-primary-foreground/8 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-primary-foreground/75 backdrop-blur-md transition-colors hover:border-accent/50 hover:text-accent"
+                >
+                  <p.icon className="size-3.5" /> {p.label}
+                </a>
+              ))}
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <a href="#beranda" className="flex items-center gap-3">
           <span className="inline-flex size-11 items-center justify-center rounded-2xl bg-primary-foreground shadow-[var(--shadow-card)]">
@@ -76,16 +149,24 @@ export function SiteHeader() {
             >
               Pendidikan Informatika
             </span>
+            <span
+              className={cn(
+                "block text-[10px] font-medium tracking-wide transition-colors",
+                scrolled ? "text-muted-foreground" : "text-primary-foreground/60",
+              )}
+            >
+              UNISVET Semarang
+            </span>
           </span>
         </a>
 
-        <nav className="hidden items-center gap-1 lg:flex">
+        <nav className="hidden items-center gap-0.5 xl:flex">
           {NAV.map((item) => (
             <div key={item.label} className="group relative">
               <a
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium transition-colors",
+                  "flex items-center gap-1 rounded-full px-3 py-2 text-[13px] font-medium transition-colors",
                   scrolled
                     ? "text-foreground/75 hover:bg-secondary hover:text-primary"
                     : "text-primary-foreground/85 hover:bg-primary-foreground/10 hover:text-primary-foreground",
@@ -95,7 +176,7 @@ export function SiteHeader() {
                 {item.children ? <ChevronDown className="size-3.5 transition-transform group-hover:rotate-180" /> : null}
               </a>
               {item.children ? (
-                <div className="invisible absolute left-0 top-full w-52 translate-y-2 pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                <div className="invisible absolute left-0 top-full w-64 translate-y-2 pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
                   <div className="overflow-hidden rounded-2xl border border-border bg-card p-2 shadow-[var(--shadow-lift)]">
                     {item.children.map((child) => (
                       <a
@@ -114,9 +195,9 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button asChild variant="pmb" size="pill" className="hidden sm:inline-flex">
+          <Button asChild variant="pmb" size="pill" className="pulse-glow hidden sm:inline-flex">
             <a href="#pmb">
-              <GraduationCap /> Pendaftaran PMB
+              <GraduationCap /> PMB UNISVET
             </a>
           </Button>
           <button
@@ -124,7 +205,7 @@ export function SiteHeader() {
             aria-label="Buka menu"
             onClick={() => setOpen((v) => !v)}
             className={cn(
-              "inline-flex size-10 items-center justify-center rounded-full border transition-colors lg:hidden",
+              "inline-flex size-10 items-center justify-center rounded-full border transition-colors xl:hidden",
               scrolled
                 ? "border-border text-primary hover:bg-secondary"
                 : "border-primary-foreground/25 text-primary-foreground hover:bg-primary-foreground/10",
@@ -142,22 +223,50 @@ export function SiteHeader() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden lg:hidden"
+            className="overflow-hidden xl:hidden"
           >
             <div className="mx-4 mt-3 rounded-3xl border border-border bg-card p-3 shadow-[var(--shadow-lift)]">
               {NAV.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-foreground/80 transition-colors hover:bg-secondary hover:text-primary"
-                >
-                  {item.label}
-                </a>
+                <div key={item.label}>
+                  <a
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className="block rounded-2xl px-4 py-3 text-sm font-semibold text-foreground/85 transition-colors hover:bg-secondary hover:text-primary"
+                  >
+                    {item.label}
+                  </a>
+                  {item.children ? (
+                    <div className="mb-1 ml-4 border-l border-border pl-3">
+                      {item.children.map((child) => (
+                        <a
+                          key={child.label}
+                          href={child.href}
+                          onClick={() => setOpen(false)}
+                          className="block rounded-xl px-3 py-2 text-[13px] text-muted-foreground transition-colors hover:text-primary"
+                        >
+                          {child.label}
+                        </a>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
               ))}
-              <Button asChild variant="pmb" size="pill" className="mt-2 w-full">
+              <div className="mt-2 grid grid-cols-2 gap-2 border-t border-border pt-3">
+                {PORTALS.map((p) => (
+                  <a
+                    key={p.label}
+                    href={p.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl bg-secondary px-3 py-2 text-xs font-semibold text-primary"
+                  >
+                    <p.icon className="size-3.5" /> {p.label}
+                  </a>
+                ))}
+              </div>
+              <Button asChild variant="pmb" size="pill" className="mt-3 w-full">
                 <a href="#pmb" onClick={() => setOpen(false)}>
-                  <GraduationCap /> Pendaftaran PMB
+                  <GraduationCap /> PMB UNISVET
                 </a>
               </Button>
             </div>
