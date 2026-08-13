@@ -1,0 +1,123 @@
+import { MapPin, Mail, Phone, MessageCircle, Instagram, Facebook, Youtube, Linkedin } from "lucide-react";
+import logo from "@/assets/logo-ivet.png";
+
+const LINKS = [
+  { label: "Beranda", href: "#beranda" },
+  { label: "Visi & Misi", href: "#profil" },
+  { label: "Kurikulum", href: "#akademik" },
+  { label: "Dosen & Staf", href: "#dosen" },
+  { label: "Berita & Kegiatan", href: "#berita" },
+  { label: "Pendaftaran PMB", href: "#pmb" },
+];
+
+const SOCIALS = [
+  { label: "Instagram", icon: Instagram, href: "https://instagram.com" },
+  { label: "Facebook", icon: Facebook, href: "https://facebook.com" },
+  { label: "YouTube", icon: Youtube, href: "https://youtube.com" },
+  { label: "LinkedIn", icon: Linkedin, href: "https://linkedin.com" },
+];
+
+export function SiteFooter() {
+  return (
+    <footer id="kontak" className="bg-primary-deep text-primary-foreground">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="grid gap-10 lg:grid-cols-4">
+          <div className="lg:col-span-1">
+            <div className="flex items-center gap-3">
+              <img src={logo} alt="Logo Universitas Ivet Semarang" loading="lazy" width={48} height={48} className="h-11 w-11 object-contain" />
+              <span className="leading-tight">
+                <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-primary-foreground/60">
+                  Universitas Ivet Semarang
+                </span>
+                <span className="block text-base font-bold">Pendidikan Informatika</span>
+              </span>
+            </div>
+            <p className="mt-5 text-sm leading-relaxed text-primary-foreground/70">
+              Program studi yang memadukan kompetensi kependidikan dan teknologi informasi untuk
+              mencetak pendidik serta profesional TI masa depan.
+            </p>
+            <div className="mt-6 flex gap-2">
+              {SOCIALS.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={s.label}
+                  className="inline-flex size-10 items-center justify-center rounded-full border border-primary-foreground/15 bg-primary-foreground/5 text-primary-foreground/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/60 hover:text-accent"
+                >
+                  <s.icon className="size-4" />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-bold uppercase tracking-widest text-accent">Tautan Cepat</h3>
+            <ul className="mt-5 space-y-3">
+              {LINKS.map((l) => (
+                <li key={l.label}>
+                  <a
+                    href={l.href}
+                    className="text-sm text-primary-foreground/70 transition-colors hover:text-accent"
+                  >
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-bold uppercase tracking-widest text-accent">Kontak</h3>
+            <ul className="mt-5 space-y-4 text-sm text-primary-foreground/70">
+              <li className="flex gap-3">
+                <MapPin className="mt-0.5 size-4 shrink-0 text-accent" />
+                <span>
+                  Universitas Ivet, Jl. Pawiyatan Luhur IV No.18, Bendan Duwur, Kec. Gajahmungkur,
+                  Kota Semarang, Jawa Tengah 50235
+                </span>
+              </li>
+              <li className="flex gap-3">
+                <Phone className="size-4 shrink-0 text-accent" />
+                <a href="tel:+62248316375" className="transition-colors hover:text-accent">
+                  (024) 8316375
+                </a>
+              </li>
+              <li className="flex gap-3">
+                <MessageCircle className="size-4 shrink-0 text-accent" />
+                <a href="https://wa.me/6281234567890" className="transition-colors hover:text-accent">
+                  WhatsApp +62 812-3456-7890
+                </a>
+              </li>
+              <li className="flex gap-3">
+                <Mail className="size-4 shrink-0 text-accent" />
+                <a href="mailto:pendidikaninformatika@ivet.ac.id" className="transition-colors hover:text-accent">
+                  pendidikaninformatika@ivet.ac.id
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-bold uppercase tracking-widest text-accent">Lokasi Kampus</h3>
+            <div className="mt-5 overflow-hidden rounded-2xl border border-primary-foreground/15">
+              <iframe
+                title="Peta lokasi Universitas Ivet Semarang"
+                src="https://www.google.com/maps?q=Universitas%20Ivet%20Semarang%20Jl.%20Pawiyatan%20Luhur%20IV%20No.18%20Semarang&output=embed"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="h-56 w-full border-0"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-primary-foreground/10 pt-6 text-xs text-primary-foreground/55 sm:flex-row">
+          <p>© {new Date().getFullYear()} Program Studi Pendidikan Informatika — Universitas Ivet Semarang.</p>
+          <p>Dikembangkan dengan semangat pendidikan digital.</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
