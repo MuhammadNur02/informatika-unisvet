@@ -2,6 +2,8 @@ import { Reveal, SectionHeading } from "./Reveal";
 import labIot from "@/assets/lab-iot.jpg";
 import labMultimedia from "@/assets/lab-multimedia.jpg";
 import labSmart from "@/assets/lab-smart.jpg";
+import labMicroteaching from "@/assets/lab-microteaching.jpg";
+import libCampus from "@/assets/lib-campus.jpg";
 
 const DOSEN = [
   { name: "Dr. Rahmawati Saputri, M.Kom.", role: "Koordinator Program Studi", interest: "Educational Data Mining" },
@@ -13,9 +15,31 @@ const DOSEN = [
 ];
 
 const FASILITAS = [
-  { name: "Lab IoT & Embedded", image: labIot, desc: "Perangkat mikrokontroler, sensor, dan purwarupa sistem cerdas." },
-  { name: "Lab Multimedia", image: labMultimedia, desc: "Workstation desain, animasi, dan produksi konten pembelajaran." },
-  { name: "Smart Classroom", image: labSmart, desc: "Ruang kelas interaktif dengan papan digital dan konferensi hibrida." },
+  {
+    name: "Laboratorium Komputer Lanjut",
+    image: labIot,
+    desc: "Workstation pemrograman, jaringan, IoT, dan purwarupa sistem cerdas.",
+  },
+  {
+    name: "Microteaching Studio",
+    image: labMicroteaching,
+    desc: "Studio latihan mengajar dengan perekaman video untuk evaluasi pedagogi.",
+  },
+  {
+    name: "Smart Classroom",
+    image: labSmart,
+    desc: "Ruang kelas interaktif dengan papan digital dan konferensi hibrida.",
+  },
+  {
+    name: "Lab Multimedia & Perpustakaan",
+    image: labMultimedia,
+    desc: "Produksi konten pembelajaran digital didukung koleksi pustaka & e-library.",
+  },
+  {
+    name: "Perpustakaan & E-Library",
+    image: libCampus,
+    desc: "Ruang baca modern dengan akses jurnal digital dan repositori kampus.",
+  },
 ];
 
 function initials(name: string) {
@@ -57,13 +81,13 @@ export function Faculty() {
           ))}
         </div>
 
-        <div className="mt-20">
+        <div id="fasilitas" className="mt-20">
           <SectionHeading
             eyebrow="Fasilitas"
             title="Ruang Belajar & Laboratorium"
             description="Fasilitas penunjang praktik yang mendukung pembelajaran berbasis proyek."
           />
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {FASILITAS.map((f, i) => (
               <Reveal key={f.name} delay={i * 0.08}>
                 <article className="card-elevated group relative h-72 overflow-hidden rounded-3xl">

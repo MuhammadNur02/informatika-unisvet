@@ -1,4 +1,4 @@
-import { Layers, BookOpenCheck, MonitorSmartphone, Network, Target, Eye } from "lucide-react";
+import { Layers, CalendarClock, MonitorSmartphone, Network, Target, Eye } from "lucide-react";
 import { Reveal, SectionHeading } from "./Reveal";
 
 const ITEMS = [
@@ -8,19 +8,19 @@ const ITEMS = [
     desc: "Lulusan siap menjadi pendidik IT profesional sekaligus software & web developer yang kompeten.",
   },
   {
-    icon: BookOpenCheck,
-    title: "Kurikulum Adaptif & Digital Learning",
-    desc: "Kurikulum OBE yang diperbarui berkala mengikuti tren industri dan praktik pembelajaran digital.",
+    icon: CalendarClock,
+    title: "Flexi-Learning",
+    desc: "Kelas reguler dan kelas karyawan dengan skema blended learning yang fleksibel bagi mahasiswa pekerja.",
   },
   {
     icon: MonitorSmartphone,
-    title: "Laboratorium Komputer Modern",
-    desc: "Lab pemrograman, IoT, multimedia, dan smart classroom dengan perangkat mutakhir.",
+    title: "Smart Lab & Microteaching Studio",
+    desc: "Laboratorium komputer lanjut, IoT, multimedia, dan studio microteaching untuk latihan mengajar terekam.",
   },
   {
     icon: Network,
-    title: "Jaringan Kemitraan Luas",
-    desc: "Kolaborasi dengan DUDI, startup teknologi, dan sekolah mitra untuk magang serta PLP.",
+    title: "Kemitraan Industri & Sekolah Mitra",
+    desc: "Kolaborasi luas dengan DUDI, startup teknologi, dan sekolah mitra untuk magang serta PLP.",
   },
 ];
 
