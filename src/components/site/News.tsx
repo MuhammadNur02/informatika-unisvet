@@ -84,10 +84,10 @@ const DATA: Record<string, Item[]> = {
   ],
 };
 
-const TABS = Object.keys(DATA);
+const TABS = Object.keys(DATA) as string[];
 
 export function News() {
-  const [active, setActive] = useState(TABS[0]);
+  const [active, setActive] = useState<string>(TABS[0] ?? "Berita");
 
   return (
     <section id="berita" className="py-20 sm:py-28">
@@ -132,7 +132,7 @@ export function News() {
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
             className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3"
           >
-            {DATA[active].map((item) => (
+            {(DATA[active] ?? []).map((item: Item) => (
               <article key={item.title} className="card-elevated group flex h-full flex-col overflow-hidden rounded-3xl">
                 <div className="relative h-44 overflow-hidden">
                   <img
