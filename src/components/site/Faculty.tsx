@@ -1,6 +1,5 @@
 import { Reveal, SectionHeading } from "./Reveal";
 import labIot from "@/assets/lab-iot.jpg";
-import labMultimedia from "@/assets/lab-multimedia.jpg";
 import labSmart from "@/assets/lab-smart.jpg";
 import labMicroteaching from "@/assets/lab-microteaching.jpg";
 import libCampus from "@/assets/lib-campus.jpg";
@@ -82,7 +81,7 @@ export function Faculty() {
             title="Ruang Belajar & Laboratorium"
             description="Fasilitas penunjang praktik yang mendukung pembelajaran berbasis proyek."
           />
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {FASILITAS.map((f, i) => (
               <Reveal key={f.name} delay={i * 0.08}>
                 <article className="card-elevated group relative h-72 overflow-hidden rounded-3xl">
