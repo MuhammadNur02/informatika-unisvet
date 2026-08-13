@@ -31,11 +31,6 @@ const FASILITAS = [
     desc: "Ruang kelas interaktif dengan papan digital dan konferensi hibrida.",
   },
   {
-    name: "Lab Multimedia & Perpustakaan",
-    image: labMultimedia,
-    desc: "Produksi konten pembelajaran digital didukung koleksi pustaka & e-library.",
-  },
-  {
     name: "Perpustakaan & E-Library",
     image: libCampus,
     desc: "Ruang baca modern dengan akses jurnal digital dan repositori kampus.",
