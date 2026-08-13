@@ -24,7 +24,16 @@ export function SiteFooter() {
         <div className="grid gap-10 lg:grid-cols-4">
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3">
-              <img src={logo} alt="Logo Universitas Ivet Semarang" loading="lazy" width={48} height={48} className="h-11 w-11 object-contain" />
+              <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-primary-foreground">
+                <img
+                  src={logo}
+                  alt="Logo Universitas Ivet Semarang"
+                  loading="lazy"
+                  width={48}
+                  height={48}
+                  className="h-9 w-9 object-contain"
+                />
+              </span>
               <span className="leading-tight">
                 <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-primary-foreground/60">
                   Universitas Ivet Semarang
