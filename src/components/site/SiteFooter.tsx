@@ -1,27 +1,36 @@
-import { MapPin, Mail, Phone, MessageCircle, Instagram, Facebook, Youtube, Linkedin } from "lucide-react";
+import { MapPin, Mail, Phone, MessageCircle, Instagram, Facebook, Youtube, Music2 } from "lucide-react";
 import logo from "@/assets/logo-ivet.png";
 
 const LINKS = [
   { label: "Beranda", href: "#beranda" },
-  { label: "Visi & Misi", href: "#profil" },
-  { label: "Kurikulum", href: "#akademik" },
-  { label: "Dosen & Staf", href: "#dosen" },
-  { label: "Berita & Kegiatan", href: "#berita" },
-  { label: "Pendaftaran PMB", href: "#pmb" },
+  { label: "Visi, Misi & Tujuan", href: "#profil" },
+  { label: "Kurikulum & CPL", href: "#kurikulum" },
+  { label: "Dosen & Tenaga Kependidikan", href: "#dosen" },
+  { label: "Fasilitas & Laboratorium", href: "#fasilitas" },
+  { label: "Berita & Agenda", href: "#berita" },
+  { label: "Alumni & Tracer Study", href: "#alumni" },
+];
+
+const PORTALS = [
+  { label: "SIAKAD", href: "https://siakad.ivet.ac.id" },
+  { label: "E-Learning LMS", href: "https://elearning.ivet.ac.id" },
+  { label: "E-Library", href: "https://library.ivet.ac.id" },
+  { label: "SPMI Mutu", href: "https://spmi.ivet.ac.id" },
+  { label: "Portal PMB UNISVET", href: "https://pmb.ivet.ac.id" },
 ];
 
 const SOCIALS = [
   { label: "Instagram", icon: Instagram, href: "https://instagram.com" },
-  { label: "Facebook", icon: Facebook, href: "https://facebook.com" },
   { label: "YouTube", icon: Youtube, href: "https://youtube.com" },
-  { label: "LinkedIn", icon: Linkedin, href: "https://linkedin.com" },
+  { label: "Facebook", icon: Facebook, href: "https://facebook.com" },
+  { label: "TikTok", icon: Music2, href: "https://tiktok.com" },
 ];
 
 export function SiteFooter() {
   return (
     <footer id="kontak" className="bg-primary-deep text-primary-foreground">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-4">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3">
               <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-primary-foreground">
@@ -38,7 +47,8 @@ export function SiteFooter() {
                 <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-primary-foreground/60">
                   Universitas Ivet Semarang
                 </span>
-                <span className="block text-base font-bold">Pendidikan Informatika</span>
+              <span className="block text-base font-bold">Pendidikan Informatika</span>
+              <span className="block text-[10px] text-primary-foreground/55">UNISVET Semarang</span>
               </span>
             </div>
             <p className="mt-5 text-sm leading-relaxed text-primary-foreground/70">
@@ -71,6 +81,24 @@ export function SiteFooter() {
                     className="text-sm text-primary-foreground/70 transition-colors hover:text-accent"
                   >
                     {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-bold uppercase tracking-widest text-accent">Portal Akademik</h3>
+            <ul className="mt-5 space-y-3">
+              {PORTALS.map((p) => (
+                <li key={p.label}>
+                  <a
+                    href={p.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-sm text-primary-foreground/70 transition-colors hover:text-accent"
+                  >
+                    {p.label}
                   </a>
                 </li>
               ))}

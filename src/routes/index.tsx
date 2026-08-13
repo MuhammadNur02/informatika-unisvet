@@ -3,15 +3,16 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { Hero } from "@/components/site/Hero";
 import { Stats } from "@/components/site/Stats";
 import { Advantages } from "@/components/site/Advantages";
+import { Tracks } from "@/components/site/Tracks";
 import { News } from "@/components/site/News";
 import { Faculty } from "@/components/site/Faculty";
 import { Testimonials } from "@/components/site/Testimonials";
 import { CtaBanner } from "@/components/site/CtaBanner";
 import { SiteFooter } from "@/components/site/SiteFooter";
 
-const title = "Pendidikan Informatika — Universitas Ivet Semarang";
+const title = "Pendidikan Informatika — Universitas Ivet (UNISVET) Semarang";
 const description =
-  "Program Studi Pendidikan Informatika Universitas Ivet Semarang: mencetak pendidik dan ahli teknologi informasi masa depan dengan kurikulum berbasis industri & EdTech.";
+  "S1 Pendidikan Informatika UNISVET Semarang: mencetak pendidik IT profesional & inovator teknologi dengan kurikulum software development, cyber security, dan digital EdTech.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -33,6 +34,7 @@ function Index() {
         <Hero />
         <Stats />
         <Advantages />
+        <Tracks />
         <News />
         <Faculty />
         <Testimonials />
