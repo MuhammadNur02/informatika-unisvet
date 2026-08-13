@@ -50,7 +50,15 @@ export function SiteHeader() {
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <a href="#beranda" className="flex items-center gap-3">
-          <img src={logo} alt="Logo Universitas Ivet Semarang" width={44} height={44} className="h-10 w-10 object-contain" />
+          <span className="inline-flex size-11 items-center justify-center rounded-2xl bg-primary-foreground shadow-[var(--shadow-card)]">
+            <img
+              src={logo}
+              alt="Logo Universitas Ivet Semarang"
+              width={44}
+              height={44}
+              className="h-9 w-9 object-contain"
+            />
+          </span>
           <span className="leading-tight">
             <span
               className={cn(
