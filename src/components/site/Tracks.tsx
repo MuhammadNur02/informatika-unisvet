@@ -50,8 +50,8 @@ const TRACKS = [
 ];
 
 export function Tracks() {
-  const [active, setActive] = useState(TRACKS[0].id);
-  const current = TRACKS.find((t) => t.id === active) ?? TRACKS[0];
+  const [active, setActive] = useState("pendidik");
+  const current = TRACKS.find((t) => t.id === active) ?? TRACKS[0]!;
 
   return (
     <section id="kurikulum" className="py-20 sm:py-28">
