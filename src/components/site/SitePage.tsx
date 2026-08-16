@@ -304,7 +304,7 @@ function BlockView({ block }: { block: Block }) {
   }
 }
 
-function SectionWrap({ title, children }: { title?: string; children: React.ReactNode }) {
+function SectionWrap({ title, children }: { title?: string | undefined; children: React.ReactNode }) {
   return (
     <section className="mt-14 first:mt-0">
       {title ? (
