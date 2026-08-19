@@ -120,7 +120,7 @@ export const KEMAHASISWAAN_PAGES: Record<string, PageContent> = {
         title: "Cara Mengajukan",
         items: [
           { title: "Cek Pengumuman", desc: "Pantau pengumuman beasiswa di laman prodi dan SIAKAD setiap awal semester." },
-          { title: "Lengkapi Dokumen", desc "Siapkan transkrip, KTM, surat keterangan penghasilan, dan sertifikat prestasi." },
+          { title: "Lengkapi Dokumen", desc: "Siapkan transkrip, KTM, surat keterangan penghasilan, dan sertifikat prestasi." },
           { title: "Ajukan ke Prodi", desc: "Serahkan berkas ke admin akademik prodi untuk verifikasi awal." },
           { title: "Seleksi & Penetapan", desc: "Wawancara bila diperlukan, lalu penetapan penerima melalui SK universitas." },
         ],
