@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { Link } from "@tanstack/react-router";
 import {
   Menu,
   X,
@@ -12,63 +13,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { NAV } from "@/lib/site-nav";
 import logo from "@/assets/logo-ivet.png";
-
-type NavItem = { label: string; href: string; children?: { label: string; href: string }[] };
-
-const NAV: NavItem[] = [
-  { label: "Beranda", href: "#beranda" },
-  {
-    label: "Profil",
-    href: "#profil",
-    children: [
-      { label: "Visi, Misi & Tujuan", href: "#profil" },
-      { label: "Struktur Organisasi", href: "#dosen" },
-      { label: "Dosen & Tenaga Kependidikan", href: "#dosen" },
-      { label: "Akreditasi (LAMDIK Baik)", href: "#statistik" },
-      { label: "Fasilitas & Laboratorium", href: "#fasilitas" },
-    ],
-  },
-  {
-    label: "Akademik",
-    href: "#kurikulum",
-    children: [
-      { label: "Kurikulum & CPL", href: "#kurikulum" },
-      { label: "Profil Lulusan", href: "#kurikulum" },
-      { label: "Kalender Akademik", href: "#berita" },
-      { label: "Panduan Skripsi & Tugas Akhir", href: "#berita" },
-      { label: "Unduh Berkas / Formulir", href: "#berita" },
-    ],
-  },
-  {
-    label: "Tridharma & Riset",
-    href: "#akademik",
-    children: [
-      { label: "Jurnal & Publikasi Ilmiah", href: "#berita" },
-      { label: "Pengabdian Masyarakat (PkM)", href: "#berita" },
-      { label: "Kelompok Riset EdTech, IoT & AI", href: "#dosen" },
-    ],
-  },
-  {
-    label: "Kemahasiswaan & Alumni",
-    href: "#alumni",
-    children: [
-      { label: "Himpunan Mahasiswa (HIMA)", href: "#alumni" },
-      { label: "Prestasi Mahasiswa", href: "#berita" },
-      { label: "Tracer Study & Alumni", href: "#alumni" },
-    ],
-  },
-  {
-    label: "Berita & Informasi",
-    href: "#berita",
-    children: [
-      { label: "Berita Terbaru", href: "#berita" },
-      { label: "Pengumuman Akademik", href: "#berita" },
-      { label: "Agenda Kegiatan", href: "#berita" },
-    ],
-  },
-  { label: "Kontak", href: "#kontak" },
-];
 
 const PORTALS = [
   { label: "SIAKAD", icon: LayoutDashboard, href: "https://siakad.ivet.ac.id" },
@@ -122,7 +68,7 @@ export function SiteHeader() {
       </AnimatePresence>
 
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <a href="#beranda" className="flex items-center gap-3">
+        <Link to="/" className="flex items-center gap-3">
           <span className="inline-flex size-11 items-center justify-center rounded-2xl bg-primary-foreground shadow-[var(--shadow-card)]">
             <img
               src={logo}
@@ -158,13 +104,13 @@ export function SiteHeader() {
               UNISVET Semarang
             </span>
           </span>
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-0.5 xl:flex">
           {NAV.map((item) => (
             <div key={item.label} className="group relative">
-              <a
-                href={item.href}
+              <Link
+                to={item.to}
                 className={cn(
                   "flex items-center gap-1 rounded-full px-3 py-2 text-[13px] font-medium transition-colors",
                   scrolled
@@ -173,19 +119,22 @@ export function SiteHeader() {
                 )}
               >
                 {item.label}
-                {item.children ? <ChevronDown className="size-3.5 transition-transform group-hover:rotate-180" /> : null}
-              </a>
+                {item.children ? (
+                  <ChevronDown className="size-3.5 transition-transform group-hover:rotate-180" />
+                ) : null}
+              </Link>
               {item.children ? (
                 <div className="invisible absolute left-0 top-full w-64 translate-y-2 pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
                   <div className="overflow-hidden rounded-2xl border border-border bg-card p-2 shadow-[var(--shadow-lift)]">
                     {item.children.map((child) => (
-                      <a
+                      <Link
                         key={child.label}
-                        href={child.href}
+                        to={child.to}
+                        activeProps={{ className: "bg-secondary text-primary" }}
                         className="block rounded-xl px-3 py-2 text-sm text-foreground/80 transition-colors hover:bg-secondary hover:text-primary"
                       >
                         {child.label}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>
@@ -196,9 +145,9 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2">
           <Button asChild variant="pmb" size="pill" className="pulse-glow hidden sm:inline-flex">
-            <a href="#pmb">
+            <Link to="/pmb/daftar">
               <GraduationCap /> PMB UNISVET
-            </a>
+            </Link>
           </Button>
           <button
             type="button"
@@ -225,27 +174,27 @@ export function SiteHeader() {
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden xl:hidden"
           >
-            <div className="mx-4 mt-3 rounded-3xl border border-border bg-card p-3 shadow-[var(--shadow-lift)]">
+            <div className="mx-4 mt-3 max-h-[70vh] overflow-y-auto rounded-3xl border border-border bg-card p-3 shadow-[var(--shadow-lift)]">
               {NAV.map((item) => (
                 <div key={item.label}>
-                  <a
-                    href={item.href}
+                  <Link
+                    to={item.to}
                     onClick={() => setOpen(false)}
                     className="block rounded-2xl px-4 py-3 text-sm font-semibold text-foreground/85 transition-colors hover:bg-secondary hover:text-primary"
                   >
                     {item.label}
-                  </a>
+                  </Link>
                   {item.children ? (
                     <div className="mb-1 ml-4 border-l border-border pl-3">
                       {item.children.map((child) => (
-                        <a
+                        <Link
                           key={child.label}
-                          href={child.href}
+                          to={child.to}
                           onClick={() => setOpen(false)}
                           className="block rounded-xl px-3 py-2 text-[13px] text-muted-foreground transition-colors hover:text-primary"
                         >
                           {child.label}
-                        </a>
+                        </Link>
                       ))}
                     </div>
                   ) : null}
@@ -265,9 +214,9 @@ export function SiteHeader() {
                 ))}
               </div>
               <Button asChild variant="pmb" size="pill" className="mt-3 w-full">
-                <a href="#pmb" onClick={() => setOpen(false)}>
+                <Link to="/pmb/daftar" onClick={() => setOpen(false)}>
                   <GraduationCap /> PMB UNISVET
-                </a>
+                </Link>
               </Button>
             </div>
           </motion.div>
