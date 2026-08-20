@@ -1,14 +1,16 @@
 import { MapPin, Mail, Phone, MessageCircle, Instagram, Facebook, Youtube, Music2 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import logo from "@/assets/logo-ivet.png";
 
 const LINKS = [
-  { label: "Beranda", href: "#beranda" },
-  { label: "Visi, Misi & Tujuan", href: "#profil" },
-  { label: "Kurikulum & CPL", href: "#kurikulum" },
-  { label: "Dosen & Tenaga Kependidikan", href: "#dosen" },
-  { label: "Fasilitas & Laboratorium", href: "#fasilitas" },
-  { label: "Berita & Agenda", href: "#berita" },
-  { label: "Alumni & Tracer Study", href: "#alumni" },
+  { label: "Beranda", to: "/" },
+  { label: "Visi & Misi", to: "/profil/visi-misi" },
+  { label: "Kurikulum", to: "/akademik/kurikulum" },
+  { label: "Dosen & Tendik", to: "/profil/dosen-tendik" },
+  { label: "Fasilitas", to: "/profil/fasilitas" },
+  { label: "Berita & Agenda", to: "/informasi/berita" },
+  { label: "Alumni", to: "/kemahasiswaan/alumni" },
+  { label: "PMB", to: "/pmb/daftar" },
 ];
 
 const PORTALS = [
@@ -76,12 +78,12 @@ export function SiteFooter() {
             <ul className="mt-5 space-y-3">
               {LINKS.map((l) => (
                 <li key={l.label}>
-                  <a
-                    href={l.href}
+                  <Link
+                    to={l.to}
                     className="text-sm text-primary-foreground/70 transition-colors hover:text-accent"
                   >
                     {l.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
