@@ -10,33 +10,493 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AkademikCplRouteImport } from './routes/akademik.cpl'
+import { Route as AkademikKurikulumRouteImport } from './routes/akademik.kurikulum'
+import { Route as AkademikMagangMbkmRouteImport } from './routes/akademik.magang-mbkm'
+import { Route as AkademikMataKuliahRouteImport } from './routes/akademik.mata-kuliah'
+import { Route as AkademikPraktikumProyekRouteImport } from './routes/akademik.praktikum-proyek'
+import { Route as AkademikProfilLulusanRouteImport } from './routes/akademik.profil-lulusan'
+import { Route as InformasiAgendaRouteImport } from './routes/informasi.agenda'
+import { Route as InformasiBeritaRouteImport } from './routes/informasi.berita'
+import { Route as InformasiEventRouteImport } from './routes/informasi.event'
+import { Route as InformasiGaleriRouteImport } from './routes/informasi.galeri'
+import { Route as InformasiPengumumanRouteImport } from './routes/informasi.pengumuman'
+import { Route as KemahasiswaanAlumniRouteImport } from './routes/kemahasiswaan.alumni'
+import { Route as KemahasiswaanBeasiswaRouteImport } from './routes/kemahasiswaan.beasiswa'
+import { Route as KemahasiswaanKegiatanRouteImport } from './routes/kemahasiswaan.kegiatan'
+import { Route as KemahasiswaanOrganisasiRouteImport } from './routes/kemahasiswaan.organisasi'
+import { Route as KemahasiswaanPrestasiRouteImport } from './routes/kemahasiswaan.prestasi'
+import { Route as PmbBeasiswaRouteImport } from './routes/pmb.beasiswa'
+import { Route as PmbBiayaRouteImport } from './routes/pmb.biaya'
+import { Route as PmbDaftarRouteImport } from './routes/pmb.daftar'
+import { Route as PmbFaqRouteImport } from './routes/pmb.faq'
+import { Route as PmbJalurPendaftaranRouteImport } from './routes/pmb.jalur-pendaftaran'
+import { Route as PmbMengapaKamiRouteImport } from './routes/pmb.mengapa-kami'
+import { Route as PmbPersyaratanRouteImport } from './routes/pmb.persyaratan'
+import { Route as ProfilAkreditasiRouteImport } from './routes/profil.akreditasi'
+import { Route as ProfilDosenTendikRouteImport } from './routes/profil.dosen-tendik'
+import { Route as ProfilFasilitasRouteImport } from './routes/profil.fasilitas'
+import { Route as ProfilStrukturOrganisasiRouteImport } from './routes/profil.struktur-organisasi'
+import { Route as ProfilTentangRouteImport } from './routes/profil.tentang'
+import { Route as ProfilVisiMisiRouteImport } from './routes/profil.visi-misi'
+import { Route as RisetHkiRouteImport } from './routes/riset.hki'
+import { Route as RisetInovasiRouteImport } from './routes/riset.inovasi'
+import { Route as RisetKerjaSamaRouteImport } from './routes/riset.kerja-sama'
+import { Route as RisetPenelitianRouteImport } from './routes/riset.penelitian'
+import { Route as RisetPengabdianRouteImport } from './routes/riset.pengabdian'
+import { Route as RisetPublikasiRouteImport } from './routes/riset.publikasi'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AkademikCplRoute = AkademikCplRouteImport.update({
+  id: '/akademik/cpl',
+  path: '/akademik/cpl',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AkademikKurikulumRoute = AkademikKurikulumRouteImport.update({
+  id: '/akademik/kurikulum',
+  path: '/akademik/kurikulum',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AkademikMagangMbkmRoute = AkademikMagangMbkmRouteImport.update({
+  id: '/akademik/magang-mbkm',
+  path: '/akademik/magang-mbkm',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AkademikMataKuliahRoute = AkademikMataKuliahRouteImport.update({
+  id: '/akademik/mata-kuliah',
+  path: '/akademik/mata-kuliah',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AkademikPraktikumProyekRoute = AkademikPraktikumProyekRouteImport.update({
+  id: '/akademik/praktikum-proyek',
+  path: '/akademik/praktikum-proyek',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AkademikProfilLulusanRoute = AkademikProfilLulusanRouteImport.update({
+  id: '/akademik/profil-lulusan',
+  path: '/akademik/profil-lulusan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InformasiAgendaRoute = InformasiAgendaRouteImport.update({
+  id: '/informasi/agenda',
+  path: '/informasi/agenda',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InformasiBeritaRoute = InformasiBeritaRouteImport.update({
+  id: '/informasi/berita',
+  path: '/informasi/berita',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InformasiEventRoute = InformasiEventRouteImport.update({
+  id: '/informasi/event',
+  path: '/informasi/event',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InformasiGaleriRoute = InformasiGaleriRouteImport.update({
+  id: '/informasi/galeri',
+  path: '/informasi/galeri',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InformasiPengumumanRoute = InformasiPengumumanRouteImport.update({
+  id: '/informasi/pengumuman',
+  path: '/informasi/pengumuman',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KemahasiswaanAlumniRoute = KemahasiswaanAlumniRouteImport.update({
+  id: '/kemahasiswaan/alumni',
+  path: '/kemahasiswaan/alumni',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KemahasiswaanBeasiswaRoute = KemahasiswaanBeasiswaRouteImport.update({
+  id: '/kemahasiswaan/beasiswa',
+  path: '/kemahasiswaan/beasiswa',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KemahasiswaanKegiatanRoute = KemahasiswaanKegiatanRouteImport.update({
+  id: '/kemahasiswaan/kegiatan',
+  path: '/kemahasiswaan/kegiatan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KemahasiswaanOrganisasiRoute = KemahasiswaanOrganisasiRouteImport.update({
+  id: '/kemahasiswaan/organisasi',
+  path: '/kemahasiswaan/organisasi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KemahasiswaanPrestasiRoute = KemahasiswaanPrestasiRouteImport.update({
+  id: '/kemahasiswaan/prestasi',
+  path: '/kemahasiswaan/prestasi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PmbBeasiswaRoute = PmbBeasiswaRouteImport.update({
+  id: '/pmb/beasiswa',
+  path: '/pmb/beasiswa',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PmbBiayaRoute = PmbBiayaRouteImport.update({
+  id: '/pmb/biaya',
+  path: '/pmb/biaya',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PmbDaftarRoute = PmbDaftarRouteImport.update({
+  id: '/pmb/daftar',
+  path: '/pmb/daftar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PmbFaqRoute = PmbFaqRouteImport.update({
+  id: '/pmb/faq',
+  path: '/pmb/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PmbJalurPendaftaranRoute = PmbJalurPendaftaranRouteImport.update({
+  id: '/pmb/jalur-pendaftaran',
+  path: '/pmb/jalur-pendaftaran',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PmbMengapaKamiRoute = PmbMengapaKamiRouteImport.update({
+  id: '/pmb/mengapa-kami',
+  path: '/pmb/mengapa-kami',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PmbPersyaratanRoute = PmbPersyaratanRouteImport.update({
+  id: '/pmb/persyaratan',
+  path: '/pmb/persyaratan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfilAkreditasiRoute = ProfilAkreditasiRouteImport.update({
+  id: '/profil/akreditasi',
+  path: '/profil/akreditasi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfilDosenTendikRoute = ProfilDosenTendikRouteImport.update({
+  id: '/profil/dosen-tendik',
+  path: '/profil/dosen-tendik',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfilFasilitasRoute = ProfilFasilitasRouteImport.update({
+  id: '/profil/fasilitas',
+  path: '/profil/fasilitas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfilStrukturOrganisasiRoute =
+  ProfilStrukturOrganisasiRouteImport.update({
+    id: '/profil/struktur-organisasi',
+    path: '/profil/struktur-organisasi',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ProfilTentangRoute = ProfilTentangRouteImport.update({
+  id: '/profil/tentang',
+  path: '/profil/tentang',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfilVisiMisiRoute = ProfilVisiMisiRouteImport.update({
+  id: '/profil/visi-misi',
+  path: '/profil/visi-misi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RisetHkiRoute = RisetHkiRouteImport.update({
+  id: '/riset/hki',
+  path: '/riset/hki',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RisetInovasiRoute = RisetInovasiRouteImport.update({
+  id: '/riset/inovasi',
+  path: '/riset/inovasi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RisetKerjaSamaRoute = RisetKerjaSamaRouteImport.update({
+  id: '/riset/kerja-sama',
+  path: '/riset/kerja-sama',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RisetPenelitianRoute = RisetPenelitianRouteImport.update({
+  id: '/riset/penelitian',
+  path: '/riset/penelitian',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RisetPengabdianRoute = RisetPengabdianRouteImport.update({
+  id: '/riset/pengabdian',
+  path: '/riset/pengabdian',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RisetPublikasiRoute = RisetPublikasiRouteImport.update({
+  id: '/riset/publikasi',
+  path: '/riset/publikasi',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/akademik/cpl': typeof AkademikCplRoute
+  '/akademik/kurikulum': typeof AkademikKurikulumRoute
+  '/akademik/magang-mbkm': typeof AkademikMagangMbkmRoute
+  '/akademik/mata-kuliah': typeof AkademikMataKuliahRoute
+  '/akademik/praktikum-proyek': typeof AkademikPraktikumProyekRoute
+  '/akademik/profil-lulusan': typeof AkademikProfilLulusanRoute
+  '/informasi/agenda': typeof InformasiAgendaRoute
+  '/informasi/berita': typeof InformasiBeritaRoute
+  '/informasi/event': typeof InformasiEventRoute
+  '/informasi/galeri': typeof InformasiGaleriRoute
+  '/informasi/pengumuman': typeof InformasiPengumumanRoute
+  '/kemahasiswaan/alumni': typeof KemahasiswaanAlumniRoute
+  '/kemahasiswaan/beasiswa': typeof KemahasiswaanBeasiswaRoute
+  '/kemahasiswaan/kegiatan': typeof KemahasiswaanKegiatanRoute
+  '/kemahasiswaan/organisasi': typeof KemahasiswaanOrganisasiRoute
+  '/kemahasiswaan/prestasi': typeof KemahasiswaanPrestasiRoute
+  '/pmb/beasiswa': typeof PmbBeasiswaRoute
+  '/pmb/biaya': typeof PmbBiayaRoute
+  '/pmb/daftar': typeof PmbDaftarRoute
+  '/pmb/faq': typeof PmbFaqRoute
+  '/pmb/jalur-pendaftaran': typeof PmbJalurPendaftaranRoute
+  '/pmb/mengapa-kami': typeof PmbMengapaKamiRoute
+  '/pmb/persyaratan': typeof PmbPersyaratanRoute
+  '/profil/akreditasi': typeof ProfilAkreditasiRoute
+  '/profil/dosen-tendik': typeof ProfilDosenTendikRoute
+  '/profil/fasilitas': typeof ProfilFasilitasRoute
+  '/profil/struktur-organisasi': typeof ProfilStrukturOrganisasiRoute
+  '/profil/tentang': typeof ProfilTentangRoute
+  '/profil/visi-misi': typeof ProfilVisiMisiRoute
+  '/riset/hki': typeof RisetHkiRoute
+  '/riset/inovasi': typeof RisetInovasiRoute
+  '/riset/kerja-sama': typeof RisetKerjaSamaRoute
+  '/riset/penelitian': typeof RisetPenelitianRoute
+  '/riset/pengabdian': typeof RisetPengabdianRoute
+  '/riset/publikasi': typeof RisetPublikasiRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/akademik/cpl': typeof AkademikCplRoute
+  '/akademik/kurikulum': typeof AkademikKurikulumRoute
+  '/akademik/magang-mbkm': typeof AkademikMagangMbkmRoute
+  '/akademik/mata-kuliah': typeof AkademikMataKuliahRoute
+  '/akademik/praktikum-proyek': typeof AkademikPraktikumProyekRoute
+  '/akademik/profil-lulusan': typeof AkademikProfilLulusanRoute
+  '/informasi/agenda': typeof InformasiAgendaRoute
+  '/informasi/berita': typeof InformasiBeritaRoute
+  '/informasi/event': typeof InformasiEventRoute
+  '/informasi/galeri': typeof InformasiGaleriRoute
+  '/informasi/pengumuman': typeof InformasiPengumumanRoute
+  '/kemahasiswaan/alumni': typeof KemahasiswaanAlumniRoute
+  '/kemahasiswaan/beasiswa': typeof KemahasiswaanBeasiswaRoute
+  '/kemahasiswaan/kegiatan': typeof KemahasiswaanKegiatanRoute
+  '/kemahasiswaan/organisasi': typeof KemahasiswaanOrganisasiRoute
+  '/kemahasiswaan/prestasi': typeof KemahasiswaanPrestasiRoute
+  '/pmb/beasiswa': typeof PmbBeasiswaRoute
+  '/pmb/biaya': typeof PmbBiayaRoute
+  '/pmb/daftar': typeof PmbDaftarRoute
+  '/pmb/faq': typeof PmbFaqRoute
+  '/pmb/jalur-pendaftaran': typeof PmbJalurPendaftaranRoute
+  '/pmb/mengapa-kami': typeof PmbMengapaKamiRoute
+  '/pmb/persyaratan': typeof PmbPersyaratanRoute
+  '/profil/akreditasi': typeof ProfilAkreditasiRoute
+  '/profil/dosen-tendik': typeof ProfilDosenTendikRoute
+  '/profil/fasilitas': typeof ProfilFasilitasRoute
+  '/profil/struktur-organisasi': typeof ProfilStrukturOrganisasiRoute
+  '/profil/tentang': typeof ProfilTentangRoute
+  '/profil/visi-misi': typeof ProfilVisiMisiRoute
+  '/riset/hki': typeof RisetHkiRoute
+  '/riset/inovasi': typeof RisetInovasiRoute
+  '/riset/kerja-sama': typeof RisetKerjaSamaRoute
+  '/riset/penelitian': typeof RisetPenelitianRoute
+  '/riset/pengabdian': typeof RisetPengabdianRoute
+  '/riset/publikasi': typeof RisetPublikasiRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/akademik/cpl': typeof AkademikCplRoute
+  '/akademik/kurikulum': typeof AkademikKurikulumRoute
+  '/akademik/magang-mbkm': typeof AkademikMagangMbkmRoute
+  '/akademik/mata-kuliah': typeof AkademikMataKuliahRoute
+  '/akademik/praktikum-proyek': typeof AkademikPraktikumProyekRoute
+  '/akademik/profil-lulusan': typeof AkademikProfilLulusanRoute
+  '/informasi/agenda': typeof InformasiAgendaRoute
+  '/informasi/berita': typeof InformasiBeritaRoute
+  '/informasi/event': typeof InformasiEventRoute
+  '/informasi/galeri': typeof InformasiGaleriRoute
+  '/informasi/pengumuman': typeof InformasiPengumumanRoute
+  '/kemahasiswaan/alumni': typeof KemahasiswaanAlumniRoute
+  '/kemahasiswaan/beasiswa': typeof KemahasiswaanBeasiswaRoute
+  '/kemahasiswaan/kegiatan': typeof KemahasiswaanKegiatanRoute
+  '/kemahasiswaan/organisasi': typeof KemahasiswaanOrganisasiRoute
+  '/kemahasiswaan/prestasi': typeof KemahasiswaanPrestasiRoute
+  '/pmb/beasiswa': typeof PmbBeasiswaRoute
+  '/pmb/biaya': typeof PmbBiayaRoute
+  '/pmb/daftar': typeof PmbDaftarRoute
+  '/pmb/faq': typeof PmbFaqRoute
+  '/pmb/jalur-pendaftaran': typeof PmbJalurPendaftaranRoute
+  '/pmb/mengapa-kami': typeof PmbMengapaKamiRoute
+  '/pmb/persyaratan': typeof PmbPersyaratanRoute
+  '/profil/akreditasi': typeof ProfilAkreditasiRoute
+  '/profil/dosen-tendik': typeof ProfilDosenTendikRoute
+  '/profil/fasilitas': typeof ProfilFasilitasRoute
+  '/profil/struktur-organisasi': typeof ProfilStrukturOrganisasiRoute
+  '/profil/tentang': typeof ProfilTentangRoute
+  '/profil/visi-misi': typeof ProfilVisiMisiRoute
+  '/riset/hki': typeof RisetHkiRoute
+  '/riset/inovasi': typeof RisetInovasiRoute
+  '/riset/kerja-sama': typeof RisetKerjaSamaRoute
+  '/riset/penelitian': typeof RisetPenelitianRoute
+  '/riset/pengabdian': typeof RisetPengabdianRoute
+  '/riset/publikasi': typeof RisetPublikasiRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/akademik/cpl'
+    | '/akademik/kurikulum'
+    | '/akademik/magang-mbkm'
+    | '/akademik/mata-kuliah'
+    | '/akademik/praktikum-proyek'
+    | '/akademik/profil-lulusan'
+    | '/informasi/agenda'
+    | '/informasi/berita'
+    | '/informasi/event'
+    | '/informasi/galeri'
+    | '/informasi/pengumuman'
+    | '/kemahasiswaan/alumni'
+    | '/kemahasiswaan/beasiswa'
+    | '/kemahasiswaan/kegiatan'
+    | '/kemahasiswaan/organisasi'
+    | '/kemahasiswaan/prestasi'
+    | '/pmb/beasiswa'
+    | '/pmb/biaya'
+    | '/pmb/daftar'
+    | '/pmb/faq'
+    | '/pmb/jalur-pendaftaran'
+    | '/pmb/mengapa-kami'
+    | '/pmb/persyaratan'
+    | '/profil/akreditasi'
+    | '/profil/dosen-tendik'
+    | '/profil/fasilitas'
+    | '/profil/struktur-organisasi'
+    | '/profil/tentang'
+    | '/profil/visi-misi'
+    | '/riset/hki'
+    | '/riset/inovasi'
+    | '/riset/kerja-sama'
+    | '/riset/penelitian'
+    | '/riset/pengabdian'
+    | '/riset/publikasi'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/akademik/cpl'
+    | '/akademik/kurikulum'
+    | '/akademik/magang-mbkm'
+    | '/akademik/mata-kuliah'
+    | '/akademik/praktikum-proyek'
+    | '/akademik/profil-lulusan'
+    | '/informasi/agenda'
+    | '/informasi/berita'
+    | '/informasi/event'
+    | '/informasi/galeri'
+    | '/informasi/pengumuman'
+    | '/kemahasiswaan/alumni'
+    | '/kemahasiswaan/beasiswa'
+    | '/kemahasiswaan/kegiatan'
+    | '/kemahasiswaan/organisasi'
+    | '/kemahasiswaan/prestasi'
+    | '/pmb/beasiswa'
+    | '/pmb/biaya'
+    | '/pmb/daftar'
+    | '/pmb/faq'
+    | '/pmb/jalur-pendaftaran'
+    | '/pmb/mengapa-kami'
+    | '/pmb/persyaratan'
+    | '/profil/akreditasi'
+    | '/profil/dosen-tendik'
+    | '/profil/fasilitas'
+    | '/profil/struktur-organisasi'
+    | '/profil/tentang'
+    | '/profil/visi-misi'
+    | '/riset/hki'
+    | '/riset/inovasi'
+    | '/riset/kerja-sama'
+    | '/riset/penelitian'
+    | '/riset/pengabdian'
+    | '/riset/publikasi'
+  id:
+    | '__root__'
+    | '/'
+    | '/akademik/cpl'
+    | '/akademik/kurikulum'
+    | '/akademik/magang-mbkm'
+    | '/akademik/mata-kuliah'
+    | '/akademik/praktikum-proyek'
+    | '/akademik/profil-lulusan'
+    | '/informasi/agenda'
+    | '/informasi/berita'
+    | '/informasi/event'
+    | '/informasi/galeri'
+    | '/informasi/pengumuman'
+    | '/kemahasiswaan/alumni'
+    | '/kemahasiswaan/beasiswa'
+    | '/kemahasiswaan/kegiatan'
+    | '/kemahasiswaan/organisasi'
+    | '/kemahasiswaan/prestasi'
+    | '/pmb/beasiswa'
+    | '/pmb/biaya'
+    | '/pmb/daftar'
+    | '/pmb/faq'
+    | '/pmb/jalur-pendaftaran'
+    | '/pmb/mengapa-kami'
+    | '/pmb/persyaratan'
+    | '/profil/akreditasi'
+    | '/profil/dosen-tendik'
+    | '/profil/fasilitas'
+    | '/profil/struktur-organisasi'
+    | '/profil/tentang'
+    | '/profil/visi-misi'
+    | '/riset/hki'
+    | '/riset/inovasi'
+    | '/riset/kerja-sama'
+    | '/riset/penelitian'
+    | '/riset/pengabdian'
+    | '/riset/publikasi'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AkademikCplRoute: typeof AkademikCplRoute
+  AkademikKurikulumRoute: typeof AkademikKurikulumRoute
+  AkademikMagangMbkmRoute: typeof AkademikMagangMbkmRoute
+  AkademikMataKuliahRoute: typeof AkademikMataKuliahRoute
+  AkademikPraktikumProyekRoute: typeof AkademikPraktikumProyekRoute
+  AkademikProfilLulusanRoute: typeof AkademikProfilLulusanRoute
+  InformasiAgendaRoute: typeof InformasiAgendaRoute
+  InformasiBeritaRoute: typeof InformasiBeritaRoute
+  InformasiEventRoute: typeof InformasiEventRoute
+  InformasiGaleriRoute: typeof InformasiGaleriRoute
+  InformasiPengumumanRoute: typeof InformasiPengumumanRoute
+  KemahasiswaanAlumniRoute: typeof KemahasiswaanAlumniRoute
+  KemahasiswaanBeasiswaRoute: typeof KemahasiswaanBeasiswaRoute
+  KemahasiswaanKegiatanRoute: typeof KemahasiswaanKegiatanRoute
+  KemahasiswaanOrganisasiRoute: typeof KemahasiswaanOrganisasiRoute
+  KemahasiswaanPrestasiRoute: typeof KemahasiswaanPrestasiRoute
+  PmbBeasiswaRoute: typeof PmbBeasiswaRoute
+  PmbBiayaRoute: typeof PmbBiayaRoute
+  PmbDaftarRoute: typeof PmbDaftarRoute
+  PmbFaqRoute: typeof PmbFaqRoute
+  PmbJalurPendaftaranRoute: typeof PmbJalurPendaftaranRoute
+  PmbMengapaKamiRoute: typeof PmbMengapaKamiRoute
+  PmbPersyaratanRoute: typeof PmbPersyaratanRoute
+  ProfilAkreditasiRoute: typeof ProfilAkreditasiRoute
+  ProfilDosenTendikRoute: typeof ProfilDosenTendikRoute
+  ProfilFasilitasRoute: typeof ProfilFasilitasRoute
+  ProfilStrukturOrganisasiRoute: typeof ProfilStrukturOrganisasiRoute
+  ProfilTentangRoute: typeof ProfilTentangRoute
+  ProfilVisiMisiRoute: typeof ProfilVisiMisiRoute
+  RisetHkiRoute: typeof RisetHkiRoute
+  RisetInovasiRoute: typeof RisetInovasiRoute
+  RisetKerjaSamaRoute: typeof RisetKerjaSamaRoute
+  RisetPenelitianRoute: typeof RisetPenelitianRoute
+  RisetPengabdianRoute: typeof RisetPengabdianRoute
+  RisetPublikasiRoute: typeof RisetPublikasiRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +508,291 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/akademik/cpl': {
+      id: '/akademik/cpl'
+      path: '/akademik/cpl'
+      fullPath: '/akademik/cpl'
+      preLoaderRoute: typeof AkademikCplRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/akademik/kurikulum': {
+      id: '/akademik/kurikulum'
+      path: '/akademik/kurikulum'
+      fullPath: '/akademik/kurikulum'
+      preLoaderRoute: typeof AkademikKurikulumRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/akademik/magang-mbkm': {
+      id: '/akademik/magang-mbkm'
+      path: '/akademik/magang-mbkm'
+      fullPath: '/akademik/magang-mbkm'
+      preLoaderRoute: typeof AkademikMagangMbkmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/akademik/mata-kuliah': {
+      id: '/akademik/mata-kuliah'
+      path: '/akademik/mata-kuliah'
+      fullPath: '/akademik/mata-kuliah'
+      preLoaderRoute: typeof AkademikMataKuliahRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/akademik/praktikum-proyek': {
+      id: '/akademik/praktikum-proyek'
+      path: '/akademik/praktikum-proyek'
+      fullPath: '/akademik/praktikum-proyek'
+      preLoaderRoute: typeof AkademikPraktikumProyekRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/akademik/profil-lulusan': {
+      id: '/akademik/profil-lulusan'
+      path: '/akademik/profil-lulusan'
+      fullPath: '/akademik/profil-lulusan'
+      preLoaderRoute: typeof AkademikProfilLulusanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/informasi/agenda': {
+      id: '/informasi/agenda'
+      path: '/informasi/agenda'
+      fullPath: '/informasi/agenda'
+      preLoaderRoute: typeof InformasiAgendaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/informasi/berita': {
+      id: '/informasi/berita'
+      path: '/informasi/berita'
+      fullPath: '/informasi/berita'
+      preLoaderRoute: typeof InformasiBeritaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/informasi/event': {
+      id: '/informasi/event'
+      path: '/informasi/event'
+      fullPath: '/informasi/event'
+      preLoaderRoute: typeof InformasiEventRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/informasi/galeri': {
+      id: '/informasi/galeri'
+      path: '/informasi/galeri'
+      fullPath: '/informasi/galeri'
+      preLoaderRoute: typeof InformasiGaleriRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/informasi/pengumuman': {
+      id: '/informasi/pengumuman'
+      path: '/informasi/pengumuman'
+      fullPath: '/informasi/pengumuman'
+      preLoaderRoute: typeof InformasiPengumumanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kemahasiswaan/alumni': {
+      id: '/kemahasiswaan/alumni'
+      path: '/kemahasiswaan/alumni'
+      fullPath: '/kemahasiswaan/alumni'
+      preLoaderRoute: typeof KemahasiswaanAlumniRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kemahasiswaan/beasiswa': {
+      id: '/kemahasiswaan/beasiswa'
+      path: '/kemahasiswaan/beasiswa'
+      fullPath: '/kemahasiswaan/beasiswa'
+      preLoaderRoute: typeof KemahasiswaanBeasiswaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kemahasiswaan/kegiatan': {
+      id: '/kemahasiswaan/kegiatan'
+      path: '/kemahasiswaan/kegiatan'
+      fullPath: '/kemahasiswaan/kegiatan'
+      preLoaderRoute: typeof KemahasiswaanKegiatanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kemahasiswaan/organisasi': {
+      id: '/kemahasiswaan/organisasi'
+      path: '/kemahasiswaan/organisasi'
+      fullPath: '/kemahasiswaan/organisasi'
+      preLoaderRoute: typeof KemahasiswaanOrganisasiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kemahasiswaan/prestasi': {
+      id: '/kemahasiswaan/prestasi'
+      path: '/kemahasiswaan/prestasi'
+      fullPath: '/kemahasiswaan/prestasi'
+      preLoaderRoute: typeof KemahasiswaanPrestasiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pmb/beasiswa': {
+      id: '/pmb/beasiswa'
+      path: '/pmb/beasiswa'
+      fullPath: '/pmb/beasiswa'
+      preLoaderRoute: typeof PmbBeasiswaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pmb/biaya': {
+      id: '/pmb/biaya'
+      path: '/pmb/biaya'
+      fullPath: '/pmb/biaya'
+      preLoaderRoute: typeof PmbBiayaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pmb/daftar': {
+      id: '/pmb/daftar'
+      path: '/pmb/daftar'
+      fullPath: '/pmb/daftar'
+      preLoaderRoute: typeof PmbDaftarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pmb/faq': {
+      id: '/pmb/faq'
+      path: '/pmb/faq'
+      fullPath: '/pmb/faq'
+      preLoaderRoute: typeof PmbFaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pmb/jalur-pendaftaran': {
+      id: '/pmb/jalur-pendaftaran'
+      path: '/pmb/jalur-pendaftaran'
+      fullPath: '/pmb/jalur-pendaftaran'
+      preLoaderRoute: typeof PmbJalurPendaftaranRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pmb/mengapa-kami': {
+      id: '/pmb/mengapa-kami'
+      path: '/pmb/mengapa-kami'
+      fullPath: '/pmb/mengapa-kami'
+      preLoaderRoute: typeof PmbMengapaKamiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pmb/persyaratan': {
+      id: '/pmb/persyaratan'
+      path: '/pmb/persyaratan'
+      fullPath: '/pmb/persyaratan'
+      preLoaderRoute: typeof PmbPersyaratanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profil/akreditasi': {
+      id: '/profil/akreditasi'
+      path: '/profil/akreditasi'
+      fullPath: '/profil/akreditasi'
+      preLoaderRoute: typeof ProfilAkreditasiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profil/dosen-tendik': {
+      id: '/profil/dosen-tendik'
+      path: '/profil/dosen-tendik'
+      fullPath: '/profil/dosen-tendik'
+      preLoaderRoute: typeof ProfilDosenTendikRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profil/fasilitas': {
+      id: '/profil/fasilitas'
+      path: '/profil/fasilitas'
+      fullPath: '/profil/fasilitas'
+      preLoaderRoute: typeof ProfilFasilitasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profil/struktur-organisasi': {
+      id: '/profil/struktur-organisasi'
+      path: '/profil/struktur-organisasi'
+      fullPath: '/profil/struktur-organisasi'
+      preLoaderRoute: typeof ProfilStrukturOrganisasiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profil/tentang': {
+      id: '/profil/tentang'
+      path: '/profil/tentang'
+      fullPath: '/profil/tentang'
+      preLoaderRoute: typeof ProfilTentangRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profil/visi-misi': {
+      id: '/profil/visi-misi'
+      path: '/profil/visi-misi'
+      fullPath: '/profil/visi-misi'
+      preLoaderRoute: typeof ProfilVisiMisiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/riset/hki': {
+      id: '/riset/hki'
+      path: '/riset/hki'
+      fullPath: '/riset/hki'
+      preLoaderRoute: typeof RisetHkiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/riset/inovasi': {
+      id: '/riset/inovasi'
+      path: '/riset/inovasi'
+      fullPath: '/riset/inovasi'
+      preLoaderRoute: typeof RisetInovasiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/riset/kerja-sama': {
+      id: '/riset/kerja-sama'
+      path: '/riset/kerja-sama'
+      fullPath: '/riset/kerja-sama'
+      preLoaderRoute: typeof RisetKerjaSamaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/riset/penelitian': {
+      id: '/riset/penelitian'
+      path: '/riset/penelitian'
+      fullPath: '/riset/penelitian'
+      preLoaderRoute: typeof RisetPenelitianRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/riset/pengabdian': {
+      id: '/riset/pengabdian'
+      path: '/riset/pengabdian'
+      fullPath: '/riset/pengabdian'
+      preLoaderRoute: typeof RisetPengabdianRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/riset/publikasi': {
+      id: '/riset/publikasi'
+      path: '/riset/publikasi'
+      fullPath: '/riset/publikasi'
+      preLoaderRoute: typeof RisetPublikasiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AkademikCplRoute: AkademikCplRoute,
+  AkademikKurikulumRoute: AkademikKurikulumRoute,
+  AkademikMagangMbkmRoute: AkademikMagangMbkmRoute,
+  AkademikMataKuliahRoute: AkademikMataKuliahRoute,
+  AkademikPraktikumProyekRoute: AkademikPraktikumProyekRoute,
+  AkademikProfilLulusanRoute: AkademikProfilLulusanRoute,
+  InformasiAgendaRoute: InformasiAgendaRoute,
+  InformasiBeritaRoute: InformasiBeritaRoute,
+  InformasiEventRoute: InformasiEventRoute,
+  InformasiGaleriRoute: InformasiGaleriRoute,
+  InformasiPengumumanRoute: InformasiPengumumanRoute,
+  KemahasiswaanAlumniRoute: KemahasiswaanAlumniRoute,
+  KemahasiswaanBeasiswaRoute: KemahasiswaanBeasiswaRoute,
+  KemahasiswaanKegiatanRoute: KemahasiswaanKegiatanRoute,
+  KemahasiswaanOrganisasiRoute: KemahasiswaanOrganisasiRoute,
+  KemahasiswaanPrestasiRoute: KemahasiswaanPrestasiRoute,
+  PmbBeasiswaRoute: PmbBeasiswaRoute,
+  PmbBiayaRoute: PmbBiayaRoute,
+  PmbDaftarRoute: PmbDaftarRoute,
+  PmbFaqRoute: PmbFaqRoute,
+  PmbJalurPendaftaranRoute: PmbJalurPendaftaranRoute,
+  PmbMengapaKamiRoute: PmbMengapaKamiRoute,
+  PmbPersyaratanRoute: PmbPersyaratanRoute,
+  ProfilAkreditasiRoute: ProfilAkreditasiRoute,
+  ProfilDosenTendikRoute: ProfilDosenTendikRoute,
+  ProfilFasilitasRoute: ProfilFasilitasRoute,
+  ProfilStrukturOrganisasiRoute: ProfilStrukturOrganisasiRoute,
+  ProfilTentangRoute: ProfilTentangRoute,
+  ProfilVisiMisiRoute: ProfilVisiMisiRoute,
+  RisetHkiRoute: RisetHkiRoute,
+  RisetInovasiRoute: RisetInovasiRoute,
+  RisetKerjaSamaRoute: RisetKerjaSamaRoute,
+  RisetPenelitianRoute: RisetPenelitianRoute,
+  RisetPengabdianRoute: RisetPengabdianRoute,
+  RisetPublikasiRoute: RisetPublikasiRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
