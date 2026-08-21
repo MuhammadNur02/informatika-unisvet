@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowUpRight, CalendarDays } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Reveal, SectionHeading } from "./Reveal";
 import { cn } from "@/lib/utils";
 import labIot from "@/assets/lab-iot.jpg";
