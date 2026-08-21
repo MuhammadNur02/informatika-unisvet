@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowUpRight, CalendarDays } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Reveal, SectionHeading } from "./Reveal";
 import { cn } from "@/lib/utils";
 import labIot from "@/assets/lab-iot.jpg";
@@ -153,12 +154,12 @@ export function News() {
                   </span>
                   <h3 className="mt-2 text-lg font-bold leading-snug text-foreground">{item.title}</h3>
                   <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{item.excerpt}</p>
-                  <a
-                    href="#berita"
+                  <Link
+                    to="/informasi/berita"
                     className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary transition-colors hover:text-accent-foreground"
                   >
                     Baca Selengkapnya <ArrowUpRight className="size-4" />
-                  </a>
+                  </Link>
                 </div>
               </article>
             ))}
