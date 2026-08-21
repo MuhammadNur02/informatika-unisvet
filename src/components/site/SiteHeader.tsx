@@ -1,15 +1,23 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import {
   Menu,
   X,
   ChevronDown,
+  ChevronRight,
   GraduationCap,
   MonitorPlay,
   Library,
   ShieldCheck,
   LayoutDashboard,
+  Home,
+  User,
+  BookOpen,
+  Users,
+  FlaskConical,
+  Info,
+  type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -23,9 +31,26 @@ const PORTALS = [
   { label: "SPMI Mutu", icon: ShieldCheck, href: "https://spmi.ivet.ac.id" },
 ];
 
+const NAV_ICONS: Record<string, LucideIcon> = {
+  Beranda: Home,
+  Profil: User,
+  Akademik: BookOpen,
+  Kemahasiswaan: Users,
+  "Riset & Inovasi": FlaskConical,
+  Informasi: Info,
+  PMB: GraduationCap,
+};
+
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  useEffect(() => {
+    setOpen(false);
+    setOpenGroup(null);
+  }, [pathname]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
