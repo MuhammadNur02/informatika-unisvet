@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { ArrowRight, ShieldCheck, Sparkles, Cpu, Laptop } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import heroLab from "@/assets/hero-lab.jpg";
 
