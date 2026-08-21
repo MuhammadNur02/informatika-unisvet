@@ -58,12 +58,12 @@ export function Hero() {
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <Button asChild variant="hero" size="xl">
-              <a href="#pmb">
+              <Link to="/pmb/daftar">
                 Daftar PMB Sekarang <ArrowRight />
-              </a>
+              </Link>
             </Button>
             <Button asChild variant="heroGhost" size="xl">
-              <a href="#kurikulum">Lihat Kurikulum</a>
+              <Link to="/akademik/kurikulum">Lihat Kurikulum</Link>
             </Button>
           </div>
           <div className="mt-8 flex flex-wrap gap-2">
