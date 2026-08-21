@@ -199,32 +199,102 @@ export function SiteHeader() {
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden xl:hidden"
           >
-            <div className="mx-4 mt-3 max-h-[70vh] overflow-y-auto rounded-3xl border border-border bg-card p-3 shadow-[var(--shadow-lift)]">
-              {NAV.map((item) => (
-                <div key={item.label}>
-                  <Link
-                    to={item.to}
-                    onClick={() => setOpen(false)}
-                    className="block rounded-2xl px-4 py-3 text-sm font-semibold text-foreground/85 transition-colors hover:bg-secondary hover:text-primary"
+            <div className="mx-4 mt-3 max-h-[72vh] space-y-2 overflow-y-auto rounded-3xl border border-border bg-card p-3 shadow-[var(--shadow-lift)]">
+              {NAV.map((item) => {
+                const Icon = NAV_ICONS[item.label] ?? Info;
+                const expanded = openGroup === item.label;
+                const groupActive =
+                  pathname === item.to ||
+                  (item.children?.some((c) => pathname === c.to) ?? false);
+
+                if (!item.children) {
+                  return (
+                    <Link
+                      key={item.label}
+                      to={item.to}
+                      onClick={() => setOpen(false)}
+                      className={cn(
+                        "flex items-center gap-3 rounded-2xl border border-border/70 bg-card px-4 py-3 text-[15px] font-semibold shadow-[var(--shadow-card)] transition-colors",
+                        groupActive ? "text-primary" : "text-foreground/85 hover:text-primary",
+                      )}
+                    >
+                      <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-secondary text-primary">
+                        <Icon className="size-4" />
+                      </span>
+                      <span className="min-w-0 truncate">{item.label}</span>
+                    </Link>
+                  );
+                }
+
+                return (
+                  <div
+                    key={item.label}
+                    className={cn(
+                      "overflow-hidden rounded-2xl border bg-card shadow-[var(--shadow-card)] transition-colors",
+                      expanded || groupActive ? "border-accent/50" : "border-border/70",
+                    )}
                   >
-                    {item.label}
-                  </Link>
-                  {item.children ? (
-                    <div className="mb-1 ml-4 border-l border-border pl-3">
-                      {item.children.map((child) => (
-                        <Link
-                          key={child.label}
-                          to={child.to}
-                          onClick={() => setOpen(false)}
-                          className="block rounded-xl px-3 py-2 text-[13px] text-muted-foreground transition-colors hover:text-primary"
+                    <button
+                      type="button"
+                      aria-expanded={expanded}
+                      onClick={() => setOpenGroup(expanded ? null : item.label)}
+                      className="flex w-full items-center gap-3 px-4 py-3 text-left text-[15px] font-semibold text-foreground/85 transition-colors hover:text-primary"
+                    >
+                      <span
+                        className={cn(
+                          "inline-flex size-8 shrink-0 items-center justify-center rounded-full transition-colors",
+                          expanded || groupActive
+                            ? "bg-accent/15 text-accent-foreground"
+                            : "bg-secondary text-primary",
+                        )}
+                      >
+                        <Icon className="size-4" />
+                      </span>
+                      <span className="min-w-0 flex-1 truncate">{item.label}</span>
+                      <ChevronDown
+                        className={cn(
+                          "size-4 shrink-0 text-muted-foreground transition-transform duration-300",
+                          expanded && "rotate-180 text-primary",
+                        )}
+                      />
+                    </button>
+
+                    <AnimatePresence initial={false}>
+                      {expanded ? (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                          className="overflow-hidden"
                         >
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
-                  ) : null}
-                </div>
-              ))}
+                          <div className="mx-3 mb-3 space-y-0.5 border-l border-border pl-3">
+                            {item.children.map((child) => {
+                              const active = pathname === child.to;
+                              return (
+                                <Link
+                                  key={child.label}
+                                  to={child.to}
+                                  onClick={() => setOpen(false)}
+                                  className={cn(
+                                    "group flex items-center gap-2 rounded-xl px-3 py-2 text-[13.5px] transition-all duration-200",
+                                    active
+                                      ? "bg-secondary font-semibold text-primary"
+                                      : "text-muted-foreground hover:bg-secondary/60 hover:pl-4 hover:text-primary",
+                                  )}
+                                >
+                                  <ChevronRight className="size-3.5 shrink-0 opacity-0 transition-opacity group-hover:opacity-100 data-[active=true]:opacity-100" />
+                                  <span className="min-w-0 truncate">{child.label}</span>
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        </motion.div>
+                      ) : null}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
               <div className="mt-2 grid grid-cols-2 gap-2 border-t border-border pt-3">
                 {PORTALS.map((p) => (
                   <a
