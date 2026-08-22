@@ -1,0 +1,4 @@
+CREATE POLICY "Galeri objects readable" ON storage.objects FOR SELECT USING (bucket_id = 'galeri-prodi');
+CREATE POLICY "Admins can upload galeri objects" ON storage.objects FOR INSERT TO authenticated WITH CHECK (bucket_id = 'galeri-prodi' AND public.has_role(auth.uid(), 'admin'));
+CREATE POLICY "Admins can update galeri objects" ON storage.objects FOR UPDATE TO authenticated USING (bucket_id = 'galeri-prodi' AND public.has_role(auth.uid(), 'admin'));
+CREATE POLICY "Admins can delete galeri objects" ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'galeri-prodi' AND public.has_role(auth.uid(), 'admin'));
