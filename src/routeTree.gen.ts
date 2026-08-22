@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AkademikCplRouteImport } from './routes/akademik.cpl'
 import { Route as AkademikKurikulumRouteImport } from './routes/akademik.kurikulum'
 import { Route as AkademikMagangMbkmRouteImport } from './routes/akademik.magang-mbkm'
@@ -49,6 +50,11 @@ import { Route as RisetPublikasiRouteImport } from './routes/riset.publikasi'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AkademikCplRoute = AkademikCplRouteImport.update({
@@ -230,6 +236,7 @@ const RisetPublikasiRoute = RisetPublikasiRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin/login': typeof AdminLoginRoute
   '/akademik/cpl': typeof AkademikCplRoute
   '/akademik/kurikulum': typeof AkademikKurikulumRoute
   '/akademik/magang-mbkm': typeof AkademikMagangMbkmRoute
@@ -268,6 +275,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin/login': typeof AdminLoginRoute
   '/akademik/cpl': typeof AkademikCplRoute
   '/akademik/kurikulum': typeof AkademikKurikulumRoute
   '/akademik/magang-mbkm': typeof AkademikMagangMbkmRoute
@@ -307,6 +315,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin/login': typeof AdminLoginRoute
   '/akademik/cpl': typeof AkademikCplRoute
   '/akademik/kurikulum': typeof AkademikKurikulumRoute
   '/akademik/magang-mbkm': typeof AkademikMagangMbkmRoute
@@ -347,6 +356,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin/login'
     | '/akademik/cpl'
     | '/akademik/kurikulum'
     | '/akademik/magang-mbkm'
@@ -385,6 +395,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin/login'
     | '/akademik/cpl'
     | '/akademik/kurikulum'
     | '/akademik/magang-mbkm'
@@ -423,6 +434,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin/login'
     | '/akademik/cpl'
     | '/akademik/kurikulum'
     | '/akademik/magang-mbkm'
@@ -462,6 +474,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminLoginRoute: typeof AdminLoginRoute
   AkademikCplRoute: typeof AkademikCplRoute
   AkademikKurikulumRoute: typeof AkademikKurikulumRoute
   AkademikMagangMbkmRoute: typeof AkademikMagangMbkmRoute
@@ -506,6 +519,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/akademik/cpl': {
@@ -758,6 +778,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminLoginRoute: AdminLoginRoute,
   AkademikCplRoute: AkademikCplRoute,
   AkademikKurikulumRoute: AkademikKurikulumRoute,
   AkademikMagangMbkmRoute: AkademikMagangMbkmRoute,
