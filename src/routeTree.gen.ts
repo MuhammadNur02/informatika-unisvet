@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AkademikCplRouteImport } from './routes/akademik.cpl'
 import { Route as AkademikKurikulumRouteImport } from './routes/akademik.kurikulum'
@@ -50,6 +51,11 @@ import { Route as RisetPublikasiRouteImport } from './routes/riset.publikasi'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/admin/dashboard',
+  path: '/admin/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
@@ -236,6 +242,7 @@ const RisetPublikasiRoute = RisetPublikasiRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/login': typeof AdminLoginRoute
   '/akademik/cpl': typeof AkademikCplRoute
   '/akademik/kurikulum': typeof AkademikKurikulumRoute
@@ -275,6 +282,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/login': typeof AdminLoginRoute
   '/akademik/cpl': typeof AkademikCplRoute
   '/akademik/kurikulum': typeof AkademikKurikulumRoute
@@ -315,6 +323,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/login': typeof AdminLoginRoute
   '/akademik/cpl': typeof AkademikCplRoute
   '/akademik/kurikulum': typeof AkademikKurikulumRoute
@@ -356,6 +365,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin/dashboard'
     | '/admin/login'
     | '/akademik/cpl'
     | '/akademik/kurikulum'
@@ -395,6 +405,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin/dashboard'
     | '/admin/login'
     | '/akademik/cpl'
     | '/akademik/kurikulum'
@@ -434,6 +445,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin/dashboard'
     | '/admin/login'
     | '/akademik/cpl'
     | '/akademik/kurikulum'
@@ -474,6 +486,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminDashboardRoute: typeof AdminDashboardRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AkademikCplRoute: typeof AkademikCplRoute
   AkademikKurikulumRoute: typeof AkademikKurikulumRoute
@@ -519,6 +532,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/admin/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/login': {
@@ -778,6 +798,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminDashboardRoute: AdminDashboardRoute,
   AdminLoginRoute: AdminLoginRoute,
   AkademikCplRoute: AkademikCplRoute,
   AkademikKurikulumRoute: AkademikKurikulumRoute,
