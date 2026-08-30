@@ -1,5 +1,7 @@
 import { Reveal, SectionHeading } from "./Reveal";
 import labIot from "@/assets/lab-iot.jpg";
+import labKomputerAsset from "@/assets/lab-komputer.webp.asset.json";
+const labKomputer = labKomputerAsset.url;
 import labSmart from "@/assets/lab-smart.jpg";
 import labMicroteaching from "@/assets/lab-microteaching.jpg";
 import libCampus from "@/assets/lib-campus.jpg";

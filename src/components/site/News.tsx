@@ -9,6 +9,12 @@ import labMultimedia from "@/assets/lab-multimedia.jpg";
 import kegiatanAsset from "@/assets/kegiatan-praktikum.jpg.asset.json";
 const kegiatanPraktikum = kegiatanAsset.url;
 import labSmart from "@/assets/lab-smart.jpg";
+import labKomputerAsset from "@/assets/lab-komputer.webp.asset.json";
+import kegiatanProyekAsset from "@/assets/kegiatan-proyek.webp.asset.json";
+import kegiatanDosenAsset from "@/assets/kegiatan-dosen.webp.asset.json";
+const labKomputer = labKomputerAsset.url;
+const kegiatanProyek = kegiatanProyekAsset.url;
+const kegiatanDosen = kegiatanDosenAsset.url;
 
 type Item = { date: string; tag: string; title: string; excerpt: string; image: string };
 
@@ -52,14 +58,14 @@ const DATA: Record<string, Item[]> = {
       tag: "Seminar",
       title: "Seminar Nasional Transformasi Digital Pendidikan",
       excerpt: "Menghadirkan pembicara dari Kemendikbud, industri EdTech, dan akademisi.",
-      image: labSmart,
+      image: kegiatanDosen,
     },
     {
       date: "18 Sep 2026",
       tag: "Kompetisi",
       title: "Ivet Informatics Competition untuk Siswa SMA/SMK",
       excerpt: "Kompetisi logika pemrograman dan desain multimedia tingkat provinsi.",
-      image: labIot,
+      image: kegiatanProyek,
     },
   ],
   Pengumuman: [
