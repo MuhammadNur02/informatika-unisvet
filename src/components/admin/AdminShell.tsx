@@ -155,7 +155,7 @@ export function AdminShell({
     <div className="min-h-screen bg-slate-surface">
       {/* Desktop sidebar */}
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-72 bg-hero-gradient lg:block">
-        <div className="tech-grid h-full">{sidebarInner}</div>
+        <div className="h-full">{sidebarInner}</div>
       </aside>
 
       {/* Mobile sidebar */}
@@ -184,7 +184,7 @@ export function AdminShell({
               >
                 <X className="size-4" />
               </button>
-              <div className="tech-grid h-full">{sidebarInner}</div>
+              <div className="h-full">{sidebarInner}</div>
             </motion.aside>
           </>
         ) : null}

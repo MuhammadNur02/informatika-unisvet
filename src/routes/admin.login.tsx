@@ -53,7 +53,7 @@ function AdminLogin() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-hero-gradient px-4 py-16">
-      <div className="tech-grid pointer-events-none absolute inset-0" />
+      <div className="pointer-events-none absolute inset-0" />
       <motion.div
         aria-hidden
         animate={{ scale: [1, 1.15, 1], opacity: [0.35, 0.55, 0.35] }}
