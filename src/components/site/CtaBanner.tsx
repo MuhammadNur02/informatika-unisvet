@@ -1,6 +1,7 @@
 import { ArrowRight, PhoneCall } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "./Reveal";
+import { SmokeLayer } from "./SmokeLayer";
 
 export function CtaBanner() {
   return (

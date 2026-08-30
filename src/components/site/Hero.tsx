@@ -3,6 +3,7 @@ import { ArrowRight, ShieldCheck, Sparkles, Cpu, Laptop } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import bannerAsset from "@/assets/banner-kampus.jpg.asset.json";
+import { SmokeLayer } from "./SmokeLayer";
 
 const heroLab = bannerAsset.url;
 
