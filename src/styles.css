@@ -235,6 +235,70 @@
   }
 }
 
+@utility binary-row {
+  position: absolute;
+  left: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 600;
+  white-space: pre;
+  letter-spacing: 0.5em;
+  opacity: var(--col-opacity, 0.15);
+  text-shadow:
+    0 0 6px currentColor,
+    0 0 18px currentColor;
+  animation: binary-drift-x linear infinite;
+  will-change: transform;
+}
+
+@utility binary-row-reverse {
+  animation-name: binary-drift-x-reverse;
+}
+
+@keyframes binary-drift-x {
+  0% {
+    transform: translate3d(-40vw, 0, 0);
+  }
+  100% {
+    transform: translate3d(110vw, 0, 0);
+  }
+}
+
+@keyframes binary-drift-x-reverse {
+  0% {
+    transform: translate3d(110vw, 0, 0);
+  }
+  100% {
+    transform: translate3d(-40vw, 0, 0);
+  }
+}
+
+@utility bit-spark {
+  position: absolute;
+  border-radius: 9999px;
+  animation: bit-spark-float ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes bit-spark-float {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.6);
+    opacity: 0;
+  }
+  25% {
+    opacity: var(--spark-opacity, 0.7);
+  }
+  50% {
+    transform: translate3d(8px, -60px, 0) scale(1);
+  }
+  75% {
+    opacity: var(--spark-opacity, 0.7);
+  }
+  100% {
+    transform: translate3d(-8px, -130px, 0) scale(0.5);
+    opacity: 0;
+  }
+}
+
 @utility pulse-glow {
   animation: pmb-pulse 2.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
