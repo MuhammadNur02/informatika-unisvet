@@ -51,7 +51,7 @@ export const PROFIL_PAGES: Record<string, PageContent> = {
         title: "Siap bergabung bersama kami?",
         desc: "Pendaftaran mahasiswa baru UNISVET Semarang dibuka sepanjang tahun dengan beberapa jalur seleksi dan skema beasiswa.",
         label: "Daftar PMB UNISVET",
-        href: "https://pmb.ivet.ac.id",
+        href: "https://pmb.unisvet.ac.id/",
       },
     ],
   },

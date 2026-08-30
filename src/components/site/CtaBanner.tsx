@@ -25,12 +25,12 @@ export function CtaBanner() {
             </p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
               <Button asChild variant="hero" size="xl">
-                <a href="https://pmb.ivet.ac.id" target="_blank" rel="noreferrer">
+                <a href="https://pmb.unisvet.ac.id/" target="_blank" rel="noreferrer">
                   Daftar di Portal PMB <ArrowRight />
                 </a>
               </Button>
               <Button asChild variant="heroGhost" size="xl">
-                <a href="https://wa.me/6224831234">
+                <a href="https://wa.me/6282138562161" target="_blank" rel="noreferrer">
                   <PhoneCall /> Konsultasi Admisi
                 </a>
               </Button>
