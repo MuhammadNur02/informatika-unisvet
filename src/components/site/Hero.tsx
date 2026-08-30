@@ -2,7 +2,9 @@ import { motion } from "motion/react";
 import { ArrowRight, ShieldCheck, Sparkles, Cpu, Laptop } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import heroLab from "@/assets/hero-lab.jpg";
+import bannerAsset from "@/assets/banner-kampus.jpg.asset.json";
+
+const heroLab = bannerAsset.url;
 
 const NODES = [
   { top: "12%", left: "8%", d: 0 },
