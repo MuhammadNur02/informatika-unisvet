@@ -208,11 +208,29 @@
   background-image: var(--gradient-hero);
 }
 
-@utility tech-grid {
-  background-image:
-    linear-gradient(oklch(1 0 0 / 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, oklch(1 0 0 / 0.07) 1px, transparent 1px);
-  background-size: 56px 56px;
+@utility binary-column {
+  position: absolute;
+  top: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 600;
+  line-height: 1.9;
+  white-space: pre;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  letter-spacing: 0.35em;
+  opacity: var(--col-opacity, 0.15);
+  text-shadow: 0 0 12px currentColor;
+  animation: binary-drift linear infinite;
+  will-change: transform;
+}
+
+@keyframes binary-drift {
+  0% {
+    transform: translate3d(0, -45vh, 0);
+  }
+  100% {
+    transform: translate3d(0, 115vh, 0);
+  }
 }
 
 @utility pulse-glow {
