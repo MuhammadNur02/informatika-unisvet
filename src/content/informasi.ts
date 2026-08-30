@@ -4,6 +4,12 @@ import labSmart from "@/assets/lab-smart.jpg";
 import labMicroteaching from "@/assets/lab-microteaching.jpg";
 import libCampus from "@/assets/lib-campus.jpg";
 import heroLab from "@/assets/hero-lab.jpg";
+import labKomputerAsset from "@/assets/lab-komputer.webp.asset.json";
+import kegiatanProyekAsset from "@/assets/kegiatan-proyek.webp.asset.json";
+import kegiatanDosenAsset from "@/assets/kegiatan-dosen.webp.asset.json";
+const labKomputer = labKomputerAsset.url;
+const kegiatanProyek = kegiatanProyekAsset.url;
+const kegiatanDosen = kegiatanDosenAsset.url;
 
 export const INFORMASI_PAGES: Record<string, PageContent> = {
   "/informasi/berita": {
@@ -121,12 +127,13 @@ export const INFORMASI_PAGES: Record<string, PageContent> = {
         type: "gallery",
         title: "Dokumentasi",
         items: [
-          { name: "Praktikum Pemrograman", image: heroLab, desc: "Suasana praktikum di laboratorium komputer lanjut." },
+          { name: "Praktikum Pemrograman", image: labKomputer, desc: "Suasana praktikum di laboratorium komputer lanjut." },
           { name: "Laboratorium IoT", image: labIot, desc: "Eksperimen sensor dan mikrokontroler mahasiswa." },
           { name: "Microteaching Studio", image: labMicroteaching, desc: "Latihan mengajar terekam untuk evaluasi pedagogi." },
           { name: "Smart Classroom", image: labSmart, desc: "Perkuliahan hibrida dengan papan digital interaktif." },
           { name: "Perpustakaan Kampus", image: libCampus, desc: "Ruang baca dan akses jurnal digital mahasiswa." },
-          { name: "Kolaborasi Proyek", image: heroLab, desc: "Kerja tim capstone project bersama dosen pembimbing." },
+          { name: "Kolaborasi Proyek", image: kegiatanProyek, desc: "Kerja tim capstone project bersama dosen pembimbing." },
+          { name: "Dosen & Tendik Prodi", image: kegiatanDosen, desc: "Kebersamaan tim dosen dan tenaga kependidikan prodi." },
         ],
       },
     ],
