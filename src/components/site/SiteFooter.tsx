@@ -18,14 +18,14 @@ const PORTALS = [
   { label: "E-Learning LMS", href: "https://elearning.ivet.ac.id" },
   { label: "E-Library", href: "https://library.ivet.ac.id" },
   { label: "SPMI Mutu", href: "https://spmi.ivet.ac.id" },
-  { label: "Portal PMB UNISVET", href: "https://pmb.ivet.ac.id" },
+  { label: "Portal PMB UNISVET", href: "https://pmb.unisvet.ac.id/" },
 ];
 
 const SOCIALS = [
-  { label: "Instagram", icon: Instagram, href: "https://instagram.com" },
-  { label: "YouTube", icon: Youtube, href: "https://youtube.com" },
-  { label: "Facebook", icon: Facebook, href: "https://facebook.com" },
-  { label: "TikTok", icon: Music2, href: "https://tiktok.com" },
+  { label: "Instagram", icon: Instagram, href: "https://www.instagram.com/informatikaunisvet/" },
+  { label: "YouTube", icon: Youtube, href: "https://youtube.com/@informatika_unisvet?si=_wI6qWN7IdWkW4-z" },
+  { label: "Facebook", icon: Facebook, href: "https://home.s.id/lo/id#" },
+  { label: "TikTok", icon: Music2, href: "https://www.tiktok.com/@informatika.unisvet?_r=1&_t=ZS-99J4eAdzfLJ" },
 ];
 
 export function SiteFooter() {
