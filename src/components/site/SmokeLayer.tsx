@@ -1,83 +1,134 @@
-type CyberWave = {
+type FloatingWord = {
+  id: number;
+  text: string;
   top: string;
-  duration: number;
+  size: number; // ukuran font acak (besar/kecil)
+  duration: number; // kecepatan bergerak ke samping
   delay: number;
+  flickerDuration: number; // durasi kedipan lampu konslet
+  flickerDelay: number;
   opacity: number;
-  depth: number;
+  color: string;
+  direction: "left" | "right"; // arah gerak berlawanan
+  depth: number; // efek 3D
 };
 
-const CYBER_WAVES: Array<CyberWave> = [
-  { top: "10%", duration: 14, delay: 0, opacity: 0.75, depth: 400 },
-  { top: "30%", duration: 18, delay: -3, opacity: 0.6, depth: 300 },
-  { top: "50%", duration: 15, delay: -6, opacity: 0.8, depth: 500 },
-  { top: "70%", duration: 20, delay: -2, opacity: 0.55, depth: 350 },
-  { top: "85%", duration: 16, delay: -8, opacity: 0.7, depth: 450 },
+function seeded(i: number, salt: number) {
+  const x = Math.sin(i * 127.1 + salt * 311.7) * 43758.5453;
+  return x - Math.floor(x);
+}
+
+const WORDS_LIST = ["UNISVET", "INFORMATIKA", "PENDIDIKAN", "IT", "S1", "EDTECH"];
+const COLOR_PALETTE = [
+  "rgba(212, 175, 55, 0.9)", // Emas
+  "rgba(255, 255, 255, 0.85)", // Putih terang
+  "rgba(180, 20, 50, 0.8)", // Maroon terang
+  "rgba(230, 200, 100, 0.85)", // Amber emas
 ];
 
-/** Lapisan animasi gelombang 3D futuristik bertema informatika (Neural Data Waves) berwarna maroon tua & emas. */
+const ITEM_COUNT = 24;
+
+const FLOATING_ITEMS: Array<FloatingWord> = Array.from({ length: ITEM_COUNT }, (_, i) => {
+  const text = WORDS_LIST[Math.floor(seeded(i, 1) * WORDS_LIST.length)];
+  const top = `${4 + seeded(i, 2) * 92}%`;
+  // Variasi ukuran font besar dan kecil secara acak
+  const size = text.length > 8 ? 14 + Math.floor(seeded(i, 3) * 16) : 18 + Math.floor(seeded(i, 3) * 26);
+  const duration = 18 + seeded(i, 4) * 22; // Durasi gerak ke samping
+  const delay = -seeded(i, 5) * 30;
+  const flickerDuration = 1.5 + seeded(i, 6) * 4; // Kecepatan kedipan konslet
+  const flickerDelay = -seeded(i, 7) * 5;
+  const opacity = 0.3 + seeded(i, 8) * 0.6;
+  const color = COLOR_PALETTE[Math.floor(seeded(i, 9) * COLOR_PALETTE.length)];
+  const direction = seeded(i, 10) > 0.5 ? "left" : "right"; // Berlawanan arah
+  const depth = -200 + Math.floor(seeded(i, 11) * 600); // Variasi kedalaman 3D
+
+  return {
+    id: i,
+    text,
+    top,
+    size,
+    duration,
+    delay,
+    flickerDuration,
+    flickerDelay,
+    opacity,
+    color,
+    direction,
+    depth,
+  };
+});
+
+/** Lapisan animasi teks 3D (UNISVET, INFORMATIKA, PENDIDIKAN) dengan efek lampu konslet & gerak acak berlawanan arah. */
 export function SmokeLayer({ className = "" }: { className?: string }) {
   return (
     <div
       className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}
-      style={{ perspective: "1000px" }}
+      style={{ perspective: "900px" }}
       aria-hidden
     >
       {/* Vignette gelap di pinggir & tengah agar kontras teks utama sangat tajam */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(40,0,10,0.4)_0%,rgba(15,0,5,0.9)_100%)] z-10" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(40,0,10,0.4)_0%,rgba(12,0,4,0.92)_100%)] z-10" />
 
-      {/* Lapisan Grid/Mesh 3D tipis ala Cyberpunk */}
-      <div
-        className="absolute inset-0 opacity-[0.08] z-0"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, rgba(212,175,55,0.3) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(212,175,55,0.3) 1px, transparent 1px)
-          `,
-          backgroundSize: "40px 40px",
-          transform: "rotateX(60deg) scale(2)",
-          transformOrigin: "center top",
-        }}
-      />
-
-      {/* Gelombang 3D Digital */}
-      {CYBER_WAVES.map((wave, i) => (
-        <div
-          key={i}
-          className="absolute left-[-25%] right-[-25%] h-[320px] animate-cyber-wave z-0"
-          style={{
-            top: wave.top,
-            opacity: wave.opacity,
-            animationDuration: `${wave.duration}s`,
-            animationDelay: `${wave.delay}s`,
-            animationIterationCount: "infinite",
-            animationTimingFunction: "ease-in-out",
-            background:
-              "linear-gradient(90deg, rgba(80,0,20,0.2), rgba(139,0,37,0.7), rgba(212,175,55,0.25), rgba(139,0,37,0.7), rgba(80,0,20,0.2))",
-            clipPath:
-              "polygon(0% 45%, 12% 25%, 25% 55%, 38% 30%, 50% 60%, 65% 35%, 78% 50%, 90% 25%, 100% 45%, 100% 100%, 0% 100%)",
-            filter: "blur(28px)",
-            transform: `translateZ(${wave.depth}px) rotateX(15deg)`,
-          }}
-        />
-      ))}
+      {/* Kontainer Elemen 3D */}
+      <div className="absolute inset-0 z-0" style={{ transformStyle: "preserve-3d" }}>
+        {FLOATING_ITEMS.map((item) => (
+          <div
+            key={item.id}
+            className={`absolute font-black tracking-wider uppercase whitespace-nowrap ${
+              item.direction === "left" ? "animate-move-left" : "animate-move-right"
+            } animate-flicker`}
+            style={
+              {
+                top: item.top,
+                fontSize: `${item.size}px`,
+                color: item.color,
+                textShadow: `0 0 10px ${item.color}, 0 0 20px ${item.color}`,
+                animationDuration: `${item.duration}s, ${item.flickerDuration}s`,
+                animationDelay: `${item.delay}s, ${item.flickerDelay}s`,
+                animationIterationCount: "infinite",
+                animationTimingFunction: "linear, steps(2, start)",
+                transform: `translateZ(${item.depth}px) rotate(${item.depth % 15}deg)`,
+                opacity: item.opacity,
+              } as React.CSSProperties
+            }
+          >
+            {item.text}
+          </div>
+        ))}
+      </div>
 
       <style>{`
-        @keyframes cyberWaveMotion {
+        @keyframes moveLeft {
           0% {
-            transform: translateX(0%) translateY(0%) rotateZ(0deg) scaleY(1);
-          }
-          33% {
-            transform: translateX(6%) translateY(-18px) rotateZ(1deg) scaleY(1.15);
-          }
-          66% {
-            transform: translateX(-4%) translateY(15px) rotateZ(-1deg) scaleY(0.95);
+            left: 110%;
           }
           100% {
-            transform: translateX(0%) translateY(0%) rotateZ(0deg) scaleY(1);
+            left: -30%;
           }
         }
-        .animate-cyber-wave {
-          animation-name: cyberWaveMotion;
+        @keyframes moveRight {
+          0% {
+            left: -30%;
+          }
+          100% {
+            left: 110%;
+          }
+        }
+        @keyframes flickerGlitch {
+          0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+            opacity: var(--tw-opacity, 0.8);
+            filter: drop-shadow(0 0 8px currentColor);
+          }
+          20%, 24%, 55% {
+            opacity: 0.05;
+            filter: none;
+          }
+        }
+        .animate-move-left {
+          animation-name: moveLeft, flickerGlitch;
+        }
+        .animate-move-right {
+          animation-name: moveRight, flickerGlitch;
         }
       `}</style>
     </div>
