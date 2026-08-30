@@ -74,21 +74,21 @@
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
-  --foreground: oklch(0.21 0.045 259);
+  --foreground: oklch(0.22 0.03 25);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.21 0.045 259);
+  --card-foreground: oklch(0.22 0.03 25);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.21 0.045 259);
-  --primary: oklch(0.28 0.088 264);
+  --popover-foreground: oklch(0.22 0.03 25);
+  --primary: oklch(0.36 0.15 25);
   --primary-foreground: oklch(0.99 0.005 250);
-  --primary-deep: oklch(0.21 0.075 265);
-  --primary-soft: oklch(0.42 0.1 263);
+  --primary-deep: oklch(0.25 0.12 25);
+  --primary-soft: oklch(0.48 0.17 27);
   --secondary: oklch(0.965 0.008 250);
-  --secondary-foreground: oklch(0.28 0.088 264);
+  --secondary-foreground: oklch(0.36 0.15 25);
   --muted: oklch(0.968 0.007 247.896);
   --muted-foreground: oklch(0.53 0.032 256);
   --accent: oklch(0.79 0.15 78);
-  --accent-foreground: oklch(0.24 0.06 264);
+  --accent-foreground: oklch(0.3 0.13 25);
   --accent-soft: oklch(0.9 0.09 85);
   --slate-surface: oklch(0.975 0.006 250);
   --destructive: oklch(0.577 0.245 27.325);
@@ -99,13 +99,13 @@
 
   --gradient-hero: linear-gradient(
     135deg,
-    oklch(0.21 0.075 265) 0%,
-    oklch(0.28 0.088 264) 45%,
-    oklch(0.36 0.095 262) 100%
+    oklch(0.19 0.08 24) 0%,
+    oklch(0.31 0.14 25) 48%,
+    oklch(0.42 0.17 27) 100%
   );
   --gradient-gold: linear-gradient(135deg, oklch(0.79 0.15 78), oklch(0.88 0.11 88));
-  --shadow-card: 0 1px 2px oklch(0.28 0.088 264 / 0.06), 0 12px 32px -12px oklch(0.28 0.088 264 / 0.18);
-  --shadow-lift: 0 24px 48px -20px oklch(0.28 0.088 264 / 0.35);
+  --shadow-card: 0 1px 2px oklch(0.36 0.15 25 / 0.07), 0 12px 32px -12px oklch(0.36 0.15 25 / 0.2);
+  --shadow-lift: 0 24px 48px -20px oklch(0.36 0.15 25 / 0.35);
   --shadow-glow: 0 0 0 1px oklch(0.79 0.15 78 / 0.5), 0 12px 32px -10px oklch(0.79 0.15 78 / 0.45);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -177,8 +177,8 @@
 @utility glass-header {
   background: oklch(1 0 0 / 0.72);
   backdrop-filter: blur(16px) saturate(180%);
-  border-bottom: 1px solid oklch(0.28 0.088 264 / 0.08);
-  box-shadow: 0 8px 30px -18px oklch(0.28 0.088 264 / 0.3);
+  border-bottom: 1px solid oklch(0.36 0.15 25 / 0.1);
+  box-shadow: 0 8px 30px -18px oklch(0.36 0.15 25 / 0.3);
 }
 
 @utility card-elevated {
@@ -226,5 +226,25 @@
   }
   50% {
     box-shadow: 0 0 0 10px oklch(0.79 0.15 78 / 0), 0 10px 26px -12px oklch(0.79 0.15 78 / 0.5);
+  }
+}
+
+@utility dot-map {
+  background-image: radial-gradient(oklch(0.72 0.19 27 / 0.55) 1.4px, transparent 1.5px);
+  background-size: 14px 14px;
+  mask-image: radial-gradient(120% 90% at 70% 30%, oklch(0 0 0) 0%, transparent 72%);
+  -webkit-mask-image: radial-gradient(120% 90% at 70% 30%, oklch(0 0 0) 0%, transparent 72%);
+}
+
+@utility dot-map-drift {
+  animation: dot-drift 26s linear infinite;
+}
+
+@keyframes dot-drift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 280px 140px;
   }
 }
