@@ -1,39 +1,41 @@
-/** Komponen latar belakang piksel/titik padat bergaya halftone, statis di belakang, dengan animasi perubahan warna dinamis tanpa menutupi konten. */
+/** Latar belakang grid sirkuit digital futuristik dengan efek garis aliran data pulsa cahaya tipis. */
 export function SmokeLayer({ className = "" }: { className?: string }) {
   return (
     <div
-      className={`absolute inset-0 overflow-hidden pointer-events-none bg-[#0a0102] ${className}`}
+      className={`absolute inset-0 overflow-hidden pointer-events-none bg-[#0a0205] ${className}`}
       style={{ zIndex: -1 }}
       aria-hidden
     >
-      {/* Lapisan Pixel / Titik-titik Padat Rapet yang Berubah-ubah Warna (Animasi Color Shifting) */}
+      {/* Garis Grid Sirkuit Komputer */}
       <div
-        className="absolute inset-[-50%] z-0 animate-color-shift opacity-85"
+        className="absolute inset-0 opacity-25"
         style={{
           backgroundImage: `
-            radial-gradient(circle, var(--pixel-color-1, rgba(160, 20, 40, 0.9)) 1px, transparent 1px),
-            radial-gradient(circle, rgba(0, 0, 0, 0.95) 1px, transparent 1px)
+            linear-gradient(to right, rgba(212, 175, 55, 0.15) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(212, 175, 55, 0.15) 1px, transparent 1px)
           `,
-          backgroundSize: "8px 8px",
-          backgroundPosition: "0 0, 4px 4px",
+          backgroundSize: "32px 32px",
         }}
       />
 
+      {/* Garis Pulsa Cahaya Data Mengalir */}
+      <div className="absolute inset-0 overflow-hidden opacity-40">
+        <div
+          className="absolute -inset-[100%] animate-circuit-pulse"
+          style={{
+            background: "radial-gradient(circle at center, rgba(212, 175, 55, 0.2) 0%, transparent 60%)",
+          }}
+        />
+      </div>
+
       <style>{`
-        @keyframes colorShift {
-          0% {
-            filter: hue-rotate(0deg) brightness(1);
-          }
-          50% {
-            filter: hue-rotate(45deg) brightness(1.2);
-          }
-          100% {
-            filter: hue-rotate(0deg) brightness(1);
-          }
+        @keyframes circuitPulse {
+          0% { transform: scale(0.9); opacity: 0.3; }
+          50% { transform: scale(1.1); opacity: 0.6; }
+          100% { transform: scale(0.9); opacity: 0.3; }
         }
-        .animate-color-shift {
-          animation: colorShift 8s ease-in-out infinite;
-          will-change: filter;
+        .animate-circuit-pulse {
+          animation: circuitPulse 6s ease-in-out infinite;
         }
       `}</style>
     </div>
