@@ -91,7 +91,7 @@ export function Hero() {
           <div className="overflow-hidden rounded-[2rem] border border-primary-foreground/15 shadow-[var(--shadow-lift)]">
             <img
               src={heroLab}
-              alt="Laboratorium komputer modern Pendidikan Informatika Universitas Ivet Semarang"
+              alt="Gedung FKIP Universitas Ivet Semarang, kampus Program Studi Pendidikan Informatika"
               width={1600}
               height={1104}
               className="h-full w-full object-cover"
