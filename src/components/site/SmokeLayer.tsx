@@ -1,45 +1,61 @@
-type SmokeBlob = {
-  top: string
-  size: number
-  duration: number
-  delay: number
-  opacity: number
-  from: 'left' | 'right'
-}
+type NebulaOrb = {
+  top: string;
+  left: string;
+  size: number;
+  duration: number;
+  delay: number;
+  color: string;
+};
 
-const BLOBS: Array<SmokeBlob> = [
-  { top: '4%', size: 420, duration: 34, delay: 0, opacity: 0.75, from: 'left' },
-  { top: '18%', size: 300, duration: 27, delay: 6, opacity: 0.6, from: 'right' },
-  { top: '34%', size: 520, duration: 42, delay: 12, opacity: 0.7, from: 'left' },
-  { top: '48%', size: 260, duration: 24, delay: 3, opacity: 0.55, from: 'right' },
-  { top: '60%', size: 460, duration: 38, delay: 18, opacity: 0.7, from: 'right' },
-  { top: '72%', size: 340, duration: 30, delay: 9, opacity: 0.65, from: 'left' },
-  { top: '12%', size: 380, duration: 36, delay: 22, opacity: 0.6, from: 'right' },
-  { top: '82%', size: 300, duration: 28, delay: 15, opacity: 0.55, from: 'left' },
-  { top: '55%', size: 240, duration: 22, delay: 26, opacity: 0.5, from: 'left' },
-]
+const ORBS: Array<NebulaOrb> = [
+  { top: "10%", left: "15%", size: 450, duration: 20, delay: 0, color: "from-primary/40 to-purple-600/30" },
+  { top: "40%", left: "70%", size: 550, duration: 25, delay: 5, color: "from-blue-600/30 to-indigo-500/20" },
+  { top: "70%", left: "25%", size: 500, duration: 22, delay: 2, color: "from-pink-600/30 to-purple-600/20" },
+  { top: "20%", left: "80%", size: 400, duration: 18, delay: 8, color: "from-violet-500/30 to-primary/30" },
+];
 
-/** Lapisan kabut/smoke maroon gelap yang bergerak acak dari kiri & kanan. */
-export function SmokeLayer({ className = '' }: { className?: string }) {
+/** Lapisan background Aurora/Cosmic Nebula modern yang elegan dan dinamis. */
+export function SmokeLayer({ className = "" }: { className?: string }) {
   return (
-    <div className={`absolute inset-0 overflow-hidden ${className}`} aria-hidden>
-      {BLOBS.map((blob, i) => (
+    <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`} aria-hidden>
+      {/* Efek Noise / Grain halus opsional untuk kesan cinematic */}
+      <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
+
+      {/* Floating Glowing Orbs */}
+      {ORBS.map((orb, i) => (
         <div
           key={i}
-          className="smoke-blob"
-          style={
-            {
-              top: blob.top,
-              left: blob.from === 'left' ? '-20%' : 'auto',
-              right: blob.from === 'right' ? '-20%' : 'auto',
-              width: blob.size,
-              height: blob.size * 0.62,
-              '--smoke-opacity': blob.opacity,
-              animation: `${blob.from === 'left' ? 'smoke-from-left' : 'smoke-from-right'} ${blob.duration}s linear ${blob.delay}s infinite`,
-            } as React.CSSProperties
-          }
+          className={`absolute rounded-full mix-blend-screen filter blur-[90px] animate-aurora opacity-60 bg-gradient-to-r ${orb.color}`}
+          style={{
+            top: orb.top,
+            left: orb.left,
+            width: orb.size,
+            height: orb.size,
+            animationDuration: `${orb.duration}s`,
+            animationDelay: `${orb.delay}s`,
+            animationIterationCount: "infinite",
+            animationTimingFunction: "ease-in-out",
+          }}
         />
       ))}
+
+      {/* Keyframe tambahan langsung di style inline atau masukkan ke CSS utama Anda jika belum ada */}
+      <style>{`
+        @keyframes aurora {
+          0%, 100% {
+            transform: translate(0px, 0px) scale(1);
+          }
+          33% {
+            transform: translate(50px, -70px) scale(1.15);
+          }
+          66% {
+            transform: translate(-40px, 40px) scale(0.9);
+          }
+        }
+        .animate-aurora {
+          animation-name: aurora;
+        }
+      `}</style>
     </div>
-  )
+  );
 }
