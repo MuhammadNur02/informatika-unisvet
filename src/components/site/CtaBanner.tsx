@@ -7,7 +7,8 @@ export function CtaBanner() {
     <section id="pmb" className="px-4 pb-20 sm:px-6 sm:pb-28 lg:px-8">
       <Reveal className="mx-auto max-w-7xl">
         <div className="relative isolate overflow-hidden rounded-[2.5rem] bg-hero-gradient px-6 py-16 text-center sm:px-14 sm:py-20">
-          <div className="absolute inset-0 tech-grid opacity-60" aria-hidden />
+          <div className="absolute inset-0 tech-grid opacity-40" aria-hidden />
+          <div className="absolute inset-0 dot-map dot-map-drift opacity-80" aria-hidden />
           <div className="absolute -right-20 -top-20 size-80 rounded-full bg-accent/25 blur-[110px]" aria-hidden />
           <div className="relative">
             <span className="inline-flex rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
