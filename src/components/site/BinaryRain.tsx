@@ -56,11 +56,15 @@ const VERTICAL: Array<Stream> = Array.from({ length: VERTICAL_COUNT }, (_, i) =>
   };
 });
 
-/** Hujan kode binary vertikal ke bawah dengan latar belakang merah maroon gelap bersih tanpa vignette dan sparks. */
+/** Hujan kode binary vertikal ke bawah yang diletakkan di lapisan paling belakang (zIndex -1) agar tidak menutupi tombol/banner. */
 export function BinaryRain({ className = "" }: { className?: string }) {
   return (
-    <div className={`absolute inset-0 overflow-hidden pointer-events-none bg-[#3b0914] ${className}`} aria-hidden>
-      <div className="relative z-10">
+    <div
+      className={`absolute inset-0 overflow-hidden pointer-events-none bg-[#3b0914] ${className}`}
+      style={{ zIndex: -1 }}
+      aria-hidden
+    >
+      <div className="absolute inset-0 z-0">
         {VERTICAL.map((col, i) => (
           <span
             key={`v-${i}`}
