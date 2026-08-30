@@ -2,7 +2,9 @@ import { motion } from "motion/react";
 import { ArrowRight, ShieldCheck, Sparkles, Cpu, Laptop } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import heroLab from "@/assets/hero-lab.jpg";
+import bannerAsset from "@/assets/banner-kampus.jpg.asset.json";
+
+const heroLab = bannerAsset.url;
 
 const NODES = [
   { top: "12%", left: "8%", d: 0 },
@@ -19,7 +21,9 @@ export function Hero() {
   return (
     <section id="beranda" className="relative isolate overflow-hidden bg-hero-gradient pb-24 pt-32 sm:pb-32 sm:pt-40">
       <div className="absolute inset-0 tech-grid opacity-60" aria-hidden />
+      <div className="absolute inset-0 dot-map dot-map-drift opacity-70" aria-hidden />
       <div className="absolute inset-0" aria-hidden>
+
         {NODES.map((n, i) => (
           <motion.span
             key={i}
@@ -87,7 +91,7 @@ export function Hero() {
           <div className="overflow-hidden rounded-[2rem] border border-primary-foreground/15 shadow-[var(--shadow-lift)]">
             <img
               src={heroLab}
-              alt="Laboratorium komputer modern Pendidikan Informatika Universitas Ivet Semarang"
+              alt="Gedung FKIP Universitas Ivet Semarang, kampus Program Studi Pendidikan Informatika"
               width={1600}
               height={1104}
               className="h-full w-full object-cover"

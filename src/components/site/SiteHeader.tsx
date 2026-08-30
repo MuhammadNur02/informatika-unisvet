@@ -22,7 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { NAV } from "@/lib/site-nav";
-import logo from "@/assets/logo-ivet.png";
+import logo from "@/assets/logo-unisvet.png";
 
 const PORTALS = [
   { label: "SIAKAD", icon: LayoutDashboard, href: "https://siakad.ivet.ac.id" },

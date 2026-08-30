@@ -1,6 +1,6 @@
 import { MapPin, Mail, Phone, MessageCircle, Instagram, Facebook, Youtube, Music2 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import logo from "@/assets/logo-ivet.png";
+import logo from "@/assets/logo-unisvet.png";
 
 const LINKS = [
   { label: "Beranda", to: "/" },
