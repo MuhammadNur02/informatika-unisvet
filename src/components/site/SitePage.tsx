@@ -325,7 +325,7 @@ function useBreadcrumb(path: string) {
   return { group: "Halaman", child: "" };
 }
 
-export function SitePage({ path }: { path: string }) {
+export function SitePage({ path, children }: { path: string; children?: React.ReactNode }) {
   const page: PageContent | undefined = PAGES[path];
   const crumb = useBreadcrumb(path);
 
@@ -369,6 +369,7 @@ export function SitePage({ path }: { path: string }) {
           {page.blocks.map((block, i) => (
             <BlockView key={i} block={block} />
           ))}
+          {children}
         </div>
       </main>
       <SiteFooter />
