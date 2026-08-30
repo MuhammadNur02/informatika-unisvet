@@ -1,59 +1,55 @@
-type NebulaOrb = {
+type WaveLine = {
   top: string;
-  left: string;
-  size: number;
   duration: number;
   delay: number;
-  color: string;
+  opacity: number;
 };
 
-const ORBS: Array<NebulaOrb> = [
-  { top: "10%", left: "15%", size: 450, duration: 20, delay: 0, color: "from-primary/40 to-purple-600/30" },
-  { top: "40%", left: "70%", size: 550, duration: 25, delay: 5, color: "from-blue-600/30 to-indigo-500/20" },
-  { top: "70%", left: "25%", size: 500, duration: 22, delay: 2, color: "from-pink-600/30 to-purple-600/20" },
-  { top: "20%", left: "80%", size: 400, duration: 18, delay: 8, color: "from-violet-500/30 to-primary/30" },
+const WAVES: Array<WaveLine> = [
+  { top: "15%", duration: 12, delay: 0, opacity: 0.7 },
+  { top: "35%", duration: 16, delay: -4, opacity: 0.5 },
+  { top: "55%", duration: 14, delay: -2, opacity: 0.6 },
+  { top: "75%", duration: 18, delay: -6, opacity: 0.4 },
 ];
 
-/** Lapisan background Aurora/Cosmic Nebula modern yang elegan dan dinamis. */
+/** Lapisan animasi gelombang kain/bendera elegan berwarna maroon tua. */
 export function SmokeLayer({ className = "" }: { className?: string }) {
   return (
     <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`} aria-hidden>
-      {/* Efek Noise / Grain halus opsional untuk kesan cinematic */}
-      <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
-
-      {/* Floating Glowing Orbs */}
-      {ORBS.map((orb, i) => (
+      {WAVES.map((wave, i) => (
         <div
           key={i}
-          className={`absolute rounded-full mix-blend-screen filter blur-[90px] animate-aurora opacity-60 bg-gradient-to-r ${orb.color}`}
+          className="absolute left-[-20%] right-[-20%] h-[300px] animate-wave"
           style={{
-            top: orb.top,
-            left: orb.left,
-            width: orb.size,
-            height: orb.size,
-            animationDuration: `${orb.duration}s`,
-            animationDelay: `${orb.delay}s`,
+            top: wave.top,
+            opacity: wave.opacity,
+            animationDuration: `${wave.duration}s`,
+            animationDelay: `${wave.delay}s`,
             animationIterationCount: "infinite",
             animationTimingFunction: "ease-in-out",
+            background:
+              "linear-gradient(90deg, transparent, rgba(128, 0, 32, 0.35), rgba(80, 0, 20, 0.6), rgba(128, 0, 32, 0.35), transparent)",
+            clipPath:
+              "polygon(0% 50%, 10% 30%, 20% 50%, 30% 70%, 40% 50%, 50% 30%, 60% 50%, 70% 70%, 80% 50%, 90% 30%, 100% 50%, 100% 100%, 0% 100%)",
+            filter: "blur(35px)",
           }}
         />
       ))}
 
-      {/* Keyframe tambahan langsung di style inline atau masukkan ke CSS utama Anda jika belum ada */}
       <style>{`
-        @keyframes aurora {
-          0%, 100% {
-            transform: translate(0px, 0px) scale(1);
+        @keyframes waveMotion {
+          0% {
+            transform: translateX(0%) translateY(0%) rotate(0deg) scaleY(1);
           }
-          33% {
-            transform: translate(50px, -70px) scale(1.15);
+          50% {
+            transform: translateX(10%) translateY(-25px) rotate(2deg) scaleY(1.2);
           }
-          66% {
-            transform: translate(-40px, 40px) scale(0.9);
+          100% {
+            transform: translateX(0%) translateY(0%) rotate(0deg) scaleY(1);
           }
         }
-        .animate-aurora {
-          animation-name: aurora;
+        .animate-wave {
+          animation-name: waveMotion;
         }
       `}</style>
     </div>
