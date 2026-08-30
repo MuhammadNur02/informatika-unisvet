@@ -144,8 +144,9 @@ export function BinaryRain({ className = "" }: { className?: string }) {
         <span
           key={`s-${i}`}
           className="bit-spark"
-          style={{
-            left: s.left,
+          style={
+            {
+              left: s.left,
             top: s.top,
             width: s.size,
             height: s.size,
