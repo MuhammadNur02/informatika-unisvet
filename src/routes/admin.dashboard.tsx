@@ -205,7 +205,7 @@ function AdminDashboard() {
             className="space-y-8"
           >
             <div className="relative overflow-hidden rounded-3xl bg-hero-gradient p-7 sm:p-9">
-              <div className="tech-grid pointer-events-none absolute inset-0 opacity-70" />
+              <div className="pointer-events-none absolute inset-0 opacity-70" />
               <div className="relative">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Selamat datang</p>
                 <h2 className="mt-2 max-w-xl text-2xl font-extrabold tracking-tight text-primary-foreground sm:text-3xl">

@@ -4,6 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import bannerAsset from "@/assets/banner-kampus.jpg.asset.json";
 import { SmokeLayer } from "./SmokeLayer";
+import { BinaryRain } from "./BinaryRain";
 
 const heroLab = bannerAsset.url;
 
@@ -21,7 +22,7 @@ const NODES = [
 export function Hero() {
   return (
     <section id="beranda" className="relative isolate overflow-hidden bg-hero-gradient pb-24 pt-32 sm:pb-32 sm:pt-40">
-      <div className="absolute inset-0 tech-grid opacity-60" aria-hidden />
+      <BinaryRain />
       <SmokeLayer />
       <div className="absolute inset-0" aria-hidden>
 
