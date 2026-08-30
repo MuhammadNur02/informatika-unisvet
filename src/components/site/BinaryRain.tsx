@@ -152,6 +152,7 @@ export function BinaryRain({ className = "" }: { className?: string }) {
             background: s.color,
             boxShadow: `0 0 ${s.size * 3}px ${s.color}, 0 0 ${s.size * 6}px ${s.color}`,
             opacity: s.opacity,
+            "--spark-opacity": s.opacity,
             animationDuration: `${s.duration}s`,
             animationDelay: `${s.delay}s`,
           }}
