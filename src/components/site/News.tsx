@@ -6,6 +6,8 @@ import { Reveal, SectionHeading } from "./Reveal";
 import { cn } from "@/lib/utils";
 import labIot from "@/assets/lab-iot.jpg";
 import labMultimedia from "@/assets/lab-multimedia.jpg";
+import kegiatanAsset from "@/assets/kegiatan-praktikum.jpg.asset.json";
+const kegiatanPraktikum = kegiatanAsset.url;
 import labSmart from "@/assets/lab-smart.jpg";
 
 type Item = { date: string; tag: string; title: string; excerpt: string; image: string };
@@ -43,7 +45,7 @@ const DATA: Record<string, Item[]> = {
       tag: "Workshop",
       title: "Workshop Web Development dengan React & TypeScript",
       excerpt: "Pelatihan intensif tiga hari bersama praktisi industri dari Semarang Tech Hub.",
-      image: labMultimedia,
+      image: kegiatanPraktikum,
     },
     {
       date: "05 Sep 2026",
