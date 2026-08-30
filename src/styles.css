@@ -1,368 +1,135 @@
-@import "tailwindcss" source(none);
-@source "../src";
-@import "tw-animate-css";
+type FloatingWord = {
+  id: number;
+  text: string;
+  top: string;
+  size: number;
+  duration: number;
+  delay: number;
+  flickerDuration: number;
+  flickerDelay: number;
+  opacity: number;
+  color: string;
+  direction: 'left' | 'right';
+  depth: number;
+};
 
-@custom-variant dark (&:is(.dark *));
-
-@theme {
-  --font-sans:
-    "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+function seeded(i: number, salt: number) {
+  const x = Math.sin(i * 127.1 + salt * 311.7) * 43758.5453;
+  return x - Math.floor(x);
 }
 
-/*
- * Design system definition.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
- */
+const WORDS_LIST = ["UNISVET", "INFORMATIKA", "PENDIDIKAN", "IT", "S1", "EDTECH"];
+const COLOR_PALETTE = [
+  "rgba(212, 175, 55, 0.9)",
+  "rgba(255, 255, 255, 0.85)",
+  "rgba(180, 20, 50, 0.8)",
+  "rgba(230, 200, 100, 0.85)",
+];
 
-@theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent-soft: var(--accent-soft);
-  --color-primary-deep: var(--primary-deep);
-  --color-primary-soft: var(--primary-soft);
-  --color-slate-surface: var(--slate-surface);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-ring-offset-background: var(--background);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-}
+const ITEM_COUNT = 24;
 
-:root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.22 0.03 25);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.22 0.03 25);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.22 0.03 25);
-  --primary: oklch(0.36 0.15 25);
-  --primary-foreground: oklch(0.99 0.005 250);
-  --primary-deep: oklch(0.25 0.12 25);
-  --primary-soft: oklch(0.48 0.17 27);
-  --secondary: oklch(0.965 0.008 250);
-  --secondary-foreground: oklch(0.36 0.15 25);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.53 0.032 256);
-  --accent: oklch(0.79 0.15 78);
-  --accent-foreground: oklch(0.3 0.13 25);
-  --accent-soft: oklch(0.9 0.09 85);
-  --slate-surface: oklch(0.975 0.006 250);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.92 0.012 255);
-  --input: oklch(0.92 0.012 255);
-  --ring: oklch(0.79 0.15 78);
+const FLOATING_ITEMS: Array<FloatingWord> = Array.from({ length: ITEM_COUNT }, (_, i) => {
+  const text = WORDS_LIST[Math.floor(seeded(i, 1) * WORDS_LIST.length)];
+  const top = `${4 + seeded(i, 2) * 92}%`;
+  const size = text.length > 8 ? 14 + Math.floor(seeded(i, 3) * 16) : 18 + Math.floor(seeded(i, 3) * 26);
+  const duration = 18 + seeded(i, 4) * 22;
+  const delay = -seeded(i, 5) * 30;
+  const flickerDuration = 1.5 + seeded(i, 6) * 4;
+  const flickerDelay = -seeded(i, 7) * 5;
+  const opacity = 0.3 + seeded(i, 8) * 0.6;
+  const color = COLOR_PALETTE[Math.floor(seeded(i, 9) * COLOR_PALETTE.length)];
+  const direction = seeded(i, 10) > 0.5 ? 'left' : 'right';
+  const depth = -200 + Math.floor(seeded(i, 11) * 600);
 
-  --gradient-hero: linear-gradient(
-    135deg,
-    oklch(0.19 0.08 24) 0%,
-    oklch(0.31 0.14 25) 48%,
-    oklch(0.42 0.17 27) 100%
+  return {
+    id: i,
+    text,
+    top,
+    size,
+    duration,
+    delay,
+    flickerDuration,
+    flickerDelay,
+    opacity,
+    color,
+    direction,
+    depth,
+  };
+});
+
+/** Lapisan animasi teks 3D (UNISVET, INFORMATIKA, PENDIDIKAN) dengan efek lampu konslet & gerak acak berlawanan arah. */
+export function SmokeLayer({ className = "" }: { className?: string }) {
+  return (
+    <div
+      className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}
+      style={{ perspective: "900px" }}
+      aria-hidden
+    >
+      {/* Vignette gelap di pinggir & tengah agar kontras teks utama sangat tajam */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(40,0,10,0.4)_0%,rgba(12,0,4,0.92)_100%)] z-10" />
+
+      {/* Kontainer Elemen 3D */}
+      <div className="absolute inset-0 z-0" style={{ transformStyle: "preserve-3d" }}>
+        {FLOATING_ITEMS.map((item) => (
+          <div
+            key={item.id}
+            className={`absolute font-black tracking-wider uppercase whitespace-nowrap ${
+              item.direction === 'left' ? 'animate-move-left' : 'animate-move-right'
+            } animate-flicker`}
+            style={
+              {
+                top: item.top,
+                fontSize: `${item.size}px`,
+                color: item.color,
+                textShadow: `0 0 10px ${item.color}, 0 0 20px ${item.color}`,
+                animationDuration: `${item.duration}s, ${item.flickerDuration}s`,
+                animationDelay: `${item.delay}s, ${item.flickerDelay}s`,
+                animationIterationCount: "infinite",
+                animationTimingFunction: "linear, steps(2, start)",
+                transform: `translateZ(${item.depth}px) rotate(${item.depth % 15}deg)`,
+                opacity: item.opacity,
+              } as React.CSSProperties
+            }
+          >
+            {item.text}
+          </div>
+        ))}
+      </div>
+
+      <style>{`
+        @keyframes moveLeft {
+          0% {
+            left: 110%;
+          }
+          100% {
+            left: -30%;
+          }
+        }
+        @keyframes moveRight {
+          0% {
+            left: -30%;
+          }
+          100% {
+            left: 110%;
+          }
+        }
+        @keyframes flickerGlitch {
+          0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+            opacity: var(--tw-opacity, 0.8);
+            filter: drop-shadow(0 0 8px currentColor);
+          }
+          20%, 24%, 55% {
+            opacity: 0.05;
+            filter: none;
+          }
+        }
+        .animate-move-left {
+          animation-name: moveLeft, flickerGlitch;
+        }
+        .animate-move-right {
+          animation-name: moveRight, flickerGlitch;
+        }
+      `}</style>
+    </div>
   );
-  --gradient-gold: linear-gradient(135deg, oklch(0.79 0.15 78), oklch(0.88 0.11 88));
-  --shadow-card: 0 1px 2px oklch(0.36 0.15 25 / 0.07), 0 12px 32px -12px oklch(0.36 0.15 25 / 0.2);
-  --shadow-lift: 0 24px 48px -20px oklch(0.36 0.15 25 / 0.35);
-  --shadow-glow: 0 0 0 1px oklch(0.79 0.15 78 / 0.5), 0 12px 32px -10px oklch(0.79 0.15 78 / 0.45);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
-}
-
-.dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
-}
-
-@layer base {
-  * {
-    border-color: var(--color-border);
-  }
-
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-}
-
-@utility glass-header {
-  background: oklch(1 0 0 / 0.72);
-  backdrop-filter: blur(16px) saturate(180%);
-  border-bottom: 1px solid oklch(0.36 0.15 25 / 0.1);
-  box-shadow: 0 8px 30px -18px oklch(0.36 0.15 25 / 0.3);
-}
-
-@utility card-elevated {
-  background: var(--color-card);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-card);
-  transition:
-    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.35s ease,
-    border-color 0.35s ease;
-
-  &:hover {
-    transform: translateY(-6px) scale(1.015);
-    box-shadow: var(--shadow-lift);
-    border-color: oklch(0.79 0.15 78 / 0.55);
-  }
-}
-
-@utility text-gradient-gold {
-  background: var(--gradient-gold);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-}
-
-@utility bg-hero-gradient {
-  background-image: var(--gradient-hero);
-}
-
-@utility binary-column {
-  position: absolute;
-  top: 0;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-weight: 600;
-  line-height: 1.9;
-  white-space: pre;
-  writing-mode: vertical-rl;
-  text-orientation: upright;
-  letter-spacing: 0.35em;
-  opacity: var(--col-opacity, 0.15);
-  text-shadow:
-    0 0 6px currentColor,
-    0 0 18px currentColor;
-  animation: binary-drift linear infinite;
-  will-change: transform;
-}
-
-@keyframes binary-drift {
-  0% {
-    transform: translate3d(0, -45vh, 0);
-  }
-  100% {
-    transform: translate3d(0, 115vh, 0);
-  }
-}
-
-@utility binary-row {
-  position: absolute;
-  left: 0;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-weight: 600;
-  white-space: pre;
-  letter-spacing: 0.5em;
-  opacity: var(--col-opacity, 0.15);
-  text-shadow:
-    0 0 6px currentColor,
-    0 0 18px currentColor;
-  animation: binary-drift-x linear infinite;
-  will-change: transform;
-}
-
-@utility binary-row-reverse {
-  animation-name: binary-drift-x-reverse;
-}
-
-@keyframes binary-drift-x {
-  0% {
-    transform: translate3d(-40vw, 0, 0);
-  }
-  100% {
-    transform: translate3d(110vw, 0, 0);
-  }
-}
-
-@keyframes binary-drift-x-reverse {
-  0% {
-    transform: translate3d(110vw, 0, 0);
-  }
-  100% {
-    transform: translate3d(-40vw, 0, 0);
-  }
-}
-
-@utility bit-spark {
-  position: absolute;
-  border-radius: 9999px;
-  animation: bit-spark-float ease-in-out infinite;
-  will-change: transform, opacity;
-}
-
-@keyframes bit-spark-float {
-  0% {
-    transform: translate3d(0, 0, 0) scale(0.6);
-    opacity: 0;
-  }
-  25% {
-    opacity: var(--spark-opacity, 0.7);
-  }
-  50% {
-    transform: translate3d(8px, -60px, 0) scale(1);
-  }
-  75% {
-    opacity: var(--spark-opacity, 0.7);
-  }
-  100% {
-    transform: translate3d(-8px, -130px, 0) scale(0.5);
-    opacity: 0;
-  }
-}
-
-@utility pulse-glow {
-  animation: pmb-pulse 2.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes pmb-pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 oklch(0.79 0.15 78 / 0.55), 0 10px 26px -12px oklch(0.79 0.15 78 / 0.5);
-  }
-  50% {
-    box-shadow: 0 0 0 10px oklch(0.79 0.15 78 / 0), 0 10px 26px -12px oklch(0.79 0.15 78 / 0.5);
-  }
-}
-
-@utility smoke-blob {
-  position: absolute;
-  border-radius: 9999px;
-  background: radial-gradient(
-    closest-side,
-    oklch(0.32 0.1 18 / 0.85),
-    oklch(0.24 0.07 18 / 0.45) 55%,
-    transparent 78%
-  );
-  filter: blur(38px);
-  pointer-events: none;
-  will-change: transform, opacity;
-}
-
-@keyframes smoke-from-left {
-  0% {
-    transform: translate3d(-30vw, 0, 0) scale(0.9);
-    opacity: 0;
-  }
-  15% {
-    opacity: var(--smoke-opacity, 0.7);
-  }
-  55% {
-    transform: translate3d(28vw, -4vh, 0) scale(1.15);
-  }
-  85% {
-    opacity: var(--smoke-opacity, 0.7);
-  }
-  100% {
-    transform: translate3d(115vw, 3vh, 0) scale(0.95);
-    opacity: 0;
-  }
-}
-
-@keyframes smoke-from-right {
-  0% {
-    transform: translate3d(30vw, 0, 0) scale(0.9);
-    opacity: 0;
-  }
-  15% {
-    opacity: var(--smoke-opacity, 0.7);
-  }
-  55% {
-    transform: translate3d(-28vw, 4vh, 0) scale(1.15);
-  }
-  85% {
-    opacity: var(--smoke-opacity, 0.7);
-  }
-  100% {
-    transform: translate3d(-115vw, -3vh, 0) scale(0.95);
-    opacity: 0;
-  }
 }
