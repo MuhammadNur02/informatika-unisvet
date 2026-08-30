@@ -34,11 +34,13 @@ function pickColor(i: number, bright: boolean): string {
   return COLORS.rose;
 }
 
+// Tanpa pemisah: untuk kolom vertikal karakter ditumpuk lurus ke bawah
+// oleh writing-mode (seperti garis "I"), untuk baris horizontal dirapatkan.
 function makeChars(i: number, len: number) {
   return Array.from(
     { length: len },
     (_, j) => GLYPHS[Math.floor(seeded(i * 31 + j, 2) * GLYPHS.length)],
-  ).join("\n");
+  ).join("");
 }
 
 // Kecepatan acak 3 tingkat: cepat / sedang / pelan
