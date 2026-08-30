@@ -154,9 +154,10 @@ export function BinaryRain({ className = "" }: { className?: string }) {
             boxShadow: `0 0 ${s.size * 3}px ${s.color}, 0 0 ${s.size * 6}px ${s.color}`,
             opacity: s.opacity,
             "--spark-opacity": s.opacity,
-            animationDuration: `${s.duration}s`,
-            animationDelay: `${s.delay}s`,
-          }}
+              animationDuration: `${s.duration}s`,
+              animationDelay: `${s.delay}s`,
+            } as React.CSSProperties
+          }
         />
       ))}
     </div>
