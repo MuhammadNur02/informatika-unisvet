@@ -1,5 +1,7 @@
 import type { PageContent } from "./types";
 import labIot from "@/assets/lab-iot.jpg";
+import labKomputerAsset from "@/assets/lab-komputer.webp.asset.json";
+const labKomputer = labKomputerAsset.url;
 import labSmart from "@/assets/lab-smart.jpg";
 import labMicroteaching from "@/assets/lab-microteaching.jpg";
 import libCampus from "@/assets/lib-campus.jpg";
@@ -193,7 +195,7 @@ export const PROFIL_PAGES: Record<string, PageContent> = {
         type: "gallery",
         title: "Laboratorium & Ruang Belajar",
         items: [
-          { name: "Laboratorium Komputer Lanjut", image: labIot, desc: "Workstation pemrograman, jaringan, IoT, dan purwarupa sistem cerdas." },
+          { name: "Laboratorium Komputer Lanjut", image: labKomputer, desc: "Workstation pemrograman, jaringan, IoT, dan purwarupa sistem cerdas." },
           { name: "Microteaching Studio", image: labMicroteaching, desc: "Studio latihan mengajar dengan perekaman video untuk evaluasi pedagogi." },
           { name: "Smart Classroom", image: labSmart, desc: "Ruang kelas interaktif dengan papan digital dan konferensi hibrida." },
           { name: "Perpustakaan & E-Library", image: libCampus, desc: "Ruang baca modern dengan akses jurnal digital dan repositori kampus." },
