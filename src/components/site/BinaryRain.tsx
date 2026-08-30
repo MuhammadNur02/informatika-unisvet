@@ -138,7 +138,7 @@ export function BinaryRain({ className = "" }: { className?: string }) {
             } as React.CSSProperties
           }
         >
-          {row.chars.replaceAll("\n", " ")}
+          {row.chars}
         </span>
       ))}
 
