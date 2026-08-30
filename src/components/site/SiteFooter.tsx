@@ -125,8 +125,14 @@ export function SiteFooter() {
               </li>
               <li className="flex gap-3">
                 <MessageCircle className="size-4 shrink-0 text-accent" />
-                <a href="https://wa.me/6281234567890" className="transition-colors hover:text-accent">
-                  WhatsApp +62 812-3456-7890
+                <a href="https://wa.me/6282138562161" className="transition-colors hover:text-accent">
+                  WhatsApp Admin +62 821-3856-2161
+                </a>
+              </li>
+              <li className="flex gap-3">
+                <MessageCircle className="size-4 shrink-0 text-accent" />
+                <a href="https://wa.me/6285226154744" className="transition-colors hover:text-accent">
+                  WhatsApp Kaprodi +62 852-2615-4744
                 </a>
               </li>
               <li className="flex gap-3">
