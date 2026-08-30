@@ -257,7 +257,8 @@ export const PMB_PAGES: Record<string, PageContent> = {
         type: "prose",
         title: "Kontak Panitia",
         paragraphs: [
-          "WhatsApp: +62 812-3456-7890 (jam kerja 08.00–16.00 WIB).",
+          "WhatsApp Admin: +62 821-3856-2161 (jam kerja 08.00–16.00 WIB).",
+          "WhatsApp Kaprodi: +62 852-2615-4744.",
           "Email: pendidikaninformatika@ivet.ac.id — Telepon: (024) 8316375.",
           "Sekretariat: Universitas Ivet, Jl. Pawiyatan Luhur IV No.18, Bendan Duwur, Gajahmungkur, Kota Semarang, Jawa Tengah 50235.",
         ],
@@ -267,7 +268,7 @@ export const PMB_PAGES: Record<string, PageContent> = {
         title: "Buka Portal PMB UNISVET",
         desc: "Pendaftaran daring dibuka sepanjang periode PMB tahun akademik berjalan.",
         label: "Ke Portal PMB",
-        href: "https://pmb.ivet.ac.id",
+        href: "https://pmb.unisvet.ac.id/",
       },
     ],
   },
