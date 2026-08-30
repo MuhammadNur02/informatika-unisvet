@@ -268,7 +268,7 @@ export function SiteHeader() {
                           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                           className="overflow-hidden"
                         >
-                          <div className="mx-3 mb-3 space-y-0.5 border-l border-border pl-3">
+                          <div className="relative mx-3 mb-3 ml-[27px] space-y-0.5 pl-4 before:absolute before:bottom-2 before:left-0 before:top-2 before:w-px before:bg-gradient-to-b before:from-accent/50 before:via-border before:to-transparent before:content-['']">
                             {item.children.map((child) => {
                               const active = pathname === child.to;
                               return (
@@ -277,12 +277,18 @@ export function SiteHeader() {
                                   to={child.to}
                                   onClick={() => setOpen(false)}
                                   className={cn(
-                                    "group flex items-center gap-2 rounded-xl px-3 py-2 text-[13.5px] transition-all duration-200",
+                                    "group relative flex items-center gap-2 rounded-xl px-3 py-2 text-[13.5px] transition-colors duration-200",
                                     active
                                       ? "bg-secondary font-semibold text-primary"
-                                      : "text-muted-foreground hover:bg-secondary/60 hover:pl-4 hover:text-primary",
+                                      : "text-muted-foreground hover:bg-secondary/60 hover:text-primary",
                                   )}
                                 >
+                                  <span
+                                    className={cn(
+                                      "absolute -left-4 top-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors",
+                                      active ? "bg-accent" : "bg-border group-hover:bg-accent/70",
+                                    )}
+                                  />
                                   <ChevronRight className="size-3.5 shrink-0 opacity-0 transition-opacity group-hover:opacity-100 data-[active=true]:opacity-100" />
                                   <span className="min-w-0 truncate">{child.label}</span>
                                 </Link>
