@@ -229,22 +229,56 @@
   }
 }
 
-@utility dot-map {
-  background-image: radial-gradient(oklch(0.72 0.19 27 / 0.55) 1.4px, transparent 1.5px);
-  background-size: 14px 14px;
-  mask-image: radial-gradient(120% 90% at 70% 30%, oklch(0 0 0) 0%, transparent 72%);
-  -webkit-mask-image: radial-gradient(120% 90% at 70% 30%, oklch(0 0 0) 0%, transparent 72%);
+@utility smoke-blob {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(
+    closest-side,
+    oklch(0.32 0.1 18 / 0.85),
+    oklch(0.24 0.07 18 / 0.45) 55%,
+    transparent 78%
+  );
+  filter: blur(38px);
+  pointer-events: none;
+  will-change: transform, opacity;
 }
 
-@utility dot-map-drift {
-  animation: dot-drift 26s linear infinite;
-}
-
-@keyframes dot-drift {
+@keyframes smoke-from-left {
   0% {
-    background-position: 0 0;
+    transform: translate3d(-30vw, 0, 0) scale(0.9);
+    opacity: 0;
+  }
+  15% {
+    opacity: var(--smoke-opacity, 0.7);
+  }
+  55% {
+    transform: translate3d(28vw, -4vh, 0) scale(1.15);
+  }
+  85% {
+    opacity: var(--smoke-opacity, 0.7);
   }
   100% {
-    background-position: 280px 140px;
+    transform: translate3d(115vw, 3vh, 0) scale(0.95);
+    opacity: 0;
+  }
+}
+
+@keyframes smoke-from-right {
+  0% {
+    transform: translate3d(30vw, 0, 0) scale(0.9);
+    opacity: 0;
+  }
+  15% {
+    opacity: var(--smoke-opacity, 0.7);
+  }
+  55% {
+    transform: translate3d(-28vw, 4vh, 0) scale(1.15);
+  }
+  85% {
+    opacity: var(--smoke-opacity, 0.7);
+  }
+  100% {
+    transform: translate3d(-115vw, -3vh, 0) scale(0.95);
+    opacity: 0;
   }
 }
