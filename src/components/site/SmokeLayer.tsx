@@ -1,136 +1,45 @@
-type FloatingWord = {
-  id: number;
-  text: string;
-  top: string;
-  size: number; // ukuran font acak (besar/kecil)
-  duration: number; // kecepatan bergerak ke samping
-  delay: number;
-  flickerDuration: number; // durasi kedipan lampu konslet
-  flickerDelay: number;
-  opacity: number;
-  color: string;
-  direction: "left" | "right"; // arah gerak berlawanan
-  depth: number; // efek 3D
-};
-
-function seeded(i: number, salt: number) {
-  const x = Math.sin(i * 127.1 + salt * 311.7) * 43758.5453;
-  return x - Math.floor(x);
+type SmokeBlob = {
+  top: string
+  size: number
+  duration: number
+  delay: number
+  opacity: number
+  from: 'left' | 'right'
 }
 
-const WORDS_LIST = ["UNISVET", "INFORMATIKA", "PENDIDIKAN", "IT", "S1", "EDTECH"];
-const COLOR_PALETTE = [
-  "rgba(212, 175, 55, 0.9)", // Emas
-  "rgba(255, 255, 255, 0.85)", // Putih terang
-  "rgba(180, 20, 50, 0.8)", // Maroon terang
-  "rgba(230, 200, 100, 0.85)", // Amber emas
-];
+const BLOBS: Array<SmokeBlob> = [
+  { top: '4%', size: 420, duration: 34, delay: 0, opacity: 0.75, from: 'left' },
+  { top: '18%', size: 300, duration: 27, delay: 6, opacity: 0.6, from: 'right' },
+  { top: '34%', size: 520, duration: 42, delay: 12, opacity: 0.7, from: 'left' },
+  { top: '48%', size: 260, duration: 24, delay: 3, opacity: 0.55, from: 'right' },
+  { top: '60%', size: 460, duration: 38, delay: 18, opacity: 0.7, from: 'right' },
+  { top: '72%', size: 340, duration: 30, delay: 9, opacity: 0.65, from: 'left' },
+  { top: '12%', size: 380, duration: 36, delay: 22, opacity: 0.6, from: 'right' },
+  { top: '82%', size: 300, duration: 28, delay: 15, opacity: 0.55, from: 'left' },
+  { top: '55%', size: 240, duration: 22, delay: 26, opacity: 0.5, from: 'left' },
+]
 
-const ITEM_COUNT = 24;
-
-const FLOATING_ITEMS: Array<FloatingWord> = Array.from({ length: ITEM_COUNT }, (_, i) => {
-  const text = WORDS_LIST[Math.floor(seeded(i, 1) * WORDS_LIST.length)];
-  const top = `${4 + seeded(i, 2) * 92}%`;
-  // Variasi ukuran font besar dan kecil secara acak
-  const size = text.length > 8 ? 14 + Math.floor(seeded(i, 3) * 16) : 18 + Math.floor(seeded(i, 3) * 26);
-  const duration = 18 + seeded(i, 4) * 22; // Durasi gerak ke samping
-  const delay = -seeded(i, 5) * 30;
-  const flickerDuration = 1.5 + seeded(i, 6) * 4; // Kecepatan kedipan konslet
-  const flickerDelay = -seeded(i, 7) * 5;
-  const opacity = 0.3 + seeded(i, 8) * 0.6;
-  const color = COLOR_PALETTE[Math.floor(seeded(i, 9) * COLOR_PALETTE.length)];
-  const direction = seeded(i, 10) > 0.5 ? "left" : "right"; // Berlawanan arah
-  const depth = -200 + Math.floor(seeded(i, 11) * 600); // Variasi kedalaman 3D
-
-  return {
-    id: i,
-    text,
-    top,
-    size,
-    duration,
-    delay,
-    flickerDuration,
-    flickerDelay,
-    opacity,
-    color,
-    direction,
-    depth,
-  };
-});
-
-/** Lapisan animasi teks 3D (UNISVET, INFORMATIKA, PENDIDIKAN) dengan efek lampu konslet & gerak acak berlawanan arah. */
-export function SmokeLayer({ className = "" }: { className?: string }) {
+/** Lapisan kabut/smoke maroon gelap yang bergerak acak dari kiri & kanan. */
+export function SmokeLayer({ className = '' }: { className?: string }) {
   return (
-    <div
-      className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}
-      style={{ perspective: "900px" }}
-      aria-hidden
-    >
-      {/* Vignette gelap di pinggir & tengah agar kontras teks utama sangat tajam */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(40,0,10,0.4)_0%,rgba(12,0,4,0.92)_100%)] z-10" />
-
-      {/* Kontainer Elemen 3D */}
-      <div className="absolute inset-0 z-0" style={{ transformStyle: "preserve-3d" }}>
-        {FLOATING_ITEMS.map((item) => (
-          <div
-            key={item.id}
-            className={`absolute font-black tracking-wider uppercase whitespace-nowrap ${
-              item.direction === "left" ? "animate-move-left" : "animate-move-right"
-            } animate-flicker`}
-            style={
-              {
-                top: item.top,
-                fontSize: `${item.size}px`,
-                color: item.color,
-                textShadow: `0 0 10px ${item.color}, 0 0 20px ${item.color}`,
-                animationDuration: `${item.duration}s, ${item.flickerDuration}s`,
-                animationDelay: `${item.delay}s, ${item.flickerDelay}s`,
-                animationIterationCount: "infinite",
-                animationTimingFunction: "linear, steps(2, start)",
-                transform: `translateZ(${item.depth}px) rotate(${item.depth % 15}deg)`,
-                opacity: item.opacity,
-              } as React.CSSProperties
-            }
-          >
-            {item.text}
-          </div>
-        ))}
-      </div>
-
-      <style>{`
-        @keyframes moveLeft {
-          0% {
-            left: 110%;
+    <div className={`absolute inset-0 overflow-hidden ${className}`} aria-hidden>
+      {BLOBS.map((blob, i) => (
+        <div
+          key={i}
+          className="smoke-blob"
+          style={
+            {
+              top: blob.top,
+              left: blob.from === 'left' ? '-20%' : 'auto',
+              right: blob.from === 'right' ? '-20%' : 'auto',
+              width: blob.size,
+              height: blob.size * 0.62,
+              '--smoke-opacity': blob.opacity,
+              animation: `${blob.from === 'left' ? 'smoke-from-left' : 'smoke-from-right'} ${blob.duration}s linear ${blob.delay}s infinite`,
+            } as React.CSSProperties
           }
-          100% {
-            left: -30%;
-          }
-        }
-        @keyframes moveRight {
-          0% {
-            left: -30%;
-          }
-          100% {
-            left: 110%;
-          }
-        }
-        @keyframes flickerGlitch {
-          0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-            opacity: var(--tw-opacity, 0.8);
-            filter: drop-shadow(0 0 8px currentColor);
-          }
-          20%, 24%, 55% {
-            opacity: 0.05;
-            filter: none;
-          }
-        }
-        .animate-move-left {
-          animation-name: moveLeft, flickerGlitch;
-        }
-        .animate-move-right {
-          animation-name: moveRight, flickerGlitch;
-        }
-      `}</style>
+        />
+      ))}
     </div>
-  );
+  )
 }
