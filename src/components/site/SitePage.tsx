@@ -335,7 +335,8 @@ export function SitePage({ path, children }: { path: string; children?: React.Re
     <div className="min-h-screen bg-background">
       <SiteHeader />
       <main>
-        <section className="tech-grid relative overflow-hidden bg-primary-deep pb-16 pt-36 sm:pb-20 sm:pt-44">
+        <section className="relative overflow-hidden bg-primary-deep pb-16 pt-36 sm:pb-20 sm:pt-44">
+          <SmokeLayer />
           <div className="absolute -right-24 -top-24 size-72 rounded-full bg-accent/20 blur-3xl" />
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <Reveal y={16}>
