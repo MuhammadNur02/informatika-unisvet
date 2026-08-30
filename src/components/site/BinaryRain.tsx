@@ -56,23 +56,10 @@ const VERTICAL: Array<Stream> = Array.from({ length: VERTICAL_COUNT }, (_, i) =>
   };
 });
 
-const SPARKS = Array.from({ length: 10 }, (_, i) => ({
-  left: `${seeded(i, 20) * 100}%`,
-  top: `${55 + seeded(i, 21) * 45}%`,
-  size: 2 + Math.floor(seeded(i, 22) * 3),
-  duration: 6 + seeded(i, 23) * 9,
-  delay: -seeded(i, 24) * 15,
-  color: seeded(i, 25) > 0.5 ? COLORS.gold : COLORS.white,
-  opacity: 0.25 + seeded(i, 26) * 0.3,
-}));
-
-/** Hujan kode binary vertikal ke bawah yang dikombinasikan dengan efek 3D latar belakang. */
+/** Hujan kode binary vertikal ke bawah dengan latar belakang merah maroon gelap bersih tanpa vignette dan sparks. */
 export function BinaryRain({ className = "" }: { className?: string }) {
   return (
-    <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`} aria-hidden>
-      {/* Vignette gelap agar teks utama tetap tajam dan kontras */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(40,0,10,0.4)_0%,rgba(15,0,5,0.85)_100%)] z-0" />
-
+    <div className={`absolute inset-0 overflow-hidden pointer-events-none bg-[#3b0914] ${className}`} aria-hidden>
       <div className="relative z-10">
         {VERTICAL.map((col, i) => (
           <span
@@ -91,27 +78,6 @@ export function BinaryRain({ className = "" }: { className?: string }) {
           >
             {col.chars}
           </span>
-        ))}
-
-        {SPARKS.map((s, i) => (
-          <span
-            key={`s-${i}`}
-            className="bit-spark"
-            style={
-              {
-                left: s.left,
-                top: s.top,
-                width: s.size,
-                height: s.size,
-                background: s.color,
-                boxShadow: `0 0 ${s.size * 2}px ${s.color}`,
-                opacity: s.opacity,
-                "--spark-opacity": s.opacity,
-                animationDuration: `${s.duration}s`,
-                animationDelay: `${s.delay}s`,
-              } as React.CSSProperties
-            }
-          />
         ))}
       </div>
     </div>
