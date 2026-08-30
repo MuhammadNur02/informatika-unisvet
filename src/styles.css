@@ -219,7 +219,9 @@
   text-orientation: upright;
   letter-spacing: 0.35em;
   opacity: var(--col-opacity, 0.15);
-  text-shadow: 0 0 12px currentColor;
+  text-shadow:
+    0 0 6px currentColor,
+    0 0 18px currentColor;
   animation: binary-drift linear infinite;
   will-change: transform;
 }
