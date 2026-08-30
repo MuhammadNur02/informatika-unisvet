@@ -21,7 +21,7 @@ export function Hero() {
   return (
     <section id="beranda" className="relative isolate overflow-hidden bg-hero-gradient pb-24 pt-32 sm:pb-32 sm:pt-40">
       <div className="absolute inset-0 tech-grid opacity-60" aria-hidden />
-      <div className="absolute inset-0 dot-map dot-map-drift opacity-70" aria-hidden />
+      <SmokeLayer />
       <div className="absolute inset-0" aria-hidden>
 
         {NODES.map((n, i) => (
