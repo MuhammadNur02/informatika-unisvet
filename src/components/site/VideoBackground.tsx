@@ -18,8 +18,8 @@ export function VideoBackground({ className = "" }: { className?: string }) {
         disablePictureInPicture
         disableRemotePlayback
       />
-      <div className="absolute inset-0 bg-primary-deep/70 mix-blend-multiply" />
-      <div className="absolute inset-0 bg-hero-gradient opacity-70" />
+      <div className="absolute inset-0 bg-primary-deep/60 mix-blend-multiply" />
+      <div className="absolute inset-0 bg-hero-gradient opacity-45" />
     </div>
   );
 }
