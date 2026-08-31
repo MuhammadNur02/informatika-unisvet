@@ -3,7 +3,7 @@ import { ChevronRight, Quote, ArrowRight } from "lucide-react";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
 import { Reveal } from "./Reveal";
-import { SmokeLayer } from "./SmokeLayer";
+import { VideoBackground } from "./VideoBackground";
 import { Button } from "@/components/ui/button";
 import type { Block, PageContent } from "@/content/types";
 import { PAGES } from "@/content";
