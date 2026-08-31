@@ -3,7 +3,7 @@ import { ChevronRight, Quote, ArrowRight } from "lucide-react";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
 import { Reveal } from "./Reveal";
-import { SmokeLayer } from "./SmokeLayer";
+import { VideoBackground } from "./VideoBackground";
 import { Button } from "@/components/ui/button";
 import type { Block, PageContent } from "@/content/types";
 import { PAGES } from "@/content";
@@ -337,8 +337,7 @@ export function SitePage({ path, children }: { path: string; children?: React.Re
       <SiteHeader />
       <main>
         <section className="relative overflow-hidden bg-primary-deep pb-16 pt-36 sm:pb-20 sm:pt-44">
-          <SmokeLayer />
-          <div className="absolute -right-24 -top-24 size-72 rounded-full bg-accent/20 blur-3xl" />
+          <VideoBackground />
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <Reveal y={16}>
               <nav className="flex flex-wrap items-center gap-2 text-xs font-medium text-primary-foreground/60">
