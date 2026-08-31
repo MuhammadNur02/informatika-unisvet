@@ -47,6 +47,75 @@ export type Database = {
         }
         Relationships: []
       }
+      media: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          judul: string
+          kind: string
+          storage_path: string | null
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          judul: string
+          kind?: string
+          storage_path?: string | null
+          url: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          judul?: string
+          kind?: string
+          storage_path?: string | null
+          url?: string
+        }
+        Relationships: []
+      }
+      page_content: {
+        Row: {
+          blocks: Json
+          created_at: string
+          description: string
+          eyebrow: string
+          id: string
+          meta_title: string
+          path: string
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          blocks?: Json
+          created_at?: string
+          description?: string
+          eyebrow?: string
+          id?: string
+          meta_title?: string
+          path: string
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          blocks?: Json
+          created_at?: string
+          description?: string
+          eyebrow?: string
+          id?: string
+          meta_title?: string
+          path?: string
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
