@@ -99,9 +99,9 @@
 
   --gradient-hero: linear-gradient(
     135deg,
-    oklch(0.19 0.08 24) 0%,
-    oklch(0.31 0.14 25) 48%,
-    oklch(0.42 0.17 27) 100%
+    oklch(0.16 0.07 23) 0%,
+    oklch(0.24 0.11 24) 50%,
+    oklch(0.3 0.13 26) 100%
   );
   --gradient-gold: linear-gradient(135deg, oklch(0.79 0.15 78), oklch(0.88 0.11 88));
   --shadow-card: 0 1px 2px oklch(0.36 0.15 25 / 0.07), 0 12px 32px -12px oklch(0.36 0.15 25 / 0.2);
@@ -208,97 +208,6 @@
   background-image: var(--gradient-hero);
 }
 
-@utility binary-column {
-  position: absolute;
-  top: 0;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-weight: 600;
-  line-height: 1.9;
-  white-space: pre;
-  writing-mode: vertical-rl;
-  text-orientation: upright;
-  letter-spacing: 0.35em;
-  opacity: var(--col-opacity, 0.15);
-  text-shadow:
-    0 0 6px currentColor,
-    0 0 18px currentColor;
-  animation: binary-drift linear infinite;
-  will-change: transform;
-}
-
-@keyframes binary-drift {
-  0% {
-    transform: translate3d(0, -45vh, 0);
-  }
-  100% {
-    transform: translate3d(0, 115vh, 0);
-  }
-}
-
-@utility binary-row {
-  position: absolute;
-  left: 0;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-weight: 600;
-  white-space: pre;
-  letter-spacing: 0.5em;
-  opacity: var(--col-opacity, 0.15);
-  text-shadow:
-    0 0 6px currentColor,
-    0 0 18px currentColor;
-  animation: binary-drift-x linear infinite;
-  will-change: transform;
-}
-
-@utility binary-row-reverse {
-  animation-name: binary-drift-x-reverse;
-}
-
-@keyframes binary-drift-x {
-  0% {
-    transform: translate3d(-40vw, 0, 0);
-  }
-  100% {
-    transform: translate3d(110vw, 0, 0);
-  }
-}
-
-@keyframes binary-drift-x-reverse {
-  0% {
-    transform: translate3d(110vw, 0, 0);
-  }
-  100% {
-    transform: translate3d(-40vw, 0, 0);
-  }
-}
-
-@utility bit-spark {
-  position: absolute;
-  border-radius: 9999px;
-  animation: bit-spark-float ease-in-out infinite;
-  will-change: transform, opacity;
-}
-
-@keyframes bit-spark-float {
-  0% {
-    transform: translate3d(0, 0, 0) scale(0.6);
-    opacity: 0;
-  }
-  25% {
-    opacity: var(--spark-opacity, 0.7);
-  }
-  50% {
-    transform: translate3d(8px, -60px, 0) scale(1);
-  }
-  75% {
-    opacity: var(--spark-opacity, 0.7);
-  }
-  100% {
-    transform: translate3d(-8px, -130px, 0) scale(0.5);
-    opacity: 0;
-  }
-}
-
 @utility pulse-glow {
   animation: pmb-pulse 2.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
@@ -313,56 +222,3 @@
   }
 }
 
-@utility smoke-blob {
-  position: absolute;
-  border-radius: 9999px;
-  background: radial-gradient(
-    closest-side,
-    oklch(0.32 0.1 18 / 0.85),
-    oklch(0.24 0.07 18 / 0.45) 55%,
-    transparent 78%
-  );
-  filter: blur(38px);
-  pointer-events: none;
-  will-change: transform, opacity;
-}
-
-@keyframes smoke-from-left {
-  0% {
-    transform: translate3d(-30vw, 0, 0) scale(0.9);
-    opacity: 0;
-  }
-  15% {
-    opacity: var(--smoke-opacity, 0.7);
-  }
-  55% {
-    transform: translate3d(28vw, -4vh, 0) scale(1.15);
-  }
-  85% {
-    opacity: var(--smoke-opacity, 0.7);
-  }
-  100% {
-    transform: translate3d(115vw, 3vh, 0) scale(0.95);
-    opacity: 0;
-  }
-}
-
-@keyframes smoke-from-right {
-  0% {
-    transform: translate3d(30vw, 0, 0) scale(0.9);
-    opacity: 0;
-  }
-  15% {
-    opacity: var(--smoke-opacity, 0.7);
-  }
-  55% {
-    transform: translate3d(-28vw, 4vh, 0) scale(1.15);
-  }
-  85% {
-    opacity: var(--smoke-opacity, 0.7);
-  }
-  100% {
-    transform: translate3d(-115vw, -3vh, 0) scale(0.95);
-    opacity: 0;
-  }
-}
