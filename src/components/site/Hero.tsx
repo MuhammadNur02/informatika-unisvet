@@ -3,47 +3,14 @@ import { ArrowRight, ShieldCheck, Sparkles, Cpu, Laptop } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import bannerAsset from "@/assets/banner-kampus.jpg.asset.json";
-import { SmokeLayer } from "./SmokeLayer";
-import { BinaryRain } from "./BinaryRain";
+import { VideoBackground } from "./VideoBackground";
 
 const heroLab = bannerAsset.url;
-
-const NODES = [
-  { top: "12%", left: "8%", d: 0 },
-  { top: "28%", left: "22%", d: 0.6 },
-  { top: "64%", left: "12%", d: 1.2 },
-  { top: "78%", left: "34%", d: 0.3 },
-  { top: "18%", left: "62%", d: 0.9 },
-  { top: "48%", left: "78%", d: 1.5 },
-  { top: "82%", left: "68%", d: 0.45 },
-  { top: "36%", left: "44%", d: 1.1 },
-];
 
 export function Hero() {
   return (
     <section id="beranda" className="relative isolate overflow-hidden bg-hero-gradient pb-24 pt-32 sm:pb-32 sm:pt-40">
-      <BinaryRain />
-      <SmokeLayer />
-      <div className="absolute inset-0" aria-hidden>
-
-        {NODES.map((n, i) => (
-          <motion.span
-            key={i}
-            className="absolute size-2 rounded-full bg-accent/70 shadow-[0_0_18px_4px_oklch(0.79_0.15_78/0.35)]"
-            style={{ top: n.top, left: n.left }}
-            animate={{ y: [0, -18, 0], opacity: [0.25, 0.9, 0.25] }}
-            transition={{ duration: 5 + n.d, repeat: Infinity, ease: "easeInOut", delay: n.d }}
-          />
-        ))}
-      </div>
-      <div
-        className="absolute -right-24 -top-24 size-[28rem] rounded-full bg-accent/20 blur-[120px]"
-        aria-hidden
-      />
-      <div
-        className="absolute -bottom-40 -left-24 size-[26rem] rounded-full bg-primary-soft/40 blur-[120px]"
-        aria-hidden
-      />
+      <VideoBackground />
 
       <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:px-8">
         <motion.div
