@@ -15,7 +15,9 @@ export type Block =
   | { type: "stats"; title?: string; items: { label: string; value: string }[] }
   | { type: "timeline"; title?: string; items: { date: string; title: string; desc: string }[] }
   | { type: "quotes"; title?: string; items: { name: string; role: string; quote: string }[] }
-  | { type: "cta"; title: string; desc: string; label: string; href: string };
+  | { type: "cta"; title: string; desc: string; label: string; href: string }
+  | { type: "image"; title?: string; url: string; caption?: string }
+  | { type: "video"; title?: string; url: string; caption?: string; poster?: string };
 
 export type PageContent = {
   eyebrow: string;
