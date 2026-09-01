@@ -415,7 +415,7 @@ export function SitePage({ path, children }: { path: string; children?: React.Re
         </section>
 
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-          {page.blocks.map((block, i) => (
+          {page.blocks.map((block: Block, i: number) => (
             <BlockView key={i} block={block} />
           ))}
           {children}
