@@ -365,8 +365,16 @@ function useBreadcrumb(path: string) {
 }
 
 export function SitePage({ path, children }: { path: string; children?: React.ReactNode }) {
-  const page: PageContent | undefined = PAGES[path];
+  const staticContent: PageContent | undefined = PAGES[path];
   const crumb = useBreadcrumb(path);
+
+  const override = useQuery({
+    queryKey: ["page-content", path],
+    queryFn: () => fetchPageOverride(path),
+    staleTime: 60_000,
+  });
+
+  const page = override.data ?? staticContent;
 
   if (!page) return null;
 
