@@ -300,6 +300,44 @@ function BlockView({ block }: { block: Block }) {
           </div>
         </Reveal>
       );
+    case "image":
+      return (
+        <SectionWrap title={block.title}>
+          <Reveal>
+            <figure className="card-elevated overflow-hidden rounded-3xl bg-card">
+              <img
+                src={block.url}
+                alt={block.caption || block.title || "Gambar konten"}
+                loading="lazy"
+                className="max-h-[560px] w-full object-cover"
+              />
+              {block.caption ? (
+                <figcaption className="px-6 py-4 text-sm text-muted-foreground">{block.caption}</figcaption>
+              ) : null}
+            </figure>
+          </Reveal>
+        </SectionWrap>
+      );
+    case "video":
+      return (
+        <SectionWrap title={block.title}>
+          <Reveal>
+            <figure className="card-elevated overflow-hidden rounded-3xl bg-primary-deep">
+              <video
+                src={block.url}
+                poster={block.poster}
+                controls
+                playsInline
+                preload="metadata"
+                className="aspect-video w-full bg-black object-contain"
+              />
+              {block.caption ? (
+                <figcaption className="bg-card px-6 py-4 text-sm text-muted-foreground">{block.caption}</figcaption>
+              ) : null}
+            </figure>
+          </Reveal>
+        </SectionWrap>
+      );
     default:
       return null;
   }
