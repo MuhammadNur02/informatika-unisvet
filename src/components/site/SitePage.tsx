@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Quote, ArrowRight } from "lucide-react";
+import { fetchPageOverride } from "@/lib/cms";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
 import { Reveal } from "./Reveal";
@@ -300,6 +302,44 @@ function BlockView({ block }: { block: Block }) {
           </div>
         </Reveal>
       );
+    case "image":
+      return (
+        <SectionWrap title={block.title}>
+          <Reveal>
+            <figure className="card-elevated overflow-hidden rounded-3xl bg-card">
+              <img
+                src={block.url}
+                alt={block.caption || block.title || "Gambar konten"}
+                loading="lazy"
+                className="max-h-[560px] w-full object-cover"
+              />
+              {block.caption ? (
+                <figcaption className="px-6 py-4 text-sm text-muted-foreground">{block.caption}</figcaption>
+              ) : null}
+            </figure>
+          </Reveal>
+        </SectionWrap>
+      );
+    case "video":
+      return (
+        <SectionWrap title={block.title}>
+          <Reveal>
+            <figure className="card-elevated overflow-hidden rounded-3xl bg-primary-deep">
+              <video
+                src={block.url}
+                poster={block.poster}
+                controls
+                playsInline
+                preload="metadata"
+                className="aspect-video w-full bg-black object-contain"
+              />
+              {block.caption ? (
+                <figcaption className="bg-card px-6 py-4 text-sm text-muted-foreground">{block.caption}</figcaption>
+              ) : null}
+            </figure>
+          </Reveal>
+        </SectionWrap>
+      );
     default:
       return null;
   }
@@ -327,8 +367,16 @@ function useBreadcrumb(path: string) {
 }
 
 export function SitePage({ path, children }: { path: string; children?: React.ReactNode }) {
-  const page: PageContent | undefined = PAGES[path];
+  const staticContent: PageContent | undefined = PAGES[path];
   const crumb = useBreadcrumb(path);
+
+  const override = useQuery({
+    queryKey: ["page-content", path],
+    queryFn: () => fetchPageOverride(path),
+    staleTime: 60_000,
+  });
+
+  const page = override.data ?? staticContent;
 
   if (!page) return null;
 
@@ -367,7 +415,7 @@ export function SitePage({ path, children }: { path: string; children?: React.Re
         </section>
 
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-          {page.blocks.map((block, i) => (
+          {page.blocks.map((block: Block, i: number) => (
             <BlockView key={i} block={block} />
           ))}
           {children}
