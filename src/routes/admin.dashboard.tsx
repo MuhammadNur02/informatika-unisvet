@@ -32,6 +32,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { AdminShell } from "@/components/admin/AdminShell";
+import { PageEditor } from "@/components/admin/PageEditor";
+import { MediaLibrary } from "@/components/admin/MediaLibrary";
 import { fetchGaleri, uploadGaleri, deleteGaleri, type GaleriItem } from "@/lib/galeri";
 
 export const Route = createFileRoute("/admin/dashboard")({
@@ -263,7 +265,7 @@ function AdminDashboard() {
               </ul>
             </div>
           </motion.div>
-        ) : (
+        ) : section === "galeri" ? (
           <motion.div
             key="galeri"
             initial={{ opacity: 0, y: 16 }}
@@ -477,6 +479,26 @@ function AdminDashboard() {
                 </motion.div>
               )}
             </section>
+          </motion.div>
+        ) : section === "konten" ? (
+          <motion.div
+            key="konten"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.4, ease }}
+          >
+            <PageEditor userId={user.id} />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="media"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.4, ease }}
+          >
+            <MediaLibrary userId={user.id} />
           </motion.div>
         )}
       </AnimatePresence>
