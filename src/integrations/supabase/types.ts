@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      berita: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          gambar_url: string
+          id: string
+          isi: string
+          judul: string
+          kategori: string
+          published: boolean
+          ringkasan: string
+          slug: string
+          tag: string
+          tanggal: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          gambar_url?: string
+          id?: string
+          isi?: string
+          judul: string
+          kategori?: string
+          published?: boolean
+          ringkasan?: string
+          slug: string
+          tag?: string
+          tanggal?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          gambar_url?: string
+          id?: string
+          isi?: string
+          judul?: string
+          kategori?: string
+          published?: boolean
+          ringkasan?: string
+          slug?: string
+          tag?: string
+          tanggal?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       galeri: {
         Row: {
           created_at: string
@@ -84,7 +132,11 @@ export type Database = {
           description: string
           eyebrow: string
           id: string
+          meta_description: string
           meta_title: string
+          og_description: string
+          og_image: string
+          og_title: string
           path: string
           title: string
           updated_at: string
@@ -96,7 +148,11 @@ export type Database = {
           description?: string
           eyebrow?: string
           id?: string
+          meta_description?: string
           meta_title?: string
+          og_description?: string
+          og_image?: string
+          og_title?: string
           path: string
           title?: string
           updated_at?: string
@@ -108,11 +164,36 @@ export type Database = {
           description?: string
           eyebrow?: string
           id?: string
+          meta_description?: string
           meta_title?: string
+          og_description?: string
+          og_image?: string
+          og_title?: string
           path?: string
           title?: string
           updated_at?: string
           updated_by?: string | null
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          updated_by: string | null
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
         }
         Relationships: []
       }
