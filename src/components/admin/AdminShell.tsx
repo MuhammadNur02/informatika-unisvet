@@ -3,6 +3,8 @@ import { useState, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ExternalLink,
+  FileText,
+  FolderOpen,
   Images,
   LayoutDashboard,
   LogOut,
@@ -25,6 +27,8 @@ type NavItem = {
 const NAV: NavItem[] = [
   { id: "ringkasan", label: "Ringkasan", description: "Statistik singkat", icon: LayoutDashboard },
   { id: "galeri", label: "Galeri Kegiatan", description: "Unggah & kelola foto", icon: Images },
+  { id: "konten", label: "Editor Konten", description: "Teks, foto & video halaman", icon: FileText },
+  { id: "media", label: "Pustaka Media", description: "Unggah foto & video", icon: FolderOpen },
 ];
 
 export function AdminShell({
