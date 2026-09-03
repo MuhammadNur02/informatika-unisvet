@@ -24,5 +24,9 @@ export type PageContent = {
   title: string;
   description: string;
   metaTitle: string;
+  metaDescription?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
   blocks: Block[];
 };
