@@ -36,7 +36,9 @@ export function staticPage(path: string): PageContent | undefined {
 export async function fetchPageOverride(path: string): Promise<PageContent | null> {
   const { data, error } = await supabase
     .from("page_content")
-    .select("eyebrow, title, description, meta_title, blocks")
+    .select(
+      "eyebrow, title, description, meta_title, meta_description, og_title, og_description, og_image, blocks",
+    )
     .eq("path", path)
     .maybeSingle();
 
@@ -48,6 +50,10 @@ export async function fetchPageOverride(path: string): Promise<PageContent | nul
     title: data.title || fallback?.title || "",
     description: data.description || fallback?.description || "",
     metaTitle: data.meta_title || fallback?.metaTitle || "",
+    metaDescription: data.meta_description || "",
+    ogTitle: data.og_title || "",
+    ogDescription: data.og_description || "",
+    ogImage: data.og_image || "",
     blocks: Array.isArray(data.blocks) ? (data.blocks as unknown as Block[]) : (fallback?.blocks ?? []),
   };
 }
@@ -71,6 +77,10 @@ export async function savePageContent(input: {
       title: input.content.title,
       description: input.content.description,
       meta_title: input.content.metaTitle,
+      meta_description: input.content.metaDescription ?? "",
+      og_title: input.content.ogTitle ?? "",
+      og_description: input.content.ogDescription ?? "",
+      og_image: input.content.ogImage ?? "",
       blocks: input.content.blocks as never,
       updated_by: input.userId,
     },
