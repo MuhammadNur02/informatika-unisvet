@@ -235,6 +235,58 @@ export function PageEditor({ userId }: { userId: string }) {
             </div>
           </section>
 
+          <section className="card-elevated space-y-5 rounded-3xl bg-card p-6">
+            <div>
+              <h2 className="text-lg font-bold tracking-tight text-foreground">SEO & Open Graph</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Judul & deskripsi yang tampil di Google, serta pratinjau saat tautan dibagikan ke WhatsApp
+                atau media sosial.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="metaDescription">Deskripsi SEO (maks. ±160 karakter)</Label>
+              <Textarea
+                id="metaDescription"
+                rows={2}
+                maxLength={200}
+                value={draft.metaDescription ?? ""}
+                onChange={(e) => patch({ metaDescription: e.target.value })}
+                placeholder={draft.description}
+              />
+            </div>
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="ogTitle">Judul Open Graph</Label>
+                <Input
+                  id="ogTitle"
+                  value={draft.ogTitle ?? ""}
+                  onChange={(e) => patch({ ogTitle: e.target.value })}
+                  placeholder={draft.metaTitle}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="ogImage">Gambar Open Graph (URL)</Label>
+                <Input
+                  id="ogImage"
+                  value={draft.ogImage ?? ""}
+                  onChange={(e) => patch({ ogImage: e.target.value })}
+                  placeholder="https://…"
+                />
+                <MediaPicker kind="image" media={media} onPick={(url) => patch({ ogImage: url })} />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="ogDescription">Deskripsi Open Graph</Label>
+              <Textarea
+                id="ogDescription"
+                rows={2}
+                value={draft.ogDescription ?? ""}
+                onChange={(e) => patch({ ogDescription: e.target.value })}
+                placeholder={draft.metaDescription || draft.description}
+              />
+            </div>
+          </section>
+
           <section className="space-y-5">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
