@@ -28,6 +28,8 @@ type NavItem = {
 
 const NAV: NavItem[] = [
   { id: "ringkasan", label: "Ringkasan", description: "Statistik singkat", icon: LayoutDashboard },
+  { id: "beranda", label: "Beranda & Footer", description: "Hero, statistik & kontak", icon: Home },
+  { id: "berita", label: "Berita & Agenda", description: "Tulis & unggah berita", icon: Newspaper },
   { id: "galeri", label: "Galeri Kegiatan", description: "Unggah & kelola foto", icon: Images },
   { id: "konten", label: "Editor Konten", description: "Teks, foto & video halaman", icon: FileText },
   { id: "media", label: "Pustaka Media", description: "Unggah foto & video", icon: FolderOpen },
