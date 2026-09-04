@@ -5,10 +5,12 @@ import {
   ExternalLink,
   FileText,
   FolderOpen,
+  Home,
   Images,
   LayoutDashboard,
   LogOut,
   Menu,
+  Newspaper,
   ShieldCheck,
   X,
 } from "lucide-react";
