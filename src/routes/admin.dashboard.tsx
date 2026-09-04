@@ -34,6 +34,8 @@ import {
 import { AdminShell } from "@/components/admin/AdminShell";
 import { PageEditor } from "@/components/admin/PageEditor";
 import { MediaLibrary } from "@/components/admin/MediaLibrary";
+import { BeritaEditor } from "@/components/admin/BeritaEditor";
+import { BerandaEditor } from "@/components/admin/BerandaEditor";
 import { fetchGaleri, uploadGaleri, deleteGaleri, type GaleriItem } from "@/lib/galeri";
 
 export const Route = createFileRoute("/admin/dashboard")({
@@ -479,6 +481,26 @@ function AdminDashboard() {
                 </motion.div>
               )}
             </section>
+          </motion.div>
+        ) : section === "beranda" ? (
+          <motion.div
+            key="beranda"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.4, ease }}
+          >
+            <BerandaEditor userId={user.id} />
+          </motion.div>
+        ) : section === "berita" ? (
+          <motion.div
+            key="berita"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.4, ease }}
+          >
+            <BeritaEditor userId={user.id} />
           </motion.div>
         ) : section === "konten" ? (
           <motion.div
