@@ -5,8 +5,6 @@ import { Button } from "@/components/ui/button";
 import { useHomeContent } from "@/lib/site-content";
 import { VideoBackground } from "./VideoBackground";
 
-const FLOAT_ICONS = [ShieldCheck, Cpu, Laptop];
-
 export function Hero() {
   const home = useHomeContent();
   const hero = home.hero;
@@ -98,7 +96,6 @@ export function Hero() {
               <Laptop className="size-4 text-accent-foreground" /> {floating[2]}
             </motion.div>
           ) : null}
-          {FLOAT_ICONS.length === 0 ? null : null}
         </motion.div>
       </div>
     </section>
