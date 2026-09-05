@@ -1,6 +1,7 @@
 import { MapPin, Mail, Phone, MessageCircle, Instagram, Facebook, Youtube, Music2 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import logo from "@/assets/logo-unisvet.png";
+import { useFooterContent } from "@/lib/site-content";
 
 const LINKS = [
   { label: "Beranda", to: "/" },
@@ -13,22 +14,22 @@ const LINKS = [
   { label: "PMB", to: "/pmb/daftar" },
 ];
 
-const PORTALS = [
-  { label: "SIAKAD", href: "https://siakad.ivet.ac.id" },
-  { label: "E-Learning LMS", href: "https://elearning.ivet.ac.id" },
-  { label: "E-Library", href: "https://library.ivet.ac.id" },
-  { label: "SPMI Mutu", href: "https://spmi.ivet.ac.id" },
-  { label: "Portal PMB UNISVET", href: "https://pmb.unisvet.ac.id/" },
-];
-
-const SOCIALS = [
-  { label: "Instagram", icon: Instagram, href: "https://www.instagram.com/informatikaunisvet/" },
-  { label: "YouTube", icon: Youtube, href: "https://youtube.com/@informatika_unisvet?si=_wI6qWN7IdWkW4-z" },
-  { label: "Facebook", icon: Facebook, href: "https://home.s.id/lo/id#" },
-  { label: "TikTok", icon: Music2, href: "https://www.tiktok.com/@informatika.unisvet?_r=1&_t=ZS-99J4eAdzfLJ" },
-];
+function formatWa(number: string) {
+  const digits = number.replace(/\D/g, "");
+  if (!digits.startsWith("62")) return `+${digits}`;
+  const rest = digits.slice(2);
+  return `+62 ${rest.slice(0, 3)}-${rest.slice(3, 7)}-${rest.slice(7)}`.replace(/-+$/, "");
+}
 
 export function SiteFooter() {
+  const footer = useFooterContent();
+  const socials = [
+    { label: "Instagram", icon: Instagram, href: footer.socials.instagram },
+    { label: "YouTube", icon: Youtube, href: footer.socials.youtube },
+    { label: "Facebook", icon: Facebook, href: footer.socials.facebook },
+    { label: "TikTok", icon: Music2, href: footer.socials.tiktok },
+  ].filter((s) => !!s.href);
+
   return (
     <footer id="kontak" className="bg-primary-deep text-primary-foreground">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
@@ -53,12 +54,9 @@ export function SiteFooter() {
               <span className="block text-[10px] text-primary-foreground/55">UNISVET Semarang</span>
               </span>
             </div>
-            <p className="mt-5 text-sm leading-relaxed text-primary-foreground/70">
-              Program studi yang memadukan kompetensi kependidikan dan teknologi informasi untuk
-              mencetak pendidik serta profesional TI masa depan.
-            </p>
+            <p className="mt-5 text-sm leading-relaxed text-primary-foreground/70">{footer.about}</p>
             <div className="mt-6 flex gap-2">
-              {SOCIALS.map((s) => (
+              {socials.map((s) => (
                 <a
                   key={s.label}
                   href={s.href}
@@ -92,7 +90,7 @@ export function SiteFooter() {
           <div>
             <h3 className="text-sm font-bold uppercase tracking-widest text-accent">Portal Akademik</h3>
             <ul className="mt-5 space-y-3">
-              {PORTALS.map((p) => (
+              {footer.portals.map((p) => (
                 <li key={p.label}>
                   <a
                     href={p.href}
@@ -112,35 +110,43 @@ export function SiteFooter() {
             <ul className="mt-5 space-y-4 text-sm text-primary-foreground/70">
               <li className="flex gap-3">
                 <MapPin className="mt-0.5 size-4 shrink-0 text-accent" />
-                <span>
-                  Universitas Ivet, Jl. Pawiyatan Luhur IV No.18, Bendan Duwur, Kec. Gajahmungkur,
-                  Kota Semarang, Jawa Tengah 50235
-                </span>
+                <span>{footer.address}</span>
               </li>
-              <li className="flex gap-3">
-                <Phone className="size-4 shrink-0 text-accent" />
-                <a href="tel:+62248316375" className="transition-colors hover:text-accent">
-                  (024) 8316375
-                </a>
-              </li>
-              <li className="flex gap-3">
-                <MessageCircle className="size-4 shrink-0 text-accent" />
-                <a href="https://wa.me/6282138562161" className="transition-colors hover:text-accent">
-                  WhatsApp Admin +62 821-3856-2161
-                </a>
-              </li>
-              <li className="flex gap-3">
-                <MessageCircle className="size-4 shrink-0 text-accent" />
-                <a href="https://wa.me/6285226154744" className="transition-colors hover:text-accent">
-                  WhatsApp Kaprodi +62 852-2615-4744
-                </a>
-              </li>
-              <li className="flex gap-3">
-                <Mail className="size-4 shrink-0 text-accent" />
-                <a href="mailto:pendidikaninformatika@ivet.ac.id" className="transition-colors hover:text-accent">
-                  pendidikaninformatika@ivet.ac.id
-                </a>
-              </li>
+              {footer.phone ? (
+                <li className="flex gap-3">
+                  <Phone className="size-4 shrink-0 text-accent" />
+                  <a
+                    href={`tel:${footer.phone.replace(/\D/g, "")}`}
+                    className="transition-colors hover:text-accent"
+                  >
+                    {footer.phone}
+                  </a>
+                </li>
+              ) : null}
+              {footer.waAdmin ? (
+                <li className="flex gap-3">
+                  <MessageCircle className="size-4 shrink-0 text-accent" />
+                  <a href={`https://wa.me/${footer.waAdmin}`} className="transition-colors hover:text-accent">
+                    WhatsApp Admin {formatWa(footer.waAdmin)}
+                  </a>
+                </li>
+              ) : null}
+              {footer.waKaprodi ? (
+                <li className="flex gap-3">
+                  <MessageCircle className="size-4 shrink-0 text-accent" />
+                  <a href={`https://wa.me/${footer.waKaprodi}`} className="transition-colors hover:text-accent">
+                    WhatsApp Kaprodi {formatWa(footer.waKaprodi)}
+                  </a>
+                </li>
+              ) : null}
+              {footer.email ? (
+                <li className="flex gap-3">
+                  <Mail className="size-4 shrink-0 text-accent" />
+                  <a href={`mailto:${footer.email}`} className="transition-colors hover:text-accent">
+                    {footer.email}
+                  </a>
+                </li>
+              ) : null}
             </ul>
           </div>
 
@@ -149,7 +155,7 @@ export function SiteFooter() {
             <div className="mt-5 overflow-hidden rounded-2xl border border-primary-foreground/15">
               <iframe
                 title="Peta lokasi Universitas Ivet Semarang"
-                src="https://www.google.com/maps?q=Universitas%20Ivet%20Semarang%20Jl.%20Pawiyatan%20Luhur%20IV%20No.18%20Semarang&output=embed"
+                src={`https://www.google.com/maps?q=${encodeURIComponent(footer.mapQuery)}&output=embed`}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 className="h-56 w-full border-0"
@@ -160,7 +166,7 @@ export function SiteFooter() {
 
         <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-primary-foreground/10 pt-6 text-xs text-primary-foreground/55 sm:flex-row">
           <p>© {new Date().getFullYear()} Program Studi Pendidikan Informatika — Universitas Ivet Semarang.</p>
-          <p>Dikembangkan dengan semangat pendidikan digital.</p>
+          <p>{footer.note}</p>
         </div>
       </div>
     </footer>
