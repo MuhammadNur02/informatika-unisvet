@@ -1,9 +1,12 @@
 import { ArrowRight, PhoneCall } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useHomeContent } from "@/lib/site-content";
 import { Reveal } from "./Reveal";
 import { VideoBackground } from "./VideoBackground";
 
 export function CtaBanner() {
+  const { cta } = useHomeContent();
+
   return (
     <section id="pmb" className="px-4 pb-20 sm:px-6 sm:pb-28 lg:px-8">
       <Reveal className="mx-auto max-w-7xl">
@@ -11,24 +14,23 @@ export function CtaBanner() {
           <VideoBackground />
           <div className="relative">
             <span className="inline-flex rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
-              Penerimaan Mahasiswa Baru 2026/2027
+              {cta.badge}
             </span>
             <h2 className="mx-auto mt-6 max-w-3xl text-3xl font-extrabold leading-tight tracking-tight text-primary-foreground sm:text-4xl">
-              Mulai Langkahmu Menjadi Pendidik & Inovator Teknologi
+              {cta.title}
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-primary-foreground/75">
-              Bergabunglah dengan Program Studi Pendidikan Informatika Universitas Ivet Semarang.
-              Kuota terbatas, tersedia beasiswa prestasi dan keringanan biaya studi.
+              {cta.desc}
             </p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
               <Button asChild variant="hero" size="xl">
-                <a href="https://pmb.unisvet.ac.id/" target="_blank" rel="noreferrer">
-                  Daftar di Portal PMB <ArrowRight />
+                <a href={cta.primaryHref} target="_blank" rel="noreferrer">
+                  {cta.primaryLabel} <ArrowRight />
                 </a>
               </Button>
               <Button asChild variant="heroGhost" size="xl">
-                <a href="https://wa.me/6282138562161" target="_blank" rel="noreferrer">
-                  <PhoneCall /> Konsultasi Admisi
+                <a href={cta.secondaryHref} target="_blank" rel="noreferrer">
+                  <PhoneCall /> {cta.secondaryLabel}
                 </a>
               </Button>
             </div>
