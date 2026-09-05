@@ -1,42 +1,17 @@
 import { Quote } from "lucide-react";
 import { Reveal, SectionHeading } from "./Reveal";
-
-const ALUMNI = [
-  {
-    name: "Dewi Larasati",
-    year: "Alumni 2021",
-    role: "Guru Informatika, SMKN 7 Semarang",
-    quote:
-      "Bekal pedagogik dan kemampuan koding membuat saya percaya diri mengajar kurikulum informatika terbaru.",
-  },
-  {
-    name: "Yoga Pratama",
-    year: "Alumni 2020",
-    role: "Software Engineer, Startup Fintech Jakarta",
-    quote:
-      "Proyek kelas dan lab pemrograman melatih saya berpikir sistematis — transisi ke industri terasa mulus.",
-  },
-  {
-    name: "Anisa Rahma",
-    year: "Alumni 2022",
-    role: "Founder, EdTech Belajar Pintar",
-    quote:
-      "Prodi ini mengajarkan cara menggabungkan teknologi dan pendidikan, fondasi yang saya pakai membangun startup.",
-  },
-];
+import { useHomeContent } from "@/lib/site-content";
 
 export function Testimonials() {
+  const { alumni } = useHomeContent();
+
   return (
     <section id="alumni" className="py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          eyebrow="Alumni"
-          title="Cerita Sukses Lulusan"
-          description="Alumni kami berkarya sebagai pendidik, spesialis TI, software engineer, hingga wirausahawan EdTech."
-        />
+        <SectionHeading eyebrow={alumni.eyebrow} title={alumni.title} description={alumni.description} />
         <div className="mt-14 grid gap-6 md:grid-cols-3">
-          {ALUMNI.map((a, i) => (
-            <Reveal key={a.name} delay={i * 0.1}>
+          {alumni.items.map((a, i) => (
+            <Reveal key={`${a.name}-${i}`} delay={i * 0.1}>
               <figure className="card-elevated flex h-full flex-col rounded-3xl p-7">
                 <Quote className="size-8 text-accent" />
                 <blockquote className="mt-4 flex-1 text-sm leading-relaxed text-foreground/80">
