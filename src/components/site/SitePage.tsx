@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Quote, ArrowRight } from "lucide-react";
@@ -366,6 +367,34 @@ function useBreadcrumb(path: string) {
   return { group: "Halaman", child: "" };
 }
 
+function setMetaTag(attr: "name" | "property", key: string, content: string) {
+  if (!content) return;
+  let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`);
+  if (!el) {
+    el = document.createElement("meta");
+    el.setAttribute(attr, key);
+    document.head.appendChild(el);
+  }
+  el.setAttribute("content", content);
+}
+
+/** Terapkan judul & meta dari dashboard setelah override termuat. */
+function useDynamicSeo(page: PageContent | undefined) {
+  useEffect(() => {
+    if (!page) return;
+    const title = page.metaTitle || page.title;
+    const description = page.metaDescription || page.description;
+    if (title) document.title = title;
+    setMetaTag("name", "description", description);
+    setMetaTag("property", "og:title", page.ogTitle || title);
+    setMetaTag("property", "og:description", page.ogDescription || description);
+    if (page.ogImage) {
+      setMetaTag("property", "og:image", page.ogImage);
+      setMetaTag("name", "twitter:image", page.ogImage);
+    }
+  }, [page]);
+}
+
 export function SitePage({ path, children }: { path: string; children?: React.ReactNode }) {
   const staticContent: PageContent | undefined = PAGES[path];
   const crumb = useBreadcrumb(path);
@@ -377,6 +406,7 @@ export function SitePage({ path, children }: { path: string; children?: React.Re
   });
 
   const page = override.data ?? staticContent;
+  useDynamicSeo(page);
 
   if (!page) return null;
 
