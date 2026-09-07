@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { StructuredBlockFields } from "@/components/admin/StructuredBlockFields";
 import type { Block, PageContent } from "@/content/types";
 import {
   editablePaths,
@@ -62,6 +63,28 @@ function newBlock(type: string): Block {
       return { type: "image", title: "Gambar", url: "", caption: "" };
     case "video":
       return { type: "video", title: "Video", url: "", caption: "" };
+    case "steps":
+      return { type: "steps", title: "Langkah", items: [{ title: "Langkah 1", desc: "Keterangan" }] };
+    case "table":
+      return { type: "table", title: "Tabel", head: ["Kolom 1", "Kolom 2"], rows: [["", ""]], note: "" };
+    case "people":
+      return {
+        type: "people",
+        title: "Profil Orang",
+        items: [{ name: "", role: "", degree: "", interest: "", photo: "" }],
+      };
+    case "org":
+      return { type: "org", title: "Struktur Organisasi", top: "", topName: "", nodes: [{ role: "", name: "" }] };
+    case "gallery":
+      return { type: "gallery", title: "Galeri", items: [{ name: "", desc: "", image: "" }] };
+    case "faq":
+      return { type: "faq", title: "Tanya Jawab", items: [{ q: "", a: "" }] };
+    case "stats":
+      return { type: "stats", title: "Statistik", items: [{ label: "", value: "" }] };
+    case "timeline":
+      return { type: "timeline", title: "Kronologi", items: [{ date: "", title: "", desc: "" }] };
+    case "quotes":
+      return { type: "quotes", title: "Kutipan", items: [{ name: "", role: "", quote: "" }] };
     default:
       return {
         type: "cta",
