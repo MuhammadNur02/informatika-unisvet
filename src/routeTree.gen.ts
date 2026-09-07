@@ -47,6 +47,7 @@ import { Route as RisetKerjaSamaRouteImport } from './routes/riset.kerja-sama'
 import { Route as RisetPenelitianRouteImport } from './routes/riset.penelitian'
 import { Route as RisetPengabdianRouteImport } from './routes/riset.pengabdian'
 import { Route as RisetPublikasiRouteImport } from './routes/riset.publikasi'
+import { Route as InformasiBeritaSlugRouteImport } from './routes/informasi.berita.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -239,6 +240,11 @@ const RisetPublikasiRoute = RisetPublikasiRouteImport.update({
   path: '/riset/publikasi',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InformasiBeritaSlugRoute = InformasiBeritaSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => InformasiBeritaRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -251,7 +257,7 @@ export interface FileRoutesByFullPath {
   '/akademik/praktikum-proyek': typeof AkademikPraktikumProyekRoute
   '/akademik/profil-lulusan': typeof AkademikProfilLulusanRoute
   '/informasi/agenda': typeof InformasiAgendaRoute
-  '/informasi/berita': typeof InformasiBeritaRoute
+  '/informasi/berita': typeof InformasiBeritaRouteWithChildren
   '/informasi/event': typeof InformasiEventRoute
   '/informasi/galeri': typeof InformasiGaleriRoute
   '/informasi/pengumuman': typeof InformasiPengumumanRoute
@@ -279,6 +285,7 @@ export interface FileRoutesByFullPath {
   '/riset/penelitian': typeof RisetPenelitianRoute
   '/riset/pengabdian': typeof RisetPengabdianRoute
   '/riset/publikasi': typeof RisetPublikasiRoute
+  '/informasi/berita/$slug': typeof InformasiBeritaSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -291,7 +298,7 @@ export interface FileRoutesByTo {
   '/akademik/praktikum-proyek': typeof AkademikPraktikumProyekRoute
   '/akademik/profil-lulusan': typeof AkademikProfilLulusanRoute
   '/informasi/agenda': typeof InformasiAgendaRoute
-  '/informasi/berita': typeof InformasiBeritaRoute
+  '/informasi/berita': typeof InformasiBeritaRouteWithChildren
   '/informasi/event': typeof InformasiEventRoute
   '/informasi/galeri': typeof InformasiGaleriRoute
   '/informasi/pengumuman': typeof InformasiPengumumanRoute
@@ -319,6 +326,7 @@ export interface FileRoutesByTo {
   '/riset/penelitian': typeof RisetPenelitianRoute
   '/riset/pengabdian': typeof RisetPengabdianRoute
   '/riset/publikasi': typeof RisetPublikasiRoute
+  '/informasi/berita/$slug': typeof InformasiBeritaSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -332,7 +340,7 @@ export interface FileRoutesById {
   '/akademik/praktikum-proyek': typeof AkademikPraktikumProyekRoute
   '/akademik/profil-lulusan': typeof AkademikProfilLulusanRoute
   '/informasi/agenda': typeof InformasiAgendaRoute
-  '/informasi/berita': typeof InformasiBeritaRoute
+  '/informasi/berita': typeof InformasiBeritaRouteWithChildren
   '/informasi/event': typeof InformasiEventRoute
   '/informasi/galeri': typeof InformasiGaleriRoute
   '/informasi/pengumuman': typeof InformasiPengumumanRoute
@@ -360,6 +368,7 @@ export interface FileRoutesById {
   '/riset/penelitian': typeof RisetPenelitianRoute
   '/riset/pengabdian': typeof RisetPengabdianRoute
   '/riset/publikasi': typeof RisetPublikasiRoute
+  '/informasi/berita/$slug': typeof InformasiBeritaSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -402,6 +411,7 @@ export interface FileRouteTypes {
     | '/riset/penelitian'
     | '/riset/pengabdian'
     | '/riset/publikasi'
+    | '/informasi/berita/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -442,6 +452,7 @@ export interface FileRouteTypes {
     | '/riset/penelitian'
     | '/riset/pengabdian'
     | '/riset/publikasi'
+    | '/informasi/berita/$slug'
   id:
     | '__root__'
     | '/'
@@ -482,6 +493,7 @@ export interface FileRouteTypes {
     | '/riset/penelitian'
     | '/riset/pengabdian'
     | '/riset/publikasi'
+    | '/informasi/berita/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -495,7 +507,7 @@ export interface RootRouteChildren {
   AkademikPraktikumProyekRoute: typeof AkademikPraktikumProyekRoute
   AkademikProfilLulusanRoute: typeof AkademikProfilLulusanRoute
   InformasiAgendaRoute: typeof InformasiAgendaRoute
-  InformasiBeritaRoute: typeof InformasiBeritaRoute
+  InformasiBeritaRoute: typeof InformasiBeritaRouteWithChildren
   InformasiEventRoute: typeof InformasiEventRoute
   InformasiGaleriRoute: typeof InformasiGaleriRoute
   InformasiPengumumanRoute: typeof InformasiPengumumanRoute
@@ -793,8 +805,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RisetPublikasiRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/informasi/berita/$slug': {
+      id: '/informasi/berita/$slug'
+      path: '/$slug'
+      fullPath: '/informasi/berita/$slug'
+      preLoaderRoute: typeof InformasiBeritaSlugRouteImport
+      parentRoute: typeof InformasiBeritaRoute
+    }
   }
 }
+
+interface InformasiBeritaRouteChildren {
+  InformasiBeritaSlugRoute: typeof InformasiBeritaSlugRoute
+}
+
+const InformasiBeritaRouteChildren: InformasiBeritaRouteChildren = {
+  InformasiBeritaSlugRoute: InformasiBeritaSlugRoute,
+}
+
+const InformasiBeritaRouteWithChildren = InformasiBeritaRoute._addFileChildren(
+  InformasiBeritaRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -807,7 +838,7 @@ const rootRouteChildren: RootRouteChildren = {
   AkademikPraktikumProyekRoute: AkademikPraktikumProyekRoute,
   AkademikProfilLulusanRoute: AkademikProfilLulusanRoute,
   InformasiAgendaRoute: InformasiAgendaRoute,
-  InformasiBeritaRoute: InformasiBeritaRoute,
+  InformasiBeritaRoute: InformasiBeritaRouteWithChildren,
   InformasiEventRoute: InformasiEventRoute,
   InformasiGaleriRoute: InformasiGaleriRoute,
   InformasiPengumumanRoute: InformasiPengumumanRoute,
