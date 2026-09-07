@@ -189,37 +189,38 @@ export function StructuredBlockFields({
   }
 
   if (block.type === "table") {
-    const colCount = block.head.length;
+    const tb = block;
+    const colCount = tb.head.length;
     function setHead(index: number, value: string) {
-      onChange({ ...block, head: block.head.map((h, i) => (i === index ? value : h)) });
+      onChange({ ...tb, head: tb.head.map((h, i) => (i === index ? value : h)) });
     }
     function addColumn() {
       onChange({
-        ...block,
-        head: [...block.head, `Kolom ${colCount + 1}`],
-        rows: block.rows.map((r) => [...r, ""]),
+        ...tb,
+        head: [...tb.head, `Kolom ${colCount + 1}`],
+        rows: tb.rows.map((r) => [...r, ""]),
       });
     }
     function removeColumn(index: number) {
       onChange({
-        ...block,
-        head: block.head.filter((_, i) => i !== index),
-        rows: block.rows.map((r) => r.filter((_, i) => i !== index)),
+        ...tb,
+        head: tb.head.filter((_, i) => i !== index),
+        rows: tb.rows.map((r) => r.filter((_, i) => i !== index)),
       });
     }
     function addRow() {
-      onChange({ ...block, rows: [...block.rows, Array.from({ length: colCount }, () => "")] });
+      onChange({ ...tb, rows: [...tb.rows, Array.from({ length: colCount }, () => "")] });
     }
     function setCell(rowIndex: number, colIndex: number, value: string) {
       onChange({
-        ...block,
-        rows: block.rows.map((r, i) => (i === rowIndex ? r.map((c, ci) => (ci === colIndex ? value : c)) : r)),
+        ...tb,
+        rows: tb.rows.map((r, i) => (i === rowIndex ? r.map((c, ci) => (ci === colIndex ? value : c)) : r)),
       });
     }
 
     return (
       <div className="space-y-5">
-        <TitleField value={block.title ?? ""} onChange={(title) => onChange({ ...block, title })} />
+        <TitleField value={tb.title ?? ""} onChange={(title) => onChange({ ...tb, title })} />
 
         <div className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
@@ -234,7 +235,7 @@ export function StructuredBlockFields({
             </div>
           </div>
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {block.head.map((h, i) => (
+            {tb.head.map((h, i) => (
               <div key={i} className="flex items-center gap-2">
                 <Input value={h} onChange={(e) => setHead(i, e.target.value)} />
                 <Button
@@ -255,7 +256,7 @@ export function StructuredBlockFields({
 
         <div className="space-y-3">
           <Label>Isi baris</Label>
-          {block.rows.map((row, rowIndex) => (
+          {tb.rows.map((row, rowIndex) => (
             <div key={rowIndex} className="rounded-2xl border border-border bg-background p-3">
               <div className="mb-2 flex items-center justify-between">
                 <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
@@ -266,14 +267,14 @@ export function StructuredBlockFields({
                   variant="outline"
                   size="sm"
                   aria-label="Hapus baris"
-                  onClick={() => onChange({ ...block, rows: block.rows.filter((_, i) => i !== rowIndex) })}
+                  onClick={() => onChange({ ...tb, rows: tb.rows.filter((_, i) => i !== rowIndex) })}
                   className="text-destructive hover:bg-destructive hover:text-destructive-foreground"
                 >
                   <Trash2 />
                 </Button>
               </div>
               <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                {block.head.map((h, colIndex) => (
+                {tb.head.map((h, colIndex) => (
                   <div key={colIndex} className="space-y-1">
                     <span className="text-xs text-muted-foreground">{h}</span>
                     <Input
@@ -289,8 +290,8 @@ export function StructuredBlockFields({
 
         <Field
           label="Catatan di bawah tabel (opsional)"
-          value={block.note ?? ""}
-          onChange={(note) => onChange({ ...block, note })}
+          value={tb.note ?? ""}
+          onChange={(note) => onChange({ ...tb, note })}
         />
       </div>
     );
