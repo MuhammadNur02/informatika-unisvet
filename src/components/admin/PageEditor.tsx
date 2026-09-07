@@ -546,40 +546,9 @@ function BlockFields({
     );
   }
 
-  return <AdvancedFields block={block} onChange={onChange} />;
+  return <StructuredBlockFields block={block} media={media} onChange={onChange} />;
 }
 
-function AdvancedFields({ block, onChange }: { block: Block; onChange: (next: Block) => void }) {
-  const [text, setText] = useState(() => JSON.stringify(block, null, 2));
-  const [error, setError] = useState<string | null>(null);
-
-  return (
-    <div className="space-y-2">
-      <Label>Editor lanjutan (format data)</Label>
-      <Textarea
-        rows={10}
-        value={text}
-        spellCheck={false}
-        className="font-mono text-xs"
-        onChange={(e) => {
-          setText(e.target.value);
-          try {
-            const parsed = JSON.parse(e.target.value) as Block;
-            setError(null);
-            onChange(parsed);
-          } catch {
-            setError("Format belum valid — perubahan belum diterapkan.");
-          }
-        }}
-      />
-      {error ? <p className="text-xs font-semibold text-destructive">{error}</p> : null}
-      <p className="text-xs text-muted-foreground">
-        Blok jenis ini punya struktur khusus (tabel, profil orang, dsb.). Ubah nilai teksnya saja dan jangan
-        menghapus tanda kutip atau tanda kurung.
-      </p>
-    </div>
-  );
-}
 
 function TitleField({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   return (
