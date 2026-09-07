@@ -15,7 +15,7 @@ export type BeritaItem = {
 
 export type BeritaInput = Omit<BeritaItem, "id" | "slug"> & { id?: string; slug?: string };
 
-export const KATEGORI_BERITA = ["Berita", "Kegiatan", "Pengumuman"] as const;
+export const KATEGORI_BERITA = ["Berita", "Kegiatan", "Pengumuman", "Event", "Agenda"] as const;
 
 const SELECT = "id, judul, slug, kategori, tag, tanggal, ringkasan, isi, gambar_url, published";
 
@@ -40,6 +40,18 @@ export async function fetchBeritaPublik(): Promise<BeritaItem[]> {
     .order("tanggal", { ascending: false });
   if (error) throw error;
   return data ?? [];
+}
+
+/** Satu berita berdasarkan slug (hanya yang diterbitkan). */
+export async function fetchBeritaBySlug(slug: string): Promise<BeritaItem | null> {
+  const { data, error } = await supabase
+    .from("berita")
+    .select(SELECT)
+    .eq("slug", slug)
+    .eq("published", true)
+    .maybeSingle();
+  if (error) throw error;
+  return data ?? null;
 }
 
 /** Semua berita termasuk draf — untuk dashboard admin. */
