@@ -335,6 +335,22 @@ export function PageEditor({ userId }: { userId: string }) {
                 <Button type="button" variant="outline" size="sm" onClick={() => addBlock("cta")}>
                   <Plus /> CTA
                 </Button>
+                <select
+                  value=""
+                  aria-label="Tambah bagian lain"
+                  onChange={(e) => {
+                    if (e.target.value) addBlock(e.target.value);
+                  }}
+                  className="h-9 rounded-xl border border-input bg-background px-3 text-sm text-foreground outline-none focus-visible:border-accent"
+                >
+                  <option value="">+ Bagian lain…</option>
+                  {["steps", "table", "people", "org", "gallery", "faq", "stats", "timeline", "quotes"].map((t) => (
+                    <option key={t} value={t}>
+                      {BLOCK_LABEL[t]}
+                    </option>
+                  ))}
+                </select>
+
               </div>
             </div>
 
