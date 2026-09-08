@@ -232,12 +232,21 @@ export function AdminShell({
             </Button>
             <div className="min-w-0 flex-1">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                Dashboard
+                {NAV.find((n) => n.id === active)?.group ?? "Dashboard"}
               </p>
               <h1 className="truncate text-base font-bold tracking-tight text-foreground sm:text-lg">
                 {NAV.find((n) => n.id === active)?.label ?? "Ringkasan"}
               </h1>
+              <p className="hidden truncate text-xs text-muted-foreground sm:block">
+                {NAV.find((n) => n.id === active)?.description ?? ""}
+              </p>
             </div>
+            <Link
+              to="/"
+              className="hidden items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:border-accent/60 hover:text-primary md:inline-flex"
+            >
+              Lihat situs <ExternalLink className="size-3.5" />
+            </Link>
             <span
               className={cn(
                 "hidden items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold sm:inline-flex",
@@ -250,6 +259,7 @@ export function AdminShell({
               {isAdmin ? "Terverifikasi Admin" : "Tanpa hak admin"}
             </span>
           </div>
+
         </header>
 
         <main className="mx-auto max-w-6xl px-4 pb-16 pt-8 sm:px-6">{children}</main>
