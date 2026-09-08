@@ -250,7 +250,30 @@ function AdminDashboard() {
               ))}
             </div>
 
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                { id: "beranda", label: "Beranda & Footer", desc: "Ubah hero, statistik, kontak" },
+                { id: "konten", label: "Editor Konten", desc: "Isi semua halaman prodi" },
+                { id: "berita", label: "Berita & Agenda", desc: "Tulis & terbitkan berita" },
+                { id: "media", label: "Pustaka Media", desc: "Unggah foto & video" },
+              ].map((action, i) => (
+                <motion.button
+                  key={action.id}
+                  type="button"
+                  onClick={() => setSection(action.id)}
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.05 * i, duration: 0.4, ease }}
+                  className="card-elevated rounded-3xl bg-card p-5 text-left"
+                >
+                  <p className="text-sm font-bold text-foreground">{action.label}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{action.desc}</p>
+                </motion.button>
+              ))}
+            </div>
+
             <div className="rounded-3xl border border-dashed border-border bg-card p-6">
+
               <h3 className="text-sm font-bold text-foreground">Panduan singkat</h3>
               <ul className="mt-3 space-y-2.5 text-sm text-muted-foreground">
                 {[

@@ -9,8 +9,8 @@ import { fetchBeritaPublik, formatTanggalId, KATEGORI_BERITA } from "@/lib/berit
 const FILTERS = ["Semua", ...KATEGORI_BERITA] as const;
 
 type Props = {
-  /** Batasi ke satu kategori (mis. "Pengumuman"); filter disembunyikan. */
-  kategori?: string;
+  /** Batasi ke satu atau beberapa kategori (mis. "Pengumuman"); filter disembunyikan. */
+  kategori?: string | string[];
   /** Judul bagian. */
   heading?: string;
   /** Teks bila belum ada isi. */
@@ -27,9 +27,13 @@ export function BeritaList({ kategori, heading = "Berita Terbaru", emptyText }: 
 
   const items = useMemo(() => {
     const list = data ?? [];
-    if (kategori) return list.filter((b) => b.kategori === kategori);
+    if (kategori) {
+      const allowed = Array.isArray(kategori) ? kategori : [kategori];
+      return list.filter((b) => allowed.includes(b.kategori));
+    }
     return active === "Semua" ? list : list.filter((b) => b.kategori === active);
   }, [data, active, kategori]);
+
 
   return (
     <section className="mt-14 first:mt-0">
