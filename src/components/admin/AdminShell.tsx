@@ -24,16 +24,18 @@ type NavItem = {
   description: string;
   icon: typeof Images;
   id: string;
+  group: string;
 };
 
 const NAV: NavItem[] = [
-  { id: "ringkasan", label: "Ringkasan", description: "Statistik singkat", icon: LayoutDashboard },
-  { id: "beranda", label: "Beranda & Footer", description: "Hero, statistik & kontak", icon: Home },
-  { id: "berita", label: "Berita & Agenda", description: "Tulis & unggah berita", icon: Newspaper },
-  { id: "galeri", label: "Galeri Kegiatan", description: "Unggah & kelola foto", icon: Images },
-  { id: "konten", label: "Editor Konten", description: "Teks, foto & video halaman", icon: FileText },
-  { id: "media", label: "Pustaka Media", description: "Unggah foto & video", icon: FolderOpen },
+  { id: "ringkasan", label: "Ringkasan", description: "Statistik singkat", icon: LayoutDashboard, group: "Utama" },
+  { id: "beranda", label: "Beranda & Footer", description: "Hero, statistik & kontak", icon: Home, group: "Halaman" },
+  { id: "konten", label: "Editor Konten", description: "Teks, foto & video halaman", icon: FileText, group: "Halaman" },
+  { id: "berita", label: "Berita & Agenda", description: "Tulis & unggah berita", icon: Newspaper, group: "Publikasi" },
+  { id: "galeri", label: "Galeri Kegiatan", description: "Unggah & kelola foto", icon: Images, group: "Publikasi" },
+  { id: "media", label: "Pustaka Media", description: "Unggah foto & video", icon: FolderOpen, group: "Publikasi" },
 ];
+
 
 export function AdminShell({
   email,
@@ -61,54 +63,72 @@ export function AdminShell({
 
   const initials = email.slice(0, 2).toUpperCase();
 
+  const groups = NAV.reduce<{ group: string; items: NavItem[] }[]>((acc, item) => {
+    const found = acc.find((g) => g.group === item.group);
+    if (found) found.items.push(item);
+    else acc.push({ group: item.group, items: [item] });
+    return acc;
+  }, []);
+
+  let navIndex = -1;
   const nav = (
-    <nav className="space-y-1.5">
-      {NAV.map((item, index) => {
-        const isActive = active === item.id;
-        return (
-          <motion.button
-            key={item.id}
-            type="button"
-            initial={{ opacity: 0, x: -12 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.05 * index, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            onClick={() => {
-              onNavigate(item.id);
-              setMobileOpen(false);
-            }}
-            aria-current={isActive ? "page" : undefined}
-            className={cn(
-              "group relative flex w-full items-start gap-3 rounded-2xl px-3.5 py-3 text-left transition-all duration-300",
-              isActive
-                ? "bg-primary-foreground/10 text-primary-foreground shadow-[inset_0_0_0_1px_oklch(0.79_0.15_78/0.35)]"
-                : "text-primary-foreground/65 hover:bg-primary-foreground/5 hover:text-primary-foreground",
-            )}
-          >
-            {isActive ? (
-              <motion.span
-                layoutId="admin-nav-marker"
-                className="absolute left-0 top-1/2 h-7 w-1 -translate-y-1/2 rounded-full bg-accent"
-              />
-            ) : null}
-            <span
-              className={cn(
-                "mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-xl transition-colors duration-300",
-                isActive
-                  ? "bg-accent text-accent-foreground"
-                  : "bg-primary-foreground/10 text-primary-foreground/70 group-hover:bg-primary-foreground/15",
-              )}
-            >
-              <item.icon className="size-4" />
-            </span>
-            <span className="min-w-0">
-              <span className="block text-sm font-semibold">{item.label}</span>
-              <span className="block text-xs text-primary-foreground/50">{item.description}</span>
-            </span>
-          </motion.button>
-        );
-      })}
+    <nav className="space-y-5">
+      {groups.map((group) => (
+        <div key={group.group} className="space-y-1.5">
+          <p className="px-3.5 text-[10px] font-bold uppercase tracking-[0.22em] text-primary-foreground/40">
+            {group.group}
+          </p>
+          {group.items.map((item) => {
+            const isActive = active === item.id;
+            navIndex += 1;
+            const index = navIndex;
+            return (
+              <motion.button
+                key={item.id}
+                type="button"
+                initial={{ opacity: 0, x: -12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.05 * index, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                onClick={() => {
+                  onNavigate(item.id);
+                  setMobileOpen(false);
+                }}
+                aria-current={isActive ? "page" : undefined}
+                className={cn(
+                  "group relative flex w-full items-start gap-3 rounded-2xl px-3.5 py-3 text-left transition-all duration-300",
+                  isActive
+                    ? "bg-primary-foreground/10 text-primary-foreground shadow-[inset_0_0_0_1px_oklch(0.79_0.15_78/0.35)]"
+                    : "text-primary-foreground/65 hover:bg-primary-foreground/5 hover:text-primary-foreground",
+                )}
+              >
+                {isActive ? (
+                  <motion.span
+                    layoutId="admin-nav-marker"
+                    className="absolute left-0 top-1/2 h-7 w-1 -translate-y-1/2 rounded-full bg-accent"
+                  />
+                ) : null}
+                <span
+                  className={cn(
+                    "mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-xl transition-colors duration-300",
+                    isActive
+                      ? "bg-accent text-accent-foreground"
+                      : "bg-primary-foreground/10 text-primary-foreground/70 group-hover:bg-primary-foreground/15",
+                  )}
+                >
+                  <item.icon className="size-4" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-sm font-semibold">{item.label}</span>
+                  <span className="block text-xs text-primary-foreground/50">{item.description}</span>
+                </span>
+              </motion.button>
+            );
+          })}
+        </div>
+      ))}
     </nav>
   );
+
 
   const sidebarInner = (
     <div className="flex h-full flex-col gap-6 p-5">
@@ -212,12 +232,21 @@ export function AdminShell({
             </Button>
             <div className="min-w-0 flex-1">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                Dashboard
+                {NAV.find((n) => n.id === active)?.group ?? "Dashboard"}
               </p>
               <h1 className="truncate text-base font-bold tracking-tight text-foreground sm:text-lg">
                 {NAV.find((n) => n.id === active)?.label ?? "Ringkasan"}
               </h1>
+              <p className="hidden truncate text-xs text-muted-foreground sm:block">
+                {NAV.find((n) => n.id === active)?.description ?? ""}
+              </p>
             </div>
+            <Link
+              to="/"
+              className="hidden items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:border-accent/60 hover:text-primary md:inline-flex"
+            >
+              Lihat situs <ExternalLink className="size-3.5" />
+            </Link>
             <span
               className={cn(
                 "hidden items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold sm:inline-flex",
@@ -230,6 +259,7 @@ export function AdminShell({
               {isAdmin ? "Terverifikasi Admin" : "Tanpa hak admin"}
             </span>
           </div>
+
         </header>
 
         <main className="mx-auto max-w-6xl px-4 pb-16 pt-8 sm:px-6">{children}</main>
