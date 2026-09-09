@@ -5,6 +5,7 @@ import { KEMAHASISWAAN_PAGES } from "./kemahasiswaan";
 import { RISET_PAGES } from "./riset";
 import { INFORMASI_PAGES } from "./informasi";
 import { PMB_PAGES } from "./pmb";
+import { LAYANAN_PAGES } from "./layanan";
 
 export const PAGES: Record<string, PageContent> = {
   ...PROFIL_PAGES,
@@ -13,4 +14,5 @@ export const PAGES: Record<string, PageContent> = {
   ...RISET_PAGES,
   ...INFORMASI_PAGES,
   ...PMB_PAGES,
+  ...LAYANAN_PAGES,
 };

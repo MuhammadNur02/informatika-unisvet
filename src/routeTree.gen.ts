@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as KontakRouteImport } from './routes/kontak'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
@@ -21,6 +22,7 @@ import { Route as AkademikPraktikumProyekRouteImport } from './routes/akademik.p
 import { Route as AkademikProfilLulusanRouteImport } from './routes/akademik.profil-lulusan'
 import { Route as InformasiAgendaRouteImport } from './routes/informasi.agenda'
 import { Route as InformasiBeritaRouteImport } from './routes/informasi.berita'
+import { Route as InformasiDokumenRouteImport } from './routes/informasi.dokumen'
 import { Route as InformasiEventRouteImport } from './routes/informasi.event'
 import { Route as InformasiGaleriRouteImport } from './routes/informasi.galeri'
 import { Route as InformasiPengumumanRouteImport } from './routes/informasi.pengumuman'
@@ -53,6 +55,11 @@ import { Route as InformasiBeritaSlugRouteImport } from './routes/informasi.beri
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KontakRoute = KontakRouteImport.update({
+  id: '/kontak',
+  path: '/kontak',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -108,6 +115,11 @@ const InformasiAgendaRoute = InformasiAgendaRouteImport.update({
 const InformasiBeritaRoute = InformasiBeritaRouteImport.update({
   id: '/informasi/berita',
   path: '/informasi/berita',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InformasiDokumenRoute = InformasiDokumenRouteImport.update({
+  id: '/informasi/dokumen',
+  path: '/informasi/dokumen',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InformasiEventRoute = InformasiEventRouteImport.update({
@@ -254,6 +266,7 @@ const InformasiBeritaSlugRoute = InformasiBeritaSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/kontak': typeof KontakRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/login': typeof AdminLoginRoute
@@ -265,6 +278,7 @@ export interface FileRoutesByFullPath {
   '/akademik/profil-lulusan': typeof AkademikProfilLulusanRoute
   '/informasi/agenda': typeof InformasiAgendaRoute
   '/informasi/berita': typeof InformasiBeritaRouteWithChildren
+  '/informasi/dokumen': typeof InformasiDokumenRoute
   '/informasi/event': typeof InformasiEventRoute
   '/informasi/galeri': typeof InformasiGaleriRoute
   '/informasi/pengumuman': typeof InformasiPengumumanRoute
@@ -296,6 +310,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/kontak': typeof KontakRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/login': typeof AdminLoginRoute
@@ -307,6 +322,7 @@ export interface FileRoutesByTo {
   '/akademik/profil-lulusan': typeof AkademikProfilLulusanRoute
   '/informasi/agenda': typeof InformasiAgendaRoute
   '/informasi/berita': typeof InformasiBeritaRouteWithChildren
+  '/informasi/dokumen': typeof InformasiDokumenRoute
   '/informasi/event': typeof InformasiEventRoute
   '/informasi/galeri': typeof InformasiGaleriRoute
   '/informasi/pengumuman': typeof InformasiPengumumanRoute
@@ -339,6 +355,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/kontak': typeof KontakRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/login': typeof AdminLoginRoute
@@ -350,6 +367,7 @@ export interface FileRoutesById {
   '/akademik/profil-lulusan': typeof AkademikProfilLulusanRoute
   '/informasi/agenda': typeof InformasiAgendaRoute
   '/informasi/berita': typeof InformasiBeritaRouteWithChildren
+  '/informasi/dokumen': typeof InformasiDokumenRoute
   '/informasi/event': typeof InformasiEventRoute
   '/informasi/galeri': typeof InformasiGaleriRoute
   '/informasi/pengumuman': typeof InformasiPengumumanRoute
@@ -383,6 +401,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/kontak'
     | '/sitemap.xml'
     | '/admin/dashboard'
     | '/admin/login'
@@ -394,6 +413,7 @@ export interface FileRouteTypes {
     | '/akademik/profil-lulusan'
     | '/informasi/agenda'
     | '/informasi/berita'
+    | '/informasi/dokumen'
     | '/informasi/event'
     | '/informasi/galeri'
     | '/informasi/pengumuman'
@@ -425,6 +445,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/kontak'
     | '/sitemap.xml'
     | '/admin/dashboard'
     | '/admin/login'
@@ -436,6 +457,7 @@ export interface FileRouteTypes {
     | '/akademik/profil-lulusan'
     | '/informasi/agenda'
     | '/informasi/berita'
+    | '/informasi/dokumen'
     | '/informasi/event'
     | '/informasi/galeri'
     | '/informasi/pengumuman'
@@ -467,6 +489,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/kontak'
     | '/sitemap.xml'
     | '/admin/dashboard'
     | '/admin/login'
@@ -478,6 +501,7 @@ export interface FileRouteTypes {
     | '/akademik/profil-lulusan'
     | '/informasi/agenda'
     | '/informasi/berita'
+    | '/informasi/dokumen'
     | '/informasi/event'
     | '/informasi/galeri'
     | '/informasi/pengumuman'
@@ -510,6 +534,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  KontakRoute: typeof KontakRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminLoginRoute: typeof AdminLoginRoute
@@ -521,6 +546,7 @@ export interface RootRouteChildren {
   AkademikProfilLulusanRoute: typeof AkademikProfilLulusanRoute
   InformasiAgendaRoute: typeof InformasiAgendaRoute
   InformasiBeritaRoute: typeof InformasiBeritaRouteWithChildren
+  InformasiDokumenRoute: typeof InformasiDokumenRoute
   InformasiEventRoute: typeof InformasiEventRoute
   InformasiGaleriRoute: typeof InformasiGaleriRoute
   InformasiPengumumanRoute: typeof InformasiPengumumanRoute
@@ -557,6 +583,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kontak': {
+      id: '/kontak'
+      path: '/kontak'
+      fullPath: '/kontak'
+      preLoaderRoute: typeof KontakRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -634,6 +667,13 @@ declare module '@tanstack/react-router' {
       path: '/informasi/berita'
       fullPath: '/informasi/berita'
       preLoaderRoute: typeof InformasiBeritaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/informasi/dokumen': {
+      id: '/informasi/dokumen'
+      path: '/informasi/dokumen'
+      fullPath: '/informasi/dokumen'
+      preLoaderRoute: typeof InformasiDokumenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/informasi/event': {
@@ -849,6 +889,7 @@ const InformasiBeritaRouteWithChildren = InformasiBeritaRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  KontakRoute: KontakRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AdminLoginRoute: AdminLoginRoute,
@@ -860,6 +901,7 @@ const rootRouteChildren: RootRouteChildren = {
   AkademikProfilLulusanRoute: AkademikProfilLulusanRoute,
   InformasiAgendaRoute: InformasiAgendaRoute,
   InformasiBeritaRoute: InformasiBeritaRouteWithChildren,
+  InformasiDokumenRoute: InformasiDokumenRoute,
   InformasiEventRoute: InformasiEventRoute,
   InformasiGaleriRoute: InformasiGaleriRoute,
   InformasiPengumumanRoute: InformasiPengumumanRoute,

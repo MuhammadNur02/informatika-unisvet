@@ -62,6 +62,45 @@ export type Database = {
         }
         Relationships: []
       }
+      dokumen: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          deskripsi: string
+          file_url: string
+          id: string
+          judul: string
+          kategori: string
+          storage_path: string | null
+          ukuran: number
+          urutan: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          deskripsi?: string
+          file_url: string
+          id?: string
+          judul: string
+          kategori?: string
+          storage_path?: string | null
+          ukuran?: number
+          urutan?: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          deskripsi?: string
+          file_url?: string
+          id?: string
+          judul?: string
+          kategori?: string
+          storage_path?: string | null
+          ukuran?: number
+          urutan?: number
+        }
+        Relationships: []
+      }
       galeri: {
         Row: {
           created_at: string
@@ -70,8 +109,10 @@ export type Database = {
           id: string
           image_url: string
           judul: string
+          kategori: string
           storage_path: string | null
           tanggal: string
+          urutan: number
         }
         Insert: {
           created_at?: string
@@ -80,8 +121,10 @@ export type Database = {
           id?: string
           image_url: string
           judul: string
+          kategori?: string
           storage_path?: string | null
           tanggal?: string
+          urutan?: number
         }
         Update: {
           created_at?: string
@@ -90,8 +133,10 @@ export type Database = {
           id?: string
           image_url?: string
           judul?: string
+          kategori?: string
           storage_path?: string | null
           tanggal?: string
+          urutan?: number
         }
         Relationships: []
       }
@@ -173,6 +218,39 @@ export type Database = {
           title?: string
           updated_at?: string
           updated_by?: string | null
+        }
+        Relationships: []
+      }
+      pesan_kontak: {
+        Row: {
+          created_at: string
+          dibaca: boolean
+          email: string
+          id: string
+          nama: string
+          pesan: string
+          subjek: string
+          telepon: string
+        }
+        Insert: {
+          created_at?: string
+          dibaca?: boolean
+          email: string
+          id?: string
+          nama: string
+          pesan: string
+          subjek?: string
+          telepon?: string
+        }
+        Update: {
+          created_at?: string
+          dibaca?: boolean
+          email?: string
+          id?: string
+          nama?: string
+          pesan?: string
+          subjek?: string
+          telepon?: string
         }
         Relationships: []
       }
