@@ -1,0 +1,4 @@
+CREATE POLICY "Public can read dokumen files" ON storage.objects FOR SELECT TO anon, authenticated USING (bucket_id = 'dokumen-prodi');
+CREATE POLICY "Admins can upload dokumen files" ON storage.objects FOR INSERT TO authenticated WITH CHECK (bucket_id = 'dokumen-prodi' AND public.has_role(auth.uid(), 'admin'));
+CREATE POLICY "Admins can update dokumen files" ON storage.objects FOR UPDATE TO authenticated USING (bucket_id = 'dokumen-prodi' AND public.has_role(auth.uid(), 'admin'));
+CREATE POLICY "Admins can delete dokumen files" ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'dokumen-prodi' AND public.has_role(auth.uid(), 'admin'));
