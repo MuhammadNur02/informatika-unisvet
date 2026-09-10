@@ -1,439 +1,549 @@
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.5"
-  }
+    PostgrestVersion: "14.5";
+  };
   public: {
     Tables: {
       berita: {
         Row: {
-          created_at: string
-          created_by: string | null
-          gambar_url: string
-          id: string
-          isi: string
-          judul: string
-          kategori: string
-          published: boolean
-          ringkasan: string
-          slug: string
-          tag: string
-          tanggal: string
-          updated_at: string
-        }
+          created_at: string;
+          created_by: string | null;
+          gambar_url: string;
+          id: string;
+          isi: string;
+          judul: string;
+          kategori: string;
+          published: boolean;
+          ringkasan: string;
+          slug: string;
+          tag: string;
+          tanggal: string;
+          updated_at: string;
+          views: number;
+        };
         Insert: {
-          created_at?: string
-          created_by?: string | null
-          gambar_url?: string
-          id?: string
-          isi?: string
-          judul: string
-          kategori?: string
-          published?: boolean
-          ringkasan?: string
-          slug: string
-          tag?: string
-          tanggal?: string
-          updated_at?: string
-        }
+          created_at?: string;
+          created_by?: string | null;
+          gambar_url?: string;
+          id?: string;
+          isi?: string;
+          judul: string;
+          kategori?: string;
+          published?: boolean;
+          ringkasan?: string;
+          slug: string;
+          tag?: string;
+          tanggal?: string;
+          updated_at?: string;
+          views?: number;
+        };
         Update: {
-          created_at?: string
-          created_by?: string | null
-          gambar_url?: string
-          id?: string
-          isi?: string
-          judul?: string
-          kategori?: string
-          published?: boolean
-          ringkasan?: string
-          slug?: string
-          tag?: string
-          tanggal?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
+          created_at?: string;
+          created_by?: string | null;
+          gambar_url?: string;
+          id?: string;
+          isi?: string;
+          judul?: string;
+          kategori?: string;
+          published?: boolean;
+          ringkasan?: string;
+          slug?: string;
+          tag?: string;
+          tanggal?: string;
+          updated_at?: string;
+          views?: number;
+        };
+        Relationships: [];
+      };
       dokumen: {
         Row: {
-          created_at: string
-          created_by: string | null
-          deskripsi: string
-          file_url: string
-          id: string
-          judul: string
-          kategori: string
-          storage_path: string | null
-          ukuran: number
-          urutan: number
-        }
+          created_at: string;
+          created_by: string | null;
+          deskripsi: string;
+          file_url: string;
+          id: string;
+          judul: string;
+          kategori: string;
+          storage_path: string | null;
+          ukuran: number;
+          urutan: number;
+        };
         Insert: {
-          created_at?: string
-          created_by?: string | null
-          deskripsi?: string
-          file_url: string
-          id?: string
-          judul: string
-          kategori?: string
-          storage_path?: string | null
-          ukuran?: number
-          urutan?: number
-        }
+          created_at?: string;
+          created_by?: string | null;
+          deskripsi?: string;
+          file_url: string;
+          id?: string;
+          judul: string;
+          kategori?: string;
+          storage_path?: string | null;
+          ukuran?: number;
+          urutan?: number;
+        };
         Update: {
-          created_at?: string
-          created_by?: string | null
-          deskripsi?: string
-          file_url?: string
-          id?: string
-          judul?: string
-          kategori?: string
-          storage_path?: string | null
-          ukuran?: number
-          urutan?: number
-        }
-        Relationships: []
-      }
+          created_at?: string;
+          created_by?: string | null;
+          deskripsi?: string;
+          file_url?: string;
+          id?: string;
+          judul?: string;
+          kategori?: string;
+          storage_path?: string | null;
+          ukuran?: number;
+          urutan?: number;
+        };
+        Relationships: [];
+      };
+      dosen: {
+        Row: {
+          created_at: string;
+          created_by: string | null;
+          email: string | null;
+          foto_url: string | null;
+          id: string;
+          jabatan_akademik: string | null;
+          keahlian: string[] | null;
+          nama_lengkap: string;
+          nidn: string | null;
+          updated_at: string;
+          urutan: number;
+        };
+        Insert: {
+          created_at?: string;
+          created_by?: string | null;
+          email?: string | null;
+          foto_url?: string | null;
+          id?: string;
+          jabatan_akademik?: string | null;
+          keahlian?: string[] | null;
+          nama_lengkap: string;
+          nidn?: string | null;
+          updated_at?: string;
+          urutan?: number;
+        };
+        Update: {
+          created_at?: string;
+          created_by?: string | null;
+          email?: string | null;
+          foto_url?: string | null;
+          id?: string;
+          jabatan_akademik?: string | null;
+          keahlian?: string[] | null;
+          nama_lengkap?: string;
+          nidn?: string | null;
+          updated_at?: string;
+          urutan?: number;
+        };
+        Relationships: [];
+      };
+      fasilitas: {
+        Row: {
+          created_at: string;
+          created_by: string | null;
+          deskripsi: string | null;
+          foto_url: string | null;
+          id: string;
+          lokasi: string | null;
+          nama_fasilitas: string;
+          storage_path: string | null;
+          updated_at: string;
+          urutan: number;
+        };
+        Insert: {
+          created_at?: string;
+          created_by?: string | null;
+          deskripsi?: string | null;
+          foto_url?: string | null;
+          id?: string;
+          lokasi?: string | null;
+          nama_fasilitas: string;
+          storage_path?: string | null;
+          updated_at?: string;
+          urutan?: number;
+        };
+        Update: {
+          created_at?: string;
+          created_by?: string | null;
+          deskripsi?: string | null;
+          foto_url?: string | null;
+          id?: string;
+          lokasi?: string | null;
+          nama_fasilitas?: string;
+          storage_path?: string | null;
+          updated_at?: string;
+          urutan?: number;
+        };
+        Relationships: [];
+      };
       galeri: {
         Row: {
-          created_at: string
-          created_by: string | null
-          deskripsi: string | null
-          id: string
-          image_url: string
-          judul: string
-          kategori: string
-          storage_path: string | null
-          tanggal: string
-          urutan: number
-        }
+          created_at: string;
+          created_by: string | null;
+          deskripsi: string | null;
+          id: string;
+          image_url: string;
+          judul: string;
+          kategori: string;
+          storage_path: string | null;
+          tanggal: string;
+          urutan: number;
+        };
         Insert: {
-          created_at?: string
-          created_by?: string | null
-          deskripsi?: string | null
-          id?: string
-          image_url: string
-          judul: string
-          kategori?: string
-          storage_path?: string | null
-          tanggal?: string
-          urutan?: number
-        }
+          created_at?: string;
+          created_by?: string | null;
+          deskripsi?: string | null;
+          id?: string;
+          image_url: string;
+          judul: string;
+          kategori?: string;
+          storage_path?: string | null;
+          tanggal?: string;
+          urutan?: number;
+        };
         Update: {
-          created_at?: string
-          created_by?: string | null
-          deskripsi?: string | null
-          id?: string
-          image_url?: string
-          judul?: string
-          kategori?: string
-          storage_path?: string | null
-          tanggal?: string
-          urutan?: number
-        }
-        Relationships: []
-      }
+          created_at?: string;
+          created_by?: string | null;
+          deskripsi?: string | null;
+          id?: string;
+          image_url?: string;
+          judul?: string;
+          kategori?: string;
+          storage_path?: string | null;
+          tanggal?: string;
+          urutan?: number;
+        };
+        Relationships: [];
+      };
+      kurikulum: {
+        Row: {
+          created_at: string;
+          created_by: string | null;
+          id: string;
+          kategori: string;
+          kode_mk: string;
+          nama_mk: string;
+          semester: number;
+          silabus_url: string | null;
+          sks: number;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          created_by?: string | null;
+          id?: string;
+          kategori?: string;
+          kode_mk: string;
+          nama_mk: string;
+          semester: number;
+          silabus_url?: string | null;
+          sks: number;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          created_by?: string | null;
+          id?: string;
+          kategori?: string;
+          kode_mk?: string;
+          nama_mk?: string;
+          semester?: number;
+          silabus_url?: string | null;
+          sks?: number;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       media: {
         Row: {
-          created_at: string
-          created_by: string | null
-          id: string
-          judul: string
-          kind: string
-          storage_path: string | null
-          url: string
-        }
+          created_at: string;
+          created_by: string | null;
+          id: string;
+          judul: string;
+          kind: string;
+          storage_path: string | null;
+          url: string;
+        };
         Insert: {
-          created_at?: string
-          created_by?: string | null
-          id?: string
-          judul: string
-          kind?: string
-          storage_path?: string | null
-          url: string
-        }
+          created_at?: string;
+          created_by?: string | null;
+          id?: string;
+          judul: string;
+          kind?: string;
+          storage_path?: string | null;
+          url: string;
+        };
         Update: {
-          created_at?: string
-          created_by?: string | null
-          id?: string
-          judul?: string
-          kind?: string
-          storage_path?: string | null
-          url?: string
-        }
-        Relationships: []
-      }
+          created_at?: string;
+          created_by?: string | null;
+          id?: string;
+          judul?: string;
+          kind?: string;
+          storage_path?: string | null;
+          url?: string;
+        };
+        Relationships: [];
+      };
       page_content: {
         Row: {
-          blocks: Json
-          created_at: string
-          description: string
-          eyebrow: string
-          id: string
-          meta_description: string
-          meta_title: string
-          og_description: string
-          og_image: string
-          og_title: string
-          path: string
-          title: string
-          updated_at: string
-          updated_by: string | null
-        }
+          blocks: Json;
+          created_at: string;
+          description: string;
+          eyebrow: string;
+          id: string;
+          meta_description: string;
+          meta_title: string;
+          og_description: string;
+          og_image: string;
+          og_title: string;
+          path: string;
+          title: string;
+          updated_at: string;
+          updated_by: string | null;
+        };
         Insert: {
-          blocks?: Json
-          created_at?: string
-          description?: string
-          eyebrow?: string
-          id?: string
-          meta_description?: string
-          meta_title?: string
-          og_description?: string
-          og_image?: string
-          og_title?: string
-          path: string
-          title?: string
-          updated_at?: string
-          updated_by?: string | null
-        }
+          blocks?: Json;
+          created_at?: string;
+          description?: string;
+          eyebrow?: string;
+          id?: string;
+          meta_description?: string;
+          meta_title?: string;
+          og_description?: string;
+          og_image?: string;
+          og_title?: string;
+          path: string;
+          title?: string;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
         Update: {
-          blocks?: Json
-          created_at?: string
-          description?: string
-          eyebrow?: string
-          id?: string
-          meta_description?: string
-          meta_title?: string
-          og_description?: string
-          og_image?: string
-          og_title?: string
-          path?: string
-          title?: string
-          updated_at?: string
-          updated_by?: string | null
-        }
-        Relationships: []
-      }
+          blocks?: Json;
+          created_at?: string;
+          description?: string;
+          eyebrow?: string;
+          id?: string;
+          meta_description?: string;
+          meta_title?: string;
+          og_description?: string;
+          og_image?: string;
+          og_title?: string;
+          path?: string;
+          title?: string;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [];
+      };
       pesan_kontak: {
         Row: {
-          created_at: string
-          dibaca: boolean
-          email: string
-          id: string
-          nama: string
-          pesan: string
-          subjek: string
-          telepon: string
-        }
+          created_at: string;
+          dibaca: boolean;
+          email: string;
+          id: string;
+          nama: string;
+          pesan: string;
+          status: string;
+          subjek: string;
+          telepon: string;
+        };
         Insert: {
-          created_at?: string
-          dibaca?: boolean
-          email: string
-          id?: string
-          nama: string
-          pesan: string
-          subjek?: string
-          telepon?: string
-        }
+          created_at?: string;
+          dibaca?: boolean;
+          email: string;
+          id?: string;
+          nama: string;
+          pesan: string;
+          status?: string;
+          subjek?: string;
+          telepon?: string;
+        };
         Update: {
-          created_at?: string
-          dibaca?: boolean
-          email?: string
-          id?: string
-          nama?: string
-          pesan?: string
-          subjek?: string
-          telepon?: string
-        }
-        Relationships: []
-      }
+          created_at?: string;
+          dibaca?: boolean;
+          email?: string;
+          id?: string;
+          nama?: string;
+          pesan?: string;
+          status?: string;
+          subjek?: string;
+          telepon?: string;
+        };
+        Relationships: [];
+      };
       site_settings: {
         Row: {
-          key: string
-          updated_at: string
-          updated_by: string | null
-          value: Json
-        }
+          key: string;
+          updated_at: string;
+          updated_by: string | null;
+          value: Json;
+        };
         Insert: {
-          key: string
-          updated_at?: string
-          updated_by?: string | null
-          value?: Json
-        }
+          key: string;
+          updated_at?: string;
+          updated_by?: string | null;
+          value?: Json;
+        };
         Update: {
-          key?: string
-          updated_at?: string
-          updated_by?: string | null
-          value?: Json
-        }
-        Relationships: []
-      }
+          key?: string;
+          updated_at?: string;
+          updated_by?: string | null;
+          value?: Json;
+        };
+        Relationships: [];
+      };
       user_roles: {
         Row: {
-          created_at: string
-          id: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
+          created_at: string;
+          id: string;
+          role: Database["public"]["Enums"]["app_role"];
+          user_id: string;
+        };
         Insert: {
-          created_at?: string
-          id?: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
+          created_at?: string;
+          id?: string;
+          role: Database["public"]["Enums"]["app_role"];
+          user_id: string;
+        };
         Update: {
-          created_at?: string
-          id?: string
-          role?: Database["public"]["Enums"]["app_role"]
-          user_id?: string
-        }
-        Relationships: []
-      }
-    }
+          created_at?: string;
+          id?: string;
+          role?: Database["public"]["Enums"]["app_role"];
+          user_id?: string;
+        };
+        Relationships: [];
+      };
+    };
     Views: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     Functions: {
       has_role: {
         Args: {
-          _role: Database["public"]["Enums"]["app_role"]
-          _user_id: string
-        }
-        Returns: boolean
-      }
-    }
+          _role: Database["public"]["Enums"]["app_role"];
+          _user_id: string;
+        };
+        Returns: boolean;
+      };
+    };
     Enums: {
-      app_role: "admin" | "user"
-    }
+      app_role: "admin" | "user";
+    };
     CompositeTypes: {
-      [_ in never]: never
-    }
-  }
-}
+      [_ in never]: never;
+    };
+  };
+};
 
-type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">;
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">];
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends (DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never) = never,
+    : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
   ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
       DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R
+      Row: infer R;
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])
-    ? (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
-        Row: infer R
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] & DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R;
       }
       ? R
       : never
-    : never
+    : never;
 
 export type TablesInsert<
-  DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
-  TableName extends (DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+  DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never) = never,
+    : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
   ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I
+      Insert: infer I;
     }
     ? I
     : never
   : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
     ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Insert: infer I
+        Insert: infer I;
       }
       ? I
       : never
-    : never
+    : never;
 
 export type TablesUpdate<
-  DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
-  TableName extends (DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+  DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never) = never,
+    : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
   ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U
+      Update: infer U;
     }
     ? U
     : never
   : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
     ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Update: infer U
+        Update: infer U;
       }
       ? U
       : never
-    : never
+    : never;
 
 export type Enums<
-  DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema["Enums"]
-    | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+  DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"] | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never) = never,
+    : never = never,
 > = DefaultSchemaEnumNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
   ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
     ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
-    : never
+    : never;
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never) = never,
+    : never = never,
 > = PublicCompositeTypeNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
   ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
   : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
     ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
-    : never
+    : never;
 
 export const Constants = {
   public: {
@@ -441,4 +551,4 @@ export const Constants = {
       app_role: ["admin", "user"],
     },
   },
-} as const
+} as const;
