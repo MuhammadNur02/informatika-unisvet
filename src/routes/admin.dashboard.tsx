@@ -36,6 +36,8 @@ import { PageEditor } from "@/components/admin/PageEditor";
 import { MediaLibrary } from "@/components/admin/MediaLibrary";
 import { BeritaEditor } from "@/components/admin/BeritaEditor";
 import { BerandaEditor } from "@/components/admin/BerandaEditor";
+import { DokumenManager } from "@/components/admin/DokumenManager";
+import { PesanInbox } from "@/components/admin/PesanInbox";
 import { fetchGaleri, uploadGaleri, deleteGaleri, type GaleriItem } from "@/lib/galeri";
 
 export const Route = createFileRoute("/admin/dashboard")({
@@ -524,6 +526,26 @@ function AdminDashboard() {
             transition={{ duration: 0.4, ease }}
           >
             <BeritaEditor userId={user.id} />
+          </motion.div>
+        ) : section === "dokumen" ? (
+          <motion.div
+            key="dokumen"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.4, ease }}
+          >
+            <DokumenManager userId={user.id} />
+          </motion.div>
+        ) : section === "pesan" ? (
+          <motion.div
+            key="pesan"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.4, ease }}
+          >
+            <PesanInbox />
           </motion.div>
         ) : section === "konten" ? (
           <motion.div
