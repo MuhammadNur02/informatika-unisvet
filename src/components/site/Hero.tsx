@@ -11,7 +11,7 @@ export function Hero() {
   const floating = hero.floating.slice(0, 3);
 
   return (
-    <section id="beranda" className="relative isolate overflow-hidden bg-hero-gradient pb-24 pt-32 sm:pb-32 sm:pt-40">
+    <section id="beranda" className="relative isolate overflow-hidden bg-black/40 pb-24 pt-32 sm:pb-32 sm:pt-40 backdrop-blur-[2px]">
       <VideoBackground />
 
       <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:px-8">
@@ -59,7 +59,7 @@ export function Hero() {
         >
           <div className="overflow-hidden rounded-[2rem] border border-primary-foreground/15 shadow-[var(--shadow-lift)]">
             <img
-              src={hero.image}
+              src="/banner-kampus.jpg"
               alt="Gedung FKIP Universitas Ivet Semarang, kampus Program Studi Pendidikan Informatika"
               width={1600}
               height={1104}

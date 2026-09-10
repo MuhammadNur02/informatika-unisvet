@@ -1,18 +1,52 @@
 import { Reveal, SectionHeading } from "./Reveal";
 import labIot from "@/assets/lab-iot.jpg";
-import labKomputerAsset from "@/assets/lab-komputer.webp.asset.json";
-const labKomputer = labKomputerAsset.url;
 import labSmart from "@/assets/lab-smart.jpg";
 import labMicroteaching from "@/assets/lab-microteaching.jpg";
 import libCampus from "@/assets/lib-campus.jpg";
+import dosen1 from "@/assets/dosen-1.jpg";
+import dosen2 from "@/assets/dosen-2.jpg";
+import dosen3 from "@/assets/dosen-3.jpg";
+import dosen4 from "@/assets/dosen-4.jpg";
+import dosen5 from "@/assets/dosen-5.jpg";
+import dosen6 from "@/assets/dosen-6.jpg";
 
 const DOSEN = [
-  { name: "Dr. Rahmawati Saputri, M.Kom.", role: "Koordinator Program Studi", interest: "Educational Data Mining" },
-  { name: "Adi Nugroho, S.Pd., M.Cs.", role: "Dosen Rekayasa Perangkat Lunak", interest: "Web Engineering & DevOps" },
-  { name: "Siti Halimah, M.Pd.", role: "Dosen Kurikulum & Pembelajaran", interest: "Digital Pedagogy" },
-  { name: "Bayu Prakoso, M.T.", role: "Dosen Jaringan & IoT", interest: "Smart Systems & IoT" },
-  { name: "Nurul Aini, M.Kom.", role: "Dosen Multimedia", interest: "Interactive Media Learning" },
-  { name: "Fajar Ramadhan, M.Cs.", role: "Dosen Kecerdasan Artifisial", interest: "Machine Learning for Education" },
+  { 
+    name: "R. Irlanto Sudomo, M.Pd.", 
+    role: "Wakil Rektor II Unisvet", 
+    interest: "Pendidikan, Profesi Kependidikan, & Manajemen Tata Kelola Institusi",
+    image: dosen1 
+  },
+  { 
+    name: "Dr. Herry Sulendro Mangiri, S.T., M.Eng.", 
+    role: "Dekan F. Maritim", 
+    interest: "Teknik, Invensi Teknologi Terapan, & Penjaminan Mutu",
+    image: dosen2 
+  },
+  { 
+    name: "Dr. Afis Pratama, S.T., M.Pd.", 
+    role: "Ka. LPPM Unisvet", 
+    interest: "Pendidikan Informatika & Penjaminan Mutu Akademik",
+    image: dosen3 
+  },
+  { 
+    name: "Handini Arga Damar Rani, M.Kom.", 
+    role: "Ka. Lab. TIK F.SAINTEK", 
+    interest: "Data Mining & Ilmu Komputer",
+    image: dosen4 
+  },
+  { 
+    name: "Adi Nova Trisetiyanto, S.Pd., M.Pd.", 
+    role: "Ka. Prodi P. Informatika", 
+    interest: "Media Pembelajaran Digital & Research & Development",
+    image: dosen5 
+  },
+  { 
+    name: "Henny Prasetyani, M.Pd.", 
+    role: "Koord. PMB P. Informatika", 
+    interest: "Teknologi Informasi & Pengabdian Masyarakat",
+    image: dosen6 
+  },
 ];
 
 const FASILITAS = [
@@ -38,16 +72,6 @@ const FASILITAS = [
   },
 ];
 
-function initials(name: string) {
-  return name
-    .replace(/(Dr\.|S\.Pd\.|M\.Kom\.|M\.Cs\.|M\.Pd\.|M\.T\.|,)/g, "")
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((w) => w[0])
-    .join("");
-}
-
 export function Faculty() {
   return (
     <section id="dosen" className="bg-slate-surface py-20 sm:py-28">
@@ -58,19 +82,38 @@ export function Faculty() {
           description="Didampingi dosen berkualifikasi magister dan doktor dengan fokus riset pendidikan dan teknologi informasi."
         />
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {DOSEN.map((d, i) => (
             <Reveal key={d.name} delay={(i % 3) * 0.08}>
-              <article className="card-elevated flex h-full items-start gap-4 rounded-3xl p-5">
-                <span className="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-[image:var(--gradient-hero)] text-base font-bold text-primary-foreground">
-                  {initials(d.name)}
-                </span>
-                <div>
-                  <h3 className="text-base font-bold leading-snug text-foreground">{d.name}</h3>
-                  <p className="mt-1 text-sm font-medium text-primary/70">{d.role}</p>
-                  <p className="mt-2 inline-flex rounded-full bg-accent/15 px-2.5 py-1 text-xs font-semibold text-accent-foreground">
-                    {d.interest}
-                  </p>
+              <article className="card-elevated flex h-full flex-col items-center text-center rounded-3xl p-7">
+                {/* Foto Profil */}
+                <div className="w-36 h-36 shrink-0 overflow-hidden rounded-3xl bg-[image:var(--gradient-hero)] shadow-md mb-5 flex items-center justify-center">
+                  {d.image ? (
+                    <img src={d.image} alt={d.name} className="h-full w-full object-cover object-top" />
+                  ) : (
+                    <span className="text-4xl font-bold text-primary-foreground">{d.name.charAt(0)}</span>
+                  )}
+                </div>
+                
+                {/* Informasi Teks dengan tinggi minimum agar simetris */}
+                <div className="flex flex-col flex-grow justify-between w-full">
+                  <div>
+                    {/* Mengatur min-height untuk nama agar muat 2 baris dengan rapi */}
+                    <div className="min-h-[3.5rem] flex items-center justify-center">
+                      <h3 className="text-lg font-bold leading-snug text-foreground">{d.name}</h3>
+                    </div>
+                    {/* Mengatur min-height untuk jabatan */}
+                    <div className="min-h-[2rem] flex items-center justify-center mt-1">
+                      <p className="text-sm font-semibold text-primary/80">{d.role}</p>
+                    </div>
+                  </div>
+
+                  {/* Badge Bidang Keahlian */}
+                  <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-center flex-grow">
+                    <span className="inline-block rounded-full bg-accent/15 px-3.5 py-1.5 text-xs font-semibold text-accent-foreground">
+                      {d.interest}
+                    </span>
+                  </div>
                 </div>
               </article>
             </Reveal>
