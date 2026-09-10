@@ -59,6 +59,7 @@ export const NAV: NavGroup[] = [
       { label: "Pengumuman", to: "/informasi/pengumuman" },
       { label: "Agenda", to: "/informasi/agenda" },
       { label: "Galeri", to: "/informasi/galeri" },
+      { label: "Unduh Dokumen", to: "/informasi/dokumen" },
     ],
   },
   {
@@ -74,6 +75,7 @@ export const NAV: NavGroup[] = [
       { label: "Daftar", to: "/pmb/daftar" },
     ],
   },
+  { label: "Kontak", to: "/kontak" },
 ];
 
 export const PORTAL_LINKS = [
