@@ -88,13 +88,51 @@ export async function uploadDokumen(input: {
   }
 }
 
-export async function updateDokumenUrutan(id: string, urutan: number) {
-  const { error } = await supabase.from("dokumen").update({ urutan }).eq("id", id);
-  if (error) throw error;
-}
+export async function updateDokumen(
+  id: string,
+  input: {
+    judul?: string;
+    deskripsi?: string;
+    kategori?: string;
+    urutan?: number;
+    file?: File;
+    oldStoragePath?: string | null;
+  }
+) {
+  let updatePayload: Record<string, any> = {
+    ...(input.judul && { judul: input.judul }),
+    ...(input.deskripsi !== undefined && { deskripsi: input.deskripsi }),
+    ...(input.kategori && { kategori: input.kategori }),
+    ...(input.urutan !== undefined && { urutan: input.urutan }),
+  };
 
-export async function deleteDokumen(item: { id: string; storage_path: string | null }) {
-  const { error } = await supabase.from("dokumen").delete().eq("id", item.id);
-  if (error) throw error;
-  if (item.storage_path) await supabase.storage.from(BUCKET).remove([item.storage_path]);
-}
+  if (input.file) {
+    const ext = input.file.name.split(".").pop()?.toLowerCaseKode TypeScript yang disajikan sudah mengimplementasikan *CRUD* (Create, Read, Update, Delete) data dokumen dengan integrasi **Supabase Database** dan **Supabase Storage**.
+
+---
+
+### **Analisis Kode & Catatan Utama**
+
+* **Mekanisme Storage Dual-URL:** Kode mendukung file lokal via Storage Path (`createSignedUrls` berdurasi 6 jam) dan URL eksternal langsung (`file_url`). Jika signed URL gagal/tidak ada, sistem otomatis memilih `file_url`.
+* **Prosedur *Rollback* saat Upload:** Jika `insert` ke tabel database `dokumen` gagal setelah file terunggah, file yang berada di Supabase Storage otomatis dihapus kembali melalui `remove([path])` untuk mencegah *orphan files*.
+* **Penataan Urutan (*Ordering*):** Pengambilan data (`fetchDokumen`) diurutkan berdasarkan `urutan` (secara *ascending*), disusul `created_at` (secara *descending*).
+
+---
+
+### **Rekomendasi Peningkatan Kode**
+
+1. **Efisiensi Batch Signed URLs:**  
+   Metode `createSignedUrls` menerima daftar `paths`. Namun, pastikan jumlah *array* tidak terlalu besar (misalnya di atas 100 file) agar tidak memicu pembatasan *payload* request dari Supabase Storage. Jika jumlah file banyak, terapkan paginasi pada query `dokumen`.
+2. **Validasi Input Tipe Kategori:**  
+   Parameter `kategori` pada fungsi `uploadDokumen` dapat diperketat tipe datanya agar sesuai dengan konstanta `KATEGORI_DOKUMEN`:
+   ```typescript
+   export type KategoriDokumen = typeof KATEGORI_DOKUMEN[number];
+
+   export async function uploadDokumen(input: {
+     file: File;
+     judul: string;
+     deskripsi: string;
+     kategori: KategoriDokumen;
+     urutan: number;
+     userId: string;
+   }) { ... }
