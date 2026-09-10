@@ -1,10 +1,3 @@
-import mp4Asset from "@/assets/tech-bg.mp4.asset.json";
-import webmAsset from "@/assets/tech-bg.webm.asset.json";
-
-/**
- * Latar video teknologi HD yang diputar berulang (loop), tanpa suara, dan
- * dipasang absolute di dalam section agar tidak bergeser/bug saat scroll.
- */
 export function VideoBackground({ className = "" }: { className?: string }) {
   return (
     <div className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`} aria-hidden>
@@ -18,11 +11,11 @@ export function VideoBackground({ className = "" }: { className?: string }) {
         disablePictureInPicture
         disableRemotePlayback
       >
-        <source src={webmAsset.url} type="video/webm" />
-        <source src={mp4Asset.url} type="video/mp4" />
+        <source src="/tech-bg.webm" type="video/webm" />
+        <source src="/tech-bg.mp4" type="video/mp4" />
       </video>
-      <div className="absolute inset-0 bg-primary-deep/60 mix-blend-multiply" />
-      <div className="absolute inset-0 bg-hero-gradient opacity-45" />
+      <div className="absolute inset-0 bg-primary-deep/80 mix-blend-multiply" />
+      <div className="absolute inset-0 bg-hero-gradient opacity-50" />
     </div>
   );
 }

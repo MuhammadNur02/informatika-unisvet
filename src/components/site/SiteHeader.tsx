@@ -25,10 +25,10 @@ import { NAV } from "@/lib/site-nav";
 import logo from "@/assets/logo-unisvet.png";
 
 const PORTALS = [
-  { label: "SIAKAD", icon: LayoutDashboard, href: "https://siakad.ivet.ac.id" },
-  { label: "E-Learning", icon: MonitorPlay, href: "https://elearning.ivet.ac.id" },
-  { label: "E-Library", icon: Library, href: "https://library.ivet.ac.id" },
-  { label: "SPMI Mutu", icon: ShieldCheck, href: "https://spmi.ivet.ac.id" },
+  { label: "SIAKAD", icon: LayoutDashboard, href: "https://unisvet.siakadcloud.com/gate/login" },
+  { label: "E-Learning", icon: MonitorPlay, href: "https://edlink.id/login?r=%2Fclasses&sso_attempt=1" },
+  { label: "E-Library", icon: Library, href: "https://eprint.ivet.ac.id" },
+  { label: "SPMI Mutu", icon: ShieldCheck, href: "https://spmi.kemdiktisaintek.go.id/auth/login" },
 ];
 
 const NAV_ICONS: Record<string, LucideIcon> = {

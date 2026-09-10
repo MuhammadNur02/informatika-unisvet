@@ -115,15 +115,13 @@ export const PROFIL_PAGES: Record<string, PageContent> = {
         type: "org",
         title: "Bagan Organisasi",
         top: "Koordinator Program Studi",
-        topName: "Dr. Rahmawati Saputri, M.Kom.",
+        topName: "Adi Nova Trisetiyanto, S.Pd., M.Pd.",
         nodes: [
-          { role: "Sekretaris Prodi", name: "Adi Nugroho, S.Pd., M.Cs." },
-          { role: "Gugus Kendali Mutu", name: "Siti Halimah, M.Pd." },
-          { role: "Koordinator Kurikulum", name: "Nurul Aini, M.Kom." },
-          { role: "Koordinator Laboratorium", name: "Bayu Prakoso, M.T." },
-          { role: "Koordinator Riset & PkM", name: "Fajar Ramadhan, M.Cs." },
-          { role: "Koordinator Kemahasiswaan", name: "Adi Nugroho, S.Pd., M.Cs." },
-          { role: "Koordinator PLP & MBKM", name: "Siti Halimah, M.Pd." },
+          { role: "Wakil Rektor II Unisvet", name: "R. Irlanto Sudomo, M.Pd." },
+          { role: "Dekan F. Maritim", name: "Dr. Herry Sulendro Mangiri, S.T., M.Eng." },
+          { role: "Ka. LPPM Unisvet", name: "Dr. Afis Pratama, S.T., M.Pd." },
+          { role: "Ka. Lab. TIK F.SAINTEK", name: "Handini Arga Damar Rani, M.Kom." },
+          { role: "Koord. PMB P. Informatika", name: "Henny Prasetyani, M.Pd." },
           { role: "Admin Akademik", name: "Dwi Lestari, S.Kom." },
           { role: "Teknisi Laboratorium", name: "Rian Setiawan, A.Md.Kom." },
         ],
@@ -131,14 +129,14 @@ export const PROFIL_PAGES: Record<string, PageContent> = {
       {
         type: "table",
         title: "Tugas Pokok",
-        head: ["Unit", "Tugas Utama"],
+        head: ["Unit / Jabatan", "Fokus Bidang & Tanggung Jawab"],
         rows: [
-          ["Koordinator Prodi", "Perencanaan, pengelolaan, dan evaluasi seluruh kegiatan tridharma prodi."],
-          ["Gugus Kendali Mutu", "Monitoring pelaksanaan SPMI, audit mutu internal, dan tindak lanjut perbaikan."],
-          ["Koordinator Kurikulum", "Pengembangan RPS, peninjauan kurikulum OBE, dan pemetaan CPL."],
-          ["Koordinator Laboratorium", "Penjadwalan praktikum, perawatan perangkat, dan keselamatan kerja lab."],
-          ["Koordinator Riset & PkM", "Pendampingan proposal hibah, publikasi, dan kegiatan pengabdian."],
-          ["Koordinator PLP & MBKM", "Penempatan mahasiswa di sekolah mitra dan mitra industri."],
+          ["Wakil Rektor II Unisvet", "Pengelolaan bidang administrasi umum, keuangan, dan sumber daya manusia institusi."],
+          ["Dekan F. Maritim", "Pengembangan kepemimpinan fakultas, invensi teknologi terapan, dan penjaminan mutu."],
+          ["Ka. LPPM Unisvet", "Pengelolaan riset, pengabdian kepada masyarakat, serta hilirisasi inovasi kampus."],
+          ["Ka. Lab. TIK F.SAINTEK", "Pengelolaan operasional laboratorium TIK, perangkat praktikum, dan keamanan data."],
+          ["Ka. Prodi P. Informatika", "Perencanaan, pengelolaan, dan evaluasi seluruh kegiatan tridharma program studi."],
+          ["Koord. PMB P. Informatika", "Koordinasi promosi, penerimaan mahasiswa baru, dan sosialisasi program studi."],
         ],
       },
     ],
@@ -147,19 +145,55 @@ export const PROFIL_PAGES: Record<string, PageContent> = {
     eyebrow: "Profil",
     title: "Dosen & Tenaga Kependidikan",
     description:
-      "Didampingi dosen berkualifikasi magister dan doktor dengan fokus riset pendidikan dan teknologi informasi, serta tenaga kependidikan yang siap melayani.",
+      "Didampingi tenaga pengajar profesional dengan fokus riset pendidikan, teknologi informasi, manajemen institusi, serta tenaga kependidikan yang siap melayani.",
     metaTitle: "Dosen & Tendik — Pendidikan Informatika UNISVET Semarang",
     blocks: [
       {
         type: "people",
-        title: "Dosen Tetap Program Studi",
+        title: "Dosen Tetap & Pejabat Struktural",
         items: [
-          { name: "Rahmawati Saputri", degree: "Dr., M.Kom.", role: "Koordinator Program Studi", interest: "Educational Data Mining", photo: dosen1 },
-          { name: "Adi Nugroho", degree: "S.Pd., M.Cs.", role: "Dosen Rekayasa Perangkat Lunak", interest: "Web Engineering & DevOps", photo: dosen2 },
-          { name: "Siti Halimah", degree: "S.Pd., M.Pd.", role: "Dosen Kurikulum & Pembelajaran", interest: "Digital Pedagogy", photo: dosen3 },
-          { name: "Bayu Prakoso", degree: "S.T., M.T.", role: "Dosen Jaringan & IoT", interest: "Smart Systems & IoT", photo: dosen4 },
-          { name: "Nurul Aini", degree: "S.Kom., M.Kom.", role: "Dosen Multimedia Pembelajaran", interest: "Interactive Media Learning", photo: dosen5 },
-          { name: "Fajar Ramadhan", degree: "S.Kom., M.Cs.", role: "Dosen Kecerdasan Artifisial", interest: "Machine Learning for Education", photo: dosen6 },
+          { 
+            name: "R. Irlanto Sudomo", 
+            degree: "M.Pd.", 
+            role: "Wakil Rektor II Unisvet", 
+            interest: "Pendidikan, Profesi Kependidikan, & Manajemen Tata Kelola Institusi", 
+            photo: dosen1 
+          },
+          { 
+            name: "Dr. Herry Sulendro Mangiri", 
+            degree: "S.T., M.Eng.", 
+            role: "Dekan F. Maritim", 
+            interest: "Teknik, Invensi Teknologi Terapan, & Penjaminan Mutu", 
+            photo: dosen2 
+          },
+          { 
+            name: "Dr. Afis Pratama", 
+            degree: "S.T., M.Pd.", 
+            role: "Ka. LPPM Unisvet", 
+            interest: "Pendidikan Informatika & Penjaminan Mutu Akademik", 
+            photo: dosen3 
+          },
+          { 
+            name: "Handini Arga Damar Rani", 
+            degree: "M.Kom.", 
+            role: "Ka. Lab. TIK F.SAINTEK", 
+            interest: "Data Mining & Ilmu Komputer", 
+            photo: dosen4 
+          },
+          { 
+            name: "Adi Nova Trisetiyanto", 
+            degree: "S.Pd., M.Pd.", 
+            role: "Ka. Prodi P. Informatika", 
+            interest: "Media Pembelajaran Digital & Research & Development", 
+            photo: dosen5 
+          },
+          { 
+            name: "Henny Prasetyani", 
+            degree: "M.Pd.", 
+            role: "Koord. PMB P. Informatika", 
+            interest: "Teknologi Informasi & Pengabdian Masyarakat", 
+            photo: dosen6 
+          },
         ],
       },
       {
@@ -174,12 +208,12 @@ export const PROFIL_PAGES: Record<string, PageContent> = {
       },
       {
         type: "stats",
-        title: "Kualifikasi Dosen",
+        title: "Kualifikasi Tim Pengajar",
         items: [
-          { label: "Doktor (S3)", value: "1" },
-          { label: "Magister (S2)", value: "5" },
-          { label: "Sertifikasi Pendidik", value: "4" },
-          { label: "Sertifikasi Kompetensi Industri", value: "3" },
+          { label: "Doktor (S3)", value: "2" },
+          { label: "Magister (S2)", value: "4" },
+          { label: "Sertifikasi Pendidik", value: "6" },
+          { label: "Struktural / Fungsional", value: "6" },
         ],
       },
     ],
