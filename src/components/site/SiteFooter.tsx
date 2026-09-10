@@ -12,6 +12,8 @@ const LINKS = [
   { label: "Berita & Agenda", to: "/informasi/berita" },
   { label: "Alumni", to: "/kemahasiswaan/alumni" },
   { label: "PMB", to: "/pmb/daftar" },
+  { label: "Unduh Dokumen", to: "/informasi/dokumen" },
+  { label: "Kontak", to: "/kontak" },
 ];
 
 function formatWa(number: string) {
