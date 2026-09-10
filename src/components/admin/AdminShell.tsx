@@ -3,10 +3,12 @@ import { useState, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ExternalLink,
+  FileDown,
   FileText,
   FolderOpen,
   Home,
   Images,
+  Inbox,
   LayoutDashboard,
   LogOut,
   Menu,
@@ -34,6 +36,8 @@ const NAV: NavItem[] = [
   { id: "berita", label: "Berita & Agenda", description: "Tulis & unggah berita", icon: Newspaper, group: "Publikasi" },
   { id: "galeri", label: "Galeri Kegiatan", description: "Unggah & kelola foto", icon: Images, group: "Publikasi" },
   { id: "media", label: "Pustaka Media", description: "Unggah foto & video", icon: FolderOpen, group: "Publikasi" },
+  { id: "dokumen", label: "Dokumen Unduhan", description: "Unggah PDF & formulir", icon: FileDown, group: "Publikasi" },
+  { id: "pesan", label: "Pesan Masuk", description: "Pesan dari formulir kontak", icon: Inbox, group: "Layanan" },
 ];
 
 
