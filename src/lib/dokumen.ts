@@ -13,13 +13,9 @@ export type DokumenItem = {
   url: string;
 };
 
-export const KATEGORI_DOKUMEN = [
-  "Kurikulum",
-  "Panduan",
-  "Formulir",
-  "Akreditasi",
-  "Umum",
-] as const;
+export const KATEGORI_DOKUMEN = ["Kurikulum", "Panduan", "Formulir", "Akreditasi", "Umum"] as const;
+
+export type KategoriDokumen = (typeof KATEGORI_DOKUMEN)[number];
 
 const BUCKET = "dokumen-prodi";
 const SELECT = "id, judul, deskripsi, kategori, file_url, storage_path, ukuran, urutan, created_at";
@@ -82,57 +78,71 @@ export async function uploadDokumen(input: {
     urutan: input.urutan,
     created_by: input.userId,
   });
+
   if (error) {
     await supabase.storage.from(BUCKET).remove([path]);
     throw error;
   }
 }
 
-export async function updateDokumen(
-  id: string,
-  input: {
-    judul?: string;
-    deskripsi?: string;
-    kategori?: string;
-    urutan?: number;
-    file?: File;
-    oldStoragePath?: string | null;
-  }
-) {
-  let updatePayload: Record<string, any> = {
-    ...(input.judul && { judul: input.judul }),
-    ...(input.deskripsi !== undefined && { deskripsi: input.deskripsi }),
-    ...(input.kategori && { kategori: input.kategori }),
-    ...(input.urutan !== undefined && { urutan: input.urutan }),
-  };
+export async function updateDokumen(input: {
+  id: string;
+  judul: string;
+  deskripsi: string;
+  kategori: string;
+  urutan: number;
+  file?: File;
+  oldStoragePath?: string | null;
+}) {
+  let newStoragePath = input.oldStoragePath;
+  let newFileUrl: string | undefined;
 
   if (input.file) {
-    const ext = input.file.name.split(".").pop()?.toLowerCaseKode TypeScript yang disajikan sudah mengimplementasikan *CRUD* (Create, Read, Update, Delete) data dokumen dengan integrasi **Supabase Database** dan **Supabase Storage**.
+    const ext = input.file.name.split(".").pop()?.toLowerCase() ?? "pdf";
+    const path = `${crypto.randomUUID()}.${ext}`;
 
----
+    const { error: uploadError } = await supabase.storage
+      .from(BUCKET)
+      .upload(path, input.file, { cacheControl: "3600", upsert: false });
 
-### **Analisis Kode & Catatan Utama**
+    if (uploadError) throw uploadError;
 
-* **Mekanisme Storage Dual-URL:** Kode mendukung file lokal via Storage Path (`createSignedUrls` berdurasi 6 jam) dan URL eksternal langsung (`file_url`). Jika signed URL gagal/tidak ada, sistem otomatis memilih `file_url`.
-* **Prosedur *Rollback* saat Upload:** Jika `insert` ke tabel database `dokumen` gagal setelah file terunggah, file yang berada di Supabase Storage otomatis dihapus kembali melalui `remove([path])` untuk mencegah *orphan files*.
-* **Penataan Urutan (*Ordering*):** Pengambilan data (`fetchDokumen`) diurutkan berdasarkan `urutan` (secara *ascending*), disusul `created_at` (secara *descending*).
+    newStoragePath = path;
+    newFileUrl = supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+  }
 
----
+  const { error: updateError } = await supabase
+    .from("dokumen")
+    .update({
+      judul: input.judul,
+      deskripsi: input.deskripsi,
+      kategori: input.kategori,
+      urutan: input.urutan,
+      ...(newFileUrl && { file_url: newFileUrl }),
+      ...(newStoragePath !== undefined && { storage_path: newStoragePath }),
+      ...(input.file && { ukuran: input.file.size }),
+    })
+    .eq("id", input.id);
 
-### **Rekomendasi Peningkatan Kode**
+  if (updateError) {
+    if (input.file && newStoragePath) {
+      await supabase.storage.from(BUCKET).remove([newStoragePath]);
+    }
+    throw updateError;
+  }
 
-1. **Efisiensi Batch Signed URLs:**  
-   Metode `createSignedUrls` menerima daftar `paths`. Namun, pastikan jumlah *array* tidak terlalu besar (misalnya di atas 100 file) agar tidak memicu pembatasan *payload* request dari Supabase Storage. Jika jumlah file banyak, terapkan paginasi pada query `dokumen`.
-2. **Validasi Input Tipe Kategori:**  
-   Parameter `kategori` pada fungsi `uploadDokumen` dapat diperketat tipe datanya agar sesuai dengan konstanta `KATEGORI_DOKUMEN`:
-   ```typescript
-   export type KategoriDokumen = typeof KATEGORI_DOKUMEN[number];
+  if (input.file && input.oldStoragePath) {
+    await supabase.storage.from(BUCKET).remove([input.oldStoragePath]);
+  }
+}
 
-   export async function uploadDokumen(input: {
-     file: File;
-     judul: string;
-     deskripsi: string;
-     kategori: KategoriDokumen;
-     urutan: number;
-     userId: string;
-   }) { ... }
+export async function updateDokumenUrutan(id: string, urutan: number) {
+  const { error } = await supabase.from("dokumen").update({ urutan }).eq("id", id);
+  if (error) throw error;
+}
+
+export async function deleteDokumen(item: { id: string; storage_path: string | null }) {
+  const { error } = await supabase.from("dokumen").delete().eq("id", item.id);
+  if (error) throw error;
+  if (item.storage_path) await supabase.storage.from(BUCKET).remove([item.storage_path]);
+}
