@@ -7,6 +7,8 @@ export type GaleriItem = {
   image_url: string;
   storage_path: string | null;
   tanggal: string;
+  kategori: string;
+  urutan: number;
   url: string;
 };
 
@@ -15,7 +17,8 @@ const BUCKET = "galeri-prodi";
 export async function fetchGaleri(): Promise<GaleriItem[]> {
   const { data, error } = await supabase
     .from("galeri")
-    .select("id, judul, deskripsi, image_url, storage_path, tanggal")
+    .select("id, judul, deskripsi, image_url, storage_path, tanggal, kategori, urutan")
+    .order("urutan", { ascending: true })
     .order("tanggal", { ascending: false })
     .order("created_at", { ascending: false });
 
@@ -41,8 +44,10 @@ export async function fetchGaleri(): Promise<GaleriItem[]> {
 export async function uploadGaleri(input: {
   file: File;
   judul: string;
-  deskripsi: string;
+  deskripsi?: string;
   tanggal: string;
+  kategori?: string;
+  urutan?: number;
   userId: string;
 }) {
   const ext = input.file.name.split(".").pop()?.toLowerCase() ?? "jpg";
@@ -61,6 +66,8 @@ export async function uploadGaleri(input: {
     image_url: publicUrl,
     storage_path: path,
     tanggal: input.tanggal,
+    kategori: input.kategori || "Umum",
+    urutan: input.urutan ?? 0,
     created_by: input.userId,
   });
 
