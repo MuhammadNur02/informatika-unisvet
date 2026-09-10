@@ -11,13 +11,14 @@ export type BeritaItem = {
   isi: string;
   gambar_url: string;
   published: boolean;
+  views: number;
 };
 
-export type BeritaInput = Omit<BeritaItem, "id" | "slug"> & { id?: string; slug?: string };
+export type BeritaInput = Omit<BeritaItem, "id" | "slug" | "views"> & { id?: string; slug?: string };
 
 export const KATEGORI_BERITA = ["Berita", "Kegiatan", "Pengumuman", "Event", "Agenda"] as const;
 
-const SELECT = "id, judul, slug, kategori, tag, tanggal, ringkasan, isi, gambar_url, published";
+const SELECT = "id, judul, slug, kategori, tag, tanggal, ringkasan, isi, gambar_url, published, views";
 
 export function slugify(value: string) {
   return (
@@ -42,7 +43,7 @@ export async function fetchBeritaPublik(): Promise<BeritaItem[]> {
   return data ?? [];
 }
 
-/** Satu berita berdasarkan slug (hanya yang diterbitkan). */
+/** Satu berita berdasarkan slug (hanya yang diterbitkan) + auto increment views. */
 export async function fetchBeritaBySlug(slug: string): Promise<BeritaItem | null> {
   const { data, error } = await supabase
     .from("berita")
@@ -50,16 +51,23 @@ export async function fetchBeritaBySlug(slug: string): Promise<BeritaItem | null
     .eq("slug", slug)
     .eq("published", true)
     .maybeSingle();
+
   if (error) throw error;
+
+  if (data) {
+    // Tambah jumlah baca (views) secara asynchronous
+    await supabase
+      .from("berita")
+      .update({ views: (data.views || 0) + 1 })
+      .eq("id", data.id);
+  }
+
   return data ?? null;
 }
 
 /** Semua berita termasuk draf — untuk dashboard admin. */
 export async function fetchBeritaAdmin(): Promise<BeritaItem[]> {
-  const { data, error } = await supabase
-    .from("berita")
-    .select(SELECT)
-    .order("tanggal", { ascending: false });
+  const { data, error } = await supabase.from("berita").select(SELECT).order("tanggal", { ascending: false });
   if (error) throw error;
   return data ?? [];
 }
