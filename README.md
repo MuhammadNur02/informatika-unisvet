@@ -1,6 +1,6 @@
 # Informatika Unisvet
 
-Build a modern, elegant, and interactive website for Program Studi Pendidikan Informatika, Universitas Ivet Semarang. Reference layout and structure inspired by https://informatika.upgris.ac.id/ with a sleeker, contemporary aesthetic and subtle micro-animations.
+Build a modern, elegant, and interactive website for Program Studi Pendidikan Informatika, Universitas Ivet Semarang. 
 
 1. Design & Visual Aesthetic:
 
