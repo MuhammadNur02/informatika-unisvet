@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -11,6 +11,7 @@ import {
   Pencil,
   Plus,
   Save,
+  Search,
   Trash2,
   X,
 } from "lucide-react";
@@ -71,9 +72,26 @@ export function BeritaEditor({ userId }: { userId: string }) {
   const [busy, setBusy] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [pendingDelete, setPendingDelete] = useState<BeritaItem | null>(null);
+  const [search, setSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("Semua");
+  const [statusFilter, setStatusFilter] = useState("Semua");
+  const [sort, setSort] = useState("terbaru");
 
   const listQuery = useQuery({ queryKey: ["berita-admin"], queryFn: fetchBeritaAdmin });
   const items = listQuery.data ?? [];
+  const visibleItems = useMemo(() => {
+    const normalized = search.trim().toLocaleLowerCase("id-ID");
+    return [...items]
+      .filter((item) => categoryFilter === "Semua" || item.kategori === categoryFilter)
+      .filter((item) => statusFilter === "Semua" || (statusFilter === "Terbit" ? item.published : !item.published))
+      .filter((item) => `${item.judul} ${item.ringkasan} ${item.tag} ${item.kategori}`.toLocaleLowerCase("id-ID").includes(normalized))
+      .sort((a, b) => {
+        if (sort === "terlama") return a.tanggal.localeCompare(b.tanggal);
+        if (sort === "az") return a.judul.localeCompare(b.judul, "id");
+        if (sort === "za") return b.judul.localeCompare(a.judul, "id");
+        return b.tanggal.localeCompare(a.tanggal);
+      });
+  }, [categoryFilter, items, search, sort, statusFilter]);
 
   function patch(next: Partial<Draft>) {
     setDraft((d) => ({ ...d, ...next }));
@@ -283,8 +301,24 @@ export function BeritaEditor({ userId }: { userId: string }) {
         <div>
           <h2 className="text-lg font-bold tracking-tight text-foreground">Daftar Berita</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            {listQuery.isLoading ? "Memuat data…" : `${items.length} berita tersimpan`}
+            {listQuery.isLoading ? "Memuat data…" : `${visibleItems.length} dari ${items.length} berita`}
           </p>
+        </div>
+
+        <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <label className="relative sm:col-span-2 xl:col-span-1">
+            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Cari berita…" className="pl-9" />
+          </label>
+          <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} aria-label="Filter kategori berita" className="h-11 rounded-xl border border-input bg-background px-3 text-sm text-foreground">
+            <option>Semua</option>{KATEGORI_BERITA.map((value) => <option key={value}>{value}</option>)}
+          </select>
+          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} aria-label="Filter status berita" className="h-11 rounded-xl border border-input bg-background px-3 text-sm text-foreground">
+            <option>Semua</option><option>Terbit</option><option>Draf</option>
+          </select>
+          <select value={sort} onChange={(e) => setSort(e.target.value)} aria-label="Urutkan berita" className="h-11 rounded-xl border border-input bg-background px-3 text-sm text-foreground">
+            <option value="terbaru">Terbaru</option><option value="terlama">Terlama</option><option value="az">Judul A–Z</option><option value="za">Judul Z–A</option>
+          </select>
         </div>
 
         {listQuery.isLoading ? (
@@ -293,10 +327,10 @@ export function BeritaEditor({ userId }: { userId: string }) {
               <Skeleton key={i} className="h-28 w-full rounded-3xl" />
             ))}
           </div>
-        ) : items.length > 0 ? (
+        ) : visibleItems.length > 0 ? (
           <div className="mt-5 space-y-4">
             <AnimatePresence mode="popLayout">
-              {items.map((item) => (
+              {visibleItems.map((item) => (
                 <motion.article
                   key={item.id}
                   layout
@@ -374,10 +408,9 @@ export function BeritaEditor({ userId }: { userId: string }) {
             <span className="mx-auto inline-flex size-14 items-center justify-center rounded-2xl bg-secondary text-primary">
               <ImagePlus className="size-6" />
             </span>
-            <h3 className="mt-4 text-base font-bold text-foreground">Belum ada berita</h3>
+            <h3 className="mt-4 text-base font-bold text-foreground">Tidak ada berita yang cocok</h3>
             <p className="mx-auto mt-1.5 max-w-sm text-sm text-muted-foreground">
-              Tulis berita pertama melalui formulir di samping. Berita akan langsung tampil di beranda dan
-              halaman Informasi › Berita.
+              Ubah kata pencarian atau penyaring untuk melihat berita lainnya.
             </p>
           </div>
         )}
