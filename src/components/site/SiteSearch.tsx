@@ -35,14 +35,18 @@ function pageHref(path: string) {
 }
 
 async function fetchSearchItems(): Promise<SearchItem[]> {
-  const [overrides, berita, galeri, dokumen] = await Promise.all([
+  const [overridesResult, beritaResult, galeriResult, dokumenResult] = await Promise.allSettled([
     supabase.from("page_content").select("path, title, description, blocks"),
     fetchBeritaPublik(),
     fetchGaleri(),
     fetchDokumen(),
   ]);
 
-  const edited = new Map((overrides.data ?? []).map((row) => [row.path, row]));
+  const overrides = overridesResult.status === "fulfilled" ? overridesResult.value.data ?? [] : [];
+  const berita = beritaResult.status === "fulfilled" ? beritaResult.value : [];
+  const galeri = galeriResult.status === "fulfilled" ? galeriResult.value : [];
+  const dokumen = dokumenResult.status === "fulfilled" ? dokumenResult.value : [];
+  const edited = new Map(overrides.map((row) => [row.path, row]));
   const pages = Object.entries(PAGES).map(([path, fallback]) => {
     const override = edited.get(path);
     const title = override?.title || fallback.title;
