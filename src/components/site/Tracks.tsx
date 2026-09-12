@@ -54,8 +54,14 @@ export function Tracks() {
   const current = TRACKS.find((t) => t.id === active) ?? TRACKS[0]!;
 
   return (
-    <section id="kurikulum" className="py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="kurikulum" className="relative overflow-hidden bg-gradient-tracks py-20 sm:py-28">
+      {/* Animated gradient mesh background */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-50" aria-hidden />
+      {/* Floating decorative shapes */}
+      <div className="pointer-events-none absolute top-10 right-1/4 h-80 w-80 rounded-full bg-accent/5 blur-3xl float-shape-delayed" aria-hidden />
+      <div className="pointer-events-none absolute bottom-20 left-10 h-64 w-64 rounded-full bg-primary/5 blur-3xl float-shape-slow" aria-hidden />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Kurikulum & Profil Lulusan"
           title="Tiga Jalur Karier Lulusan"
@@ -72,8 +78,8 @@ export function Tracks() {
                 className={cn(
                   "inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-semibold transition-all duration-300",
                   active === t.id
-                    ? "border-transparent bg-[image:var(--gradient-hero)] text-primary-foreground shadow-[var(--shadow-card)]"
-                    : "border-border bg-card text-foreground/70 hover:border-accent/50 hover:text-primary",
+                    ? "border-transparent bg-[image:var(--gradient-hero)] text-primary-foreground shadow-[var(--shadow-card)] pulse-glow"
+                    : "border-border bg-card text-foreground/70 hover:border-accent/50 hover:text-primary hover:shadow-[var(--shadow-glow-accent)]",
                 )}
               >
                 <t.icon className="size-4" />
@@ -91,10 +97,10 @@ export function Tracks() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="card-elevated grid gap-8 rounded-3xl p-8 lg:grid-cols-[1.1fr_1fr] sm:p-10"
+              className="card-elevated grid gap-8 rounded-3xl p-8 lg:grid-cols-[1.1fr_1fr] sm:p-10 border-accent-glow"
             >
               <div>
-                <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-[image:var(--gradient-hero)] text-primary-foreground">
+                <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-[image:var(--gradient-hero)] text-primary-foreground icon-glow">
                   <current.icon className="size-5" />
                 </span>
                 <h3 className="mt-5 text-2xl font-bold tracking-tight text-foreground">{current.headline}</h3>
@@ -108,13 +114,13 @@ export function Tracks() {
                   ))}
                 </ul>
               </div>
-              <div className="rounded-2xl bg-slate-surface p-6">
-                <h4 className="text-sm font-bold uppercase tracking-widest text-primary">Prospek Karier</h4>
+              <div className="rounded-2xl bg-slate-surface p-6 border border-accent/20">
+                <h4 className="text-sm font-bold uppercase tracking-widest text-accent-gradient">Prospek Karier</h4>
                 <ul className="mt-4 space-y-3">
                   {current.careers.map((c) => (
                     <li
                       key={c}
-                      className="rounded-xl border border-border bg-card px-4 py-3 text-sm font-medium text-foreground/85"
+                      className="rounded-xl border border-border bg-card px-4 py-3 text-sm font-medium text-foreground/85 hover:border-accent/40 hover:bg-accent/5 transition-all duration-300"
                     >
                       {c}
                     </li>
