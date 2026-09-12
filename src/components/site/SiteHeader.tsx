@@ -22,6 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { NAV } from "@/lib/site-nav";
+import { SiteSearch } from "@/components/site/SiteSearch";
 import logo from "@/assets/logo-unisvet.png";
 
 const PORTALS = [
@@ -169,6 +170,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <SiteSearch />
           <Button asChild variant="pmb" size="pill" className="pulse-glow hidden sm:inline-flex">
             <Link to="/pmb/daftar">
               <GraduationCap /> PMB UNISVET
@@ -314,6 +316,7 @@ export function SiteHeader() {
                   </a>
                 ))}
               </div>
+              <SiteSearch compact />
               <Button asChild variant="pmb" size="pill" className="mt-3 w-full">
                 <Link to="/pmb/daftar" onClick={() => setOpen(false)}>
                   <GraduationCap /> PMB UNISVET
