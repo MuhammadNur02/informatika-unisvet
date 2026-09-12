@@ -38,8 +38,14 @@ export function News() {
   const items = (grouped[active] ?? []).slice(0, 3);
 
   return (
-    <section id="berita" className="py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="berita" className="relative overflow-hidden bg-gradient-news py-20 sm:py-28">
+      {/* Animated gradient mesh background */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-40" aria-hidden />
+      {/* Floating decorative shapes */}
+      <div className="pointer-events-none absolute top-20 left-1/4 h-72 w-72 rounded-full bg-accent/5 blur-3xl float-shape" aria-hidden />
+      <div className="pointer-events-none absolute bottom-10 right-1/3 h-80 w-80 rounded-full bg-primary/5 blur-3xl float-shape-delayed" aria-hidden />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading eyebrow={news.eyebrow} title={news.title} description={news.description} />
 
         <Reveal className="mt-10 flex justify-center">
@@ -57,7 +63,7 @@ export function News() {
                 {active === tab ? (
                   <motion.span
                     layoutId="news-tab"
-                    className="absolute inset-0 rounded-full bg-[image:var(--gradient-hero)]"
+                    className="absolute inset-0 rounded-full bg-[image:var(--gradient-gold)]"
                     transition={{ type: "spring", stiffness: 320, damping: 30 }}
                   />
                 ) : null}
@@ -84,7 +90,7 @@ export function News() {
               items.map((item, i) => (
                 <article
                   key={item.id}
-                  className="card-elevated group flex h-full flex-col overflow-hidden rounded-3xl"
+                  className="card-elevated group flex h-full flex-col overflow-hidden rounded-3xl border-accent-glow"
                 >
                   <div className="relative h-44 overflow-hidden">
                     <img
@@ -95,13 +101,13 @@ export function News() {
                       height={700}
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-card/90 px-3 py-1 text-xs font-semibold text-primary backdrop-blur-md">
+                    <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-card/90 px-3 py-1 text-xs font-semibold text-primary backdrop-blur-md shadow-[var(--shadow-card)]">
                       <CalendarDays className="size-3.5" /> {formatTanggalId(item.tanggal)}
                     </span>
                   </div>
                   <div className="flex flex-1 flex-col p-6">
                     {item.tag ? (
-                      <span className="text-xs font-bold uppercase tracking-widest text-accent-foreground">
+                      <span className="text-xs font-bold uppercase tracking-widest text-accent-gradient">
                         {item.tag}
                       </span>
                     ) : null}
@@ -111,7 +117,7 @@ export function News() {
                     </p>
                     <Link
                       to="/informasi/berita"
-                      className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary transition-colors hover:text-accent-foreground"
+                      className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary transition-colors hover:text-accent-foreground hover:underline-offset-4 hover:underline"
                     >
                       Baca Selengkapnya <ArrowUpRight className="size-4" />
                     </Link>

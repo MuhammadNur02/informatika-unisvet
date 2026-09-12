@@ -74,8 +74,14 @@ const FASILITAS = [
 
 export function Faculty() {
   return (
-    <section id="dosen" className="bg-slate-surface py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="dosen" className="relative overflow-hidden bg-gradient-faculty py-20 sm:py-28">
+      {/* Animated gradient mesh background */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-50" aria-hidden />
+      {/* Floating decorative shapes */}
+      <div className="pointer-events-none absolute top-20 right-10 h-80 w-80 rounded-full bg-accent/5 blur-3xl float-shape-delayed" aria-hidden />
+      <div className="pointer-events-none absolute bottom-20 left-1/4 h-64 w-64 rounded-full bg-primary/5 blur-3xl float-shape-slow" aria-hidden />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Profil Pengajar"
           title="Dosen & Tenaga Pendidik"
@@ -85,9 +91,9 @@ export function Faculty() {
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {DOSEN.map((d, i) => (
             <Reveal key={d.name} delay={(i % 3) * 0.08}>
-              <article className="card-elevated flex h-full flex-col items-center text-center rounded-3xl p-7">
+              <article className="card-elevated flex h-full flex-col items-center text-center rounded-3xl p-7 border-accent-glow">
                 {/* Foto Profil */}
-                <div className="w-36 h-36 shrink-0 overflow-hidden rounded-3xl bg-[image:var(--gradient-hero)] shadow-md mb-5 flex items-center justify-center">
+                <div className="w-36 h-36 shrink-0 overflow-hidden rounded-3xl bg-[image:var(--gradient-hero)] shadow-md mb-5 flex items-center justify-center icon-glow">
                   {d.image ? (
                     <img src={d.image} alt={d.name} className="h-full w-full object-cover object-top" />
                   ) : (
@@ -104,13 +110,13 @@ export function Faculty() {
                     </div>
                     {/* Mengatur min-height untuk jabatan */}
                     <div className="min-h-[2rem] flex items-center justify-center mt-1">
-                      <p className="text-sm font-semibold text-primary/80">{d.role}</p>
+                      <p className="text-sm font-semibold text-accent-gradient">{d.role}</p>
                     </div>
                   </div>
 
                   {/* Badge Bidang Keahlian */}
-                  <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-center flex-grow">
-                    <span className="inline-block rounded-full bg-accent/15 px-3.5 py-1.5 text-xs font-semibold text-accent-foreground">
+                  <div className="mt-5 pt-4 border-t border-accent/20 flex items-center justify-center flex-grow">
+                    <span className="inline-block rounded-full bg-accent/15 px-3.5 py-1.5 text-xs font-semibold text-accent-foreground icon-glow">
                       {d.interest}
                     </span>
                   </div>
@@ -129,7 +135,7 @@ export function Faculty() {
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {FASILITAS.map((f, i) => (
               <Reveal key={f.name} delay={i * 0.08}>
-                <article className="card-elevated group relative h-72 overflow-hidden rounded-3xl">
+                <article className="card-elevated group relative h-72 overflow-hidden rounded-3xl border-accent-glow">
                   <img
                     src={f.image}
                     alt={f.name}
