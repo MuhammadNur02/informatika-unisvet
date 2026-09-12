@@ -77,6 +77,14 @@ export async function uploadGaleri(input: {
   }
 }
 
+export async function updateGaleriMetadata(input: { id: string; kategori: string; urutan: number }) {
+  const { error } = await supabase
+    .from("galeri")
+    .update({ kategori: input.kategori, urutan: input.urutan })
+    .eq("id", input.id);
+  if (error) throw error;
+}
+
 export async function deleteGaleri(item: { id: string; storage_path: string | null }) {
   const { error } = await supabase.from("galeri").delete().eq("id", item.id);
   if (error) throw error;
