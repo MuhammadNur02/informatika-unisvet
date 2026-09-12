@@ -17,15 +17,18 @@ export function Stats() {
 
   return (
     <section id="statistik" className="relative z-10 -mt-14 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl rounded-[2rem] border border-border bg-card p-6 shadow-[var(--shadow-lift)] sm:p-8">
+      <div className="mx-auto max-w-6xl rounded-[2rem] border border-accent/30 bg-card/95 backdrop-blur-md p-6 shadow-[var(--shadow-lift)] sm:p-8">
+        {/* Subtle gradient accent at top */}
+        <div className="absolute -top-1 left-1/2 h-1 w-24 -translate-x-1/2 rounded-full bg-gradient-to-r from-transparent via-accent to-transparent" aria-hidden />
+        
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat, i) => {
             const Icon = ICONS[i % ICONS.length]!;
             const parsed = parseValue(stat.value);
             return (
               <Reveal key={`${stat.label}-${i}`} delay={i * 0.08}>
-                <div className="group flex flex-col items-center gap-3 rounded-2xl px-4 py-5 text-center transition-colors hover:bg-slate-surface">
-                  <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-primary/8 text-primary transition-transform duration-300 group-hover:scale-110">
+                <div className="group flex flex-col items-center gap-3 rounded-2xl px-4 py-5 text-center transition-all duration-300 hover:bg-slate-surface hover:shadow-[var(--shadow-glow-accent)]">
+                  <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-[image:var(--gradient-gold)] text-accent-foreground shadow-[var(--shadow-card)] icon-glow transition-transform duration-300 group-hover:scale-110">
                     <Icon className="size-5" />
                   </span>
                   <span className="text-3xl font-extrabold tracking-tight text-primary">
