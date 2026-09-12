@@ -8,11 +8,10 @@ export type PesanKontak = {
   subjek: string;
   pesan: string;
   dibaca: boolean;
-  status: string;
   created_at: string;
 };
 
-const SELECT = "id, nama, email, telepon, subjek, pesan, dibaca, status, created_at";
+const SELECT = "id, nama, email, telepon, subjek, pesan, dibaca, created_at";
 
 export async function kirimPesan(input: {
   nama: string;
@@ -28,7 +27,6 @@ export async function kirimPesan(input: {
     subjek: input.subjek.trim(),
     pesan: input.pesan.trim(),
     dibaca: false,
-    status: "baru",
   });
   if (error) throw error;
 }
@@ -41,11 +39,6 @@ export async function fetchPesan(): Promise<PesanKontak[]> {
 
 export async function tandaiPesan(id: string, dibaca: boolean) {
   const { error } = await supabase.from("pesan_kontak").update({ dibaca }).eq("id", id);
-  if (error) throw error;
-}
-
-export async function updateStatusPesan(id: string, status: string) {
-  const { error } = await supabase.from("pesan_kontak").update({ status }).eq("id", id);
   if (error) throw error;
 }
 
