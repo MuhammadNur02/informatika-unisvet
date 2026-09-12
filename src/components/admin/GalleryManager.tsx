@@ -80,7 +80,10 @@ export function GalleryManager({ userId }: { userId: string }) {
 
   async function handleUpload(event: React.FormEvent) {
     event.preventDefault();
-    if (!file) return toast.error("Pilih berkas gambar terlebih dahulu.");
+    if (!file) {
+      toast.error("Pilih berkas gambar terlebih dahulu.");
+      return;
+    }
     setBusy(true);
     const toastId = toast.loading("Mengunggah foto…");
     try {
