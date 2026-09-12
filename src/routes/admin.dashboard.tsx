@@ -38,6 +38,8 @@ import { BeritaEditor } from "@/components/admin/BeritaEditor";
 import { BerandaEditor } from "@/components/admin/BerandaEditor";
 import { DokumenManager } from "@/components/admin/DokumenManager";
 import { PesanInbox } from "@/components/admin/PesanInbox";
+import { AccountSettings } from "@/components/admin/AccountSettings";
+import { GalleryManager } from "@/components/admin/GalleryManager";
 import { fetchGaleri, uploadGaleri, deleteGaleri, type GaleriItem } from "@/lib/galeri";
 
 export const Route = createFileRoute("/admin/dashboard")({
@@ -293,14 +295,11 @@ function AdminDashboard() {
             </div>
           </motion.div>
         ) : section === "galeri" ? (
-          <motion.div
-            key="galeri"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.4, ease }}
-            className="grid gap-8 lg:grid-cols-[400px_1fr]"
-          >
+          <motion.div key="galeri" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.4, ease }}>
+            <GalleryManager userId={user.id} />
+          </motion.div>
+        ) : section === "galeri-lama" ? (
+          <motion.div key="galeri-lama" className="grid gap-8 lg:grid-cols-[400px_1fr]">
             <section className="card-elevated h-fit rounded-3xl bg-card p-6 lg:sticky lg:top-24">
               <h2 className="text-lg font-bold tracking-tight text-foreground">Unggah Foto Galeri</h2>
               <p className="mt-1.5 text-sm text-muted-foreground">
@@ -546,6 +545,10 @@ function AdminDashboard() {
             transition={{ duration: 0.4, ease }}
           >
             <PesanInbox />
+          </motion.div>
+        ) : section === "akun" ? (
+          <motion.div key="akun" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.4, ease }}>
+            <AccountSettings email={user.email ?? ""} />
           </motion.div>
         ) : section === "konten" ? (
           <motion.div
