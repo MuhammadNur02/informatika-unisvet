@@ -12,6 +12,7 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
+  KeyRound,
   Newspaper,
   ShieldCheck,
   X,
@@ -38,6 +39,7 @@ const NAV: NavItem[] = [
   { id: "media", label: "Pustaka Media", description: "Unggah foto & video", icon: FolderOpen, group: "Publikasi" },
   { id: "dokumen", label: "Dokumen Unduhan", description: "Unggah PDF & formulir", icon: FileDown, group: "Publikasi" },
   { id: "pesan", label: "Pesan Masuk", description: "Pesan dari formulir kontak", icon: Inbox, group: "Layanan" },
+  { id: "akun", label: "Akun Saya", description: "Ubah kata sandi sendiri", icon: KeyRound, group: "Layanan" },
 ];
 
 
