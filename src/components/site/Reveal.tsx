@@ -37,13 +37,13 @@ export function SectionHeading({
   align?: "center" | "left";
 }) {
   return (
-    <Reveal className={align === "center" ? "mx-auto max-w-2xl text-center" : "max-w-2xl"}>
-      <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-accent-foreground">
+    <Reveal className={align === "center" ? "mx-auto max-w-3xl text-center" : "max-w-3xl"}>
+      <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-xs font-semibold uppercase tracking-widest text-accent-foreground">
         {eyebrow}
       </span>
-      <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">{title}</h2>
+      <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl xl:text-5xl">{title}</h2>
       {description ? (
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">{description}</p>
+        <p className="mt-3 text-base leading-relaxed text-muted-foreground xl:text-lg">{description}</p>
       ) : null}
     </Reveal>
   );

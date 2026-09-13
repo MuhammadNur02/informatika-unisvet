@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { Hero } from "@/components/site/Hero";
 import { Stats } from "@/components/site/Stats";
 import { Advantages } from "@/components/site/Advantages";
+import { VisiMisi } from "@/components/site/VisiMisi";
 import { Tracks } from "@/components/site/Tracks";
 import { News } from "@/components/site/News";
 import { Faculty } from "@/components/site/Faculty";
@@ -34,6 +35,7 @@ function Index() {
         <Hero />
         <Stats />
         <Advantages />
+        <VisiMisi />
         <Tracks />
         <News />
         <Faculty />

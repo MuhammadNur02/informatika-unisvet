@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useScroll, useSpring } from "motion/react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   Menu,
@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { NAV } from "@/lib/site-nav";
 import { SiteSearch } from "@/components/site/SiteSearch";
+import { ThemeToggle } from "@/components/site/ThemeToggle";
 import logo from "@/assets/logo-unisvet.png";
 
 const PORTALS = [
@@ -46,7 +47,10 @@ export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const [hovered, setHovered] = useState<string | null>(null);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { scrollYProgress } = useScroll();
+  const scrollProgress = useSpring(scrollYProgress, { stiffness: 200, damping: 30, restDelta: 0.001 });
 
   useEffect(() => {
     setOpen(false);
@@ -61,12 +65,18 @@ export function SiteHeader() {
   }, []);
 
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-        scrolled ? "glass-header py-2" : "bg-transparent py-4",
-      )}
-    >
+    <>
+      <motion.div
+        className="fixed inset-x-0 top-0 z-60 h-0.75 origin-left"
+        style={{ scaleX: scrollProgress, backgroundImage: "var(--gradient-gold)" }}
+        aria-hidden
+      />
+      <header
+        className={cn(
+          "fixed inset-x-0 top-0 z-50 transition-all duration-300",
+          scrolled ? "glass-header py-2" : "bg-transparent py-4",
+        )}
+      >
       <AnimatePresence initial={false}>
         {!scrolled ? (
           <motion.div
@@ -83,7 +93,7 @@ export function SiteHeader() {
                   href={p.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-full border border-primary-foreground/15 bg-primary-foreground/8 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-primary-foreground/75 backdrop-blur-md transition-colors hover:border-accent/50 hover:text-accent"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-hero-foreground/15 bg-hero-foreground/8 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-hero-foreground/75 backdrop-blur-md transition-colors hover:border-accent/50 hover:text-accent"
                 >
                   <p.icon className="size-3.5" /> {p.label}
                 </a>
@@ -95,20 +105,20 @@ export function SiteHeader() {
 
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link to="/" className="flex items-center gap-3">
-          <span className="inline-flex size-11 items-center justify-center rounded-2xl bg-primary-foreground shadow-[var(--shadow-card)]">
+          <span className="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-hero-foreground shadow-[var(--shadow-card)]">
             <img
               src={logo}
               alt="Logo Universitas Ivet Semarang"
-              width={44}
-              height={44}
-              className="h-9 w-9 object-contain"
+              width={56}
+              height={56}
+              className="h-11 w-11 object-contain"
             />
           </span>
           <span className="leading-tight">
             <span
               className={cn(
                 "block text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors",
-                scrolled ? "text-muted-foreground" : "text-primary-foreground/70",
+                scrolled ? "text-muted-foreground" : "text-hero-foreground/70",
               )}
             >
               Universitas Ivet Semarang
@@ -116,7 +126,7 @@ export function SiteHeader() {
             <span
               className={cn(
                 "block text-base font-bold tracking-tight transition-colors",
-                scrolled ? "text-primary" : "text-primary-foreground",
+                scrolled ? "text-primary" : "text-hero-foreground",
               )}
             >
               Pendidikan Informatika
@@ -124,7 +134,7 @@ export function SiteHeader() {
             <span
               className={cn(
                 "block text-[10px] font-medium tracking-wide transition-colors",
-                scrolled ? "text-muted-foreground" : "text-primary-foreground/60",
+                scrolled ? "text-muted-foreground" : "text-hero-foreground/60",
               )}
             >
               UNISVET Semarang
@@ -132,21 +142,44 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-0.5 xl:flex">
-          {NAV.map((item) => (
-            <div key={item.label} className="group relative">
+        <nav className="hidden items-center gap-0.5 xl:flex" onMouseLeave={() => setHovered(null)}>
+          {NAV.map((item) => {
+            const active = pathname === item.to || (item.children?.some((c) => pathname === c.to) ?? false);
+            return (
+            <div key={item.label} className="group relative" onMouseEnter={() => setHovered(item.label)}>
               <Link
                 to={item.to}
                 className={cn(
-                  "flex items-center gap-1 rounded-full px-3 py-2 text-[13px] font-medium transition-colors",
+                  "relative flex items-center gap-1 rounded-full px-3 py-2 text-[13px] font-medium transition-colors",
                   scrolled
-                    ? "text-foreground/75 hover:bg-secondary hover:text-primary"
-                    : "text-primary-foreground/85 hover:bg-primary-foreground/10 hover:text-primary-foreground",
+                    ? active
+                      ? "text-primary"
+                      : "text-foreground/75 hover:text-primary"
+                    : active
+                      ? "text-hero-foreground"
+                      : "text-hero-foreground/85 hover:text-hero-foreground",
                 )}
               >
+                {hovered === item.label ? (
+                  <motion.span
+                    layoutId="nav-hover-pill"
+                    className={cn(
+                      "absolute inset-0 -z-10 rounded-full",
+                      scrolled ? "bg-secondary" : "bg-hero-foreground/10",
+                    )}
+                    transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                  />
+                ) : null}
                 {item.label}
                 {item.children ? (
                   <ChevronDown className="size-3.5 transition-transform group-hover:rotate-180" />
+                ) : null}
+                {active ? (
+                  <motion.span
+                    layoutId="nav-active-indicator"
+                    className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-accent"
+                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                  />
                 ) : null}
               </Link>
               {item.children ? (
@@ -166,11 +199,20 @@ export function SiteHeader() {
                 </div>
               ) : null}
             </div>
-          ))}
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-2">
           <SiteSearch />
+          <ThemeToggle
+            className={cn(
+              "hidden sm:inline-flex",
+              scrolled
+                ? "border-border text-primary hover:bg-secondary"
+                : "border-hero-foreground/25 text-hero-foreground hover:bg-hero-foreground/10",
+            )}
+          />
           <Button asChild variant="pmb" size="pill" className="pulse-glow hidden sm:inline-flex">
             <Link to="/pmb/daftar">
               <GraduationCap /> PMB UNISVET
@@ -184,7 +226,7 @@ export function SiteHeader() {
               "inline-flex size-10 items-center justify-center rounded-full border transition-colors xl:hidden",
               scrolled
                 ? "border-border text-primary hover:bg-secondary"
-                : "border-primary-foreground/25 text-primary-foreground hover:bg-primary-foreground/10",
+                : "border-hero-foreground/25 text-hero-foreground hover:bg-hero-foreground/10",
             )}
           >
             {open ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -316,7 +358,10 @@ export function SiteHeader() {
                   </a>
                 ))}
               </div>
-              <SiteSearch compact />
+              <div className="flex items-center justify-between gap-2">
+                <SiteSearch compact />
+                <ThemeToggle className="border-border text-primary hover:bg-secondary" />
+              </div>
               <Button asChild variant="pmb" size="pill" className="mt-3 w-full">
                 <Link to="/pmb/daftar" onClick={() => setOpen(false)}>
                   <GraduationCap /> PMB UNISVET
@@ -326,6 +371,7 @@ export function SiteHeader() {
           </motion.div>
         ) : null}
       </AnimatePresence>
-    </header>
+      </header>
+    </>
   );
 }

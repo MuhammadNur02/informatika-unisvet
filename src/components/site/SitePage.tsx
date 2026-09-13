@@ -83,7 +83,7 @@ function BlockView({ block }: { block: Block }) {
             {block.items.map((item, i) => (
               <Reveal key={item.title} delay={i * 0.05}>
                 <li className="card-elevated flex gap-5 rounded-3xl p-6">
-                  <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[image:var(--gradient-hero)] text-sm font-bold text-primary-foreground">
+                  <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[image:var(--gradient-hero)] text-sm font-bold text-hero-foreground">
                     {i + 1}
                   </span>
                   <div>
@@ -171,8 +171,8 @@ function BlockView({ block }: { block: Block }) {
         <SectionWrap title={block.title}>
           <Reveal>
             <div className="rounded-3xl border border-border bg-card p-8 shadow-[var(--shadow-card)]">
-              <div className="mx-auto max-w-sm rounded-2xl bg-[image:var(--gradient-hero)] p-5 text-center text-primary-foreground">
-                <p className="text-xs font-semibold uppercase tracking-widest text-primary-foreground/70">
+              <div className="mx-auto max-w-sm rounded-2xl bg-[image:var(--gradient-hero)] p-5 text-center text-hero-foreground">
+                <p className="text-xs font-semibold uppercase tracking-widest text-hero-foreground/70">
                   {block.top}
                 </p>
                 <p className="mt-1 text-base font-bold">{block.topName}</p>
@@ -211,8 +211,8 @@ function BlockView({ block }: { block: Block }) {
                   />
                   <div className="absolute inset-0 bg-[linear-gradient(to_top,oklch(0.21_0.075_265/0.92),transparent_60%)]" />
                   <div className="absolute inset-x-0 bottom-0 p-6">
-                    <h3 className="text-lg font-bold text-primary-foreground">{f.name}</h3>
-                    <p className="mt-1 text-sm text-primary-foreground/75">{f.desc}</p>
+                    <h3 className="text-lg font-bold text-hero-foreground">{f.name}</h3>
+                    <p className="mt-1 text-sm text-hero-foreground/75">{f.desc}</p>
                   </div>
                 </article>
               </Reveal>
@@ -223,10 +223,10 @@ function BlockView({ block }: { block: Block }) {
     case "faq":
       return (
         <SectionWrap title={block.title}>
-          <div className="space-y-3">
+          <div className="divide-y divide-border border-t border-border">
             {block.items.map((item, i) => (
               <Reveal key={item.q} delay={i * 0.04}>
-                <details className="group rounded-2xl border border-border bg-card p-5 transition-colors hover:border-accent/50">
+                <details className="group py-5">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-bold text-foreground">
                     {item.q}
                     <ChevronRight className="size-4 shrink-0 text-accent transition-transform group-open:rotate-90" />
@@ -241,11 +241,13 @@ function BlockView({ block }: { block: Block }) {
     case "stats":
       return (
         <SectionWrap title={block.title}>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {block.items.map((s, i) => (
               <Reveal key={s.label} delay={i * 0.06}>
-                <div className="card-elevated h-full rounded-3xl p-6 text-center">
-                  <p className="text-3xl font-extrabold tracking-tight text-primary">{s.value}</p>
+                <div className="stat-figure text-center">
+                  <p className="flex min-h-11 items-center justify-center text-xl font-semibold tracking-tight text-primary sm:min-h-12 sm:text-2xl">
+                    {s.value}
+                  </p>
                   <p className="mt-2 text-sm text-muted-foreground">{s.label}</p>
                 </div>
               </Reveal>
@@ -270,31 +272,48 @@ function BlockView({ block }: { block: Block }) {
           </div>
         </SectionWrap>
       );
-    case "quotes":
+    case "quotes": {
+      const [featured, ...rest] = block.items;
+      if (!featured) return null;
       return (
         <SectionWrap title={block.title}>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {block.items.map((q, i) => (
-              <Reveal key={q.name} delay={(i % 3) * 0.06}>
-                <figure className="card-elevated h-full rounded-3xl p-6">
-                  <Quote className="size-6 text-accent" />
-                  <blockquote className="mt-4 text-sm leading-relaxed text-muted-foreground">"{q.quote}"</blockquote>
-                  <figcaption className="mt-5 border-t border-border pt-4">
-                    <p className="text-sm font-bold text-foreground">{q.name}</p>
-                    <p className="text-xs text-muted-foreground">{q.role}</p>
-                  </figcaption>
-                </figure>
-              </Reveal>
-            ))}
+          <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr]">
+            <Reveal>
+              <figure className="relative rounded-3xl border border-accent/25 bg-slate-surface p-8 sm:p-10">
+                <Quote className="size-10 text-accent/40" />
+                <blockquote className="mt-4 text-xl font-semibold leading-relaxed text-foreground sm:text-2xl">
+                  "{featured.quote}"
+                </blockquote>
+                <figcaption className="mt-6 border-t border-border pt-5">
+                  <p className="text-sm font-bold text-foreground">{featured.name}</p>
+                  <p className="text-xs text-muted-foreground">{featured.role}</p>
+                </figcaption>
+              </figure>
+            </Reveal>
+            {rest.length > 0 ? (
+              <div className="divide-y divide-border">
+                {rest.map((q, i) => (
+                  <Reveal key={q.name} delay={(i + 1) * 0.06}>
+                    <div className="py-4 first:pt-0">
+                      <p className="text-sm leading-relaxed text-muted-foreground">"{q.quote}"</p>
+                      <p className="mt-2 text-xs font-bold text-foreground">
+                        {q.name} <span className="font-normal text-muted-foreground">· {q.role}</span>
+                      </p>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+            ) : null}
           </div>
         </SectionWrap>
       );
+    }
     case "cta":
       return (
         <Reveal>
           <div className="mt-4 overflow-hidden rounded-3xl bg-[image:var(--gradient-hero)] p-8 sm:p-10">
-            <h3 className="text-2xl font-bold text-primary-foreground">{block.title}</h3>
-            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-primary-foreground/75">{block.desc}</p>
+            <h3 className="text-2xl font-bold text-hero-foreground">{block.title}</h3>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-hero-foreground/75">{block.desc}</p>
             <Button asChild variant="pmb" size="pill" className="mt-6">
               <a href={block.href} target="_blank" rel="noreferrer">
                 {block.label} <ArrowRight />
@@ -416,9 +435,15 @@ export function SitePage({ path, children }: { path: string; children?: React.Re
       <main>
         <section className="relative overflow-hidden bg-primary-deep pb-16 pt-36 sm:pb-20 sm:pt-44">
           <VideoBackground />
+          <span
+            aria-hidden
+            className="pointer-events-none absolute -right-4 -top-8 select-none font-mono text-[9rem] font-black leading-none text-hero-foreground/5 sm:-right-6 sm:text-[13rem]"
+          >
+            {crumb.group.charAt(0)}
+          </span>
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <Reveal y={16}>
-              <nav className="flex flex-wrap items-center gap-2 text-xs font-medium text-primary-foreground/60">
+              <nav className="flex flex-wrap items-center gap-2 font-mono text-xs font-medium text-hero-foreground/60">
                 <Link to="/" className="transition-colors hover:text-accent">
                   Beranda
                 </Link>
@@ -431,13 +456,13 @@ export function SitePage({ path, children }: { path: string; children?: React.Re
                   </>
                 ) : null}
               </nav>
-              <span className="mt-6 inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-accent">
+              <span className="mt-6 inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-xs font-semibold uppercase tracking-widest text-accent">
                 {page.eyebrow}
               </span>
-              <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-primary-foreground sm:text-4xl lg:text-5xl">
+              <h1 className="mt-4 max-w-4xl text-3xl font-extrabold tracking-tight text-hero-foreground sm:text-4xl lg:text-5xl xl:text-6xl">
                 {page.title}
               </h1>
-              <p className="mt-4 max-w-2xl text-base leading-relaxed text-primary-foreground/70">
+              <p className="mt-4 max-w-2xl text-base leading-relaxed text-hero-foreground/70 xl:text-lg">
                 {page.description}
               </p>
             </Reveal>

@@ -33,12 +33,12 @@ export function SiteFooter() {
   ].filter((s) => !!s.href);
 
   return (
-    <footer id="kontak" className="bg-primary-deep text-primary-foreground">
+    <footer id="kontak" className="bg-primary-deep text-hero-foreground">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3">
-              <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-primary-foreground">
+              <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-hero-foreground">
                 <img
                   src={logo}
                   alt="Logo Universitas Ivet Semarang"
@@ -49,14 +49,14 @@ export function SiteFooter() {
                 />
               </span>
               <span className="leading-tight">
-                <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-primary-foreground/60">
+                <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-hero-foreground/60">
                   Universitas Ivet Semarang
                 </span>
               <span className="block text-base font-bold">Pendidikan Informatika</span>
-              <span className="block text-[10px] text-primary-foreground/55">UNISVET Semarang</span>
+              <span className="block text-[10px] text-hero-foreground/55">UNISVET Semarang</span>
               </span>
             </div>
-            <p className="mt-5 text-sm leading-relaxed text-primary-foreground/70">{footer.about}</p>
+            <p className="mt-5 text-sm leading-relaxed text-hero-foreground/70">{footer.about}</p>
             <div className="mt-6 flex gap-2">
               {socials.map((s) => (
                 <a
@@ -65,7 +65,7 @@ export function SiteFooter() {
                   target="_blank"
                   rel="noreferrer"
                   aria-label={s.label}
-                  className="inline-flex size-10 items-center justify-center rounded-full border border-primary-foreground/15 bg-primary-foreground/5 text-primary-foreground/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/60 hover:text-accent"
+                  className="inline-flex size-10 items-center justify-center rounded-full border border-hero-foreground/15 bg-hero-foreground/5 text-hero-foreground/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/60 hover:text-accent"
                 >
                   <s.icon className="size-4" />
                 </a>
@@ -80,7 +80,7 @@ export function SiteFooter() {
                 <li key={l.label}>
                   <Link
                     to={l.to}
-                    className="text-sm text-primary-foreground/70 transition-colors hover:text-accent"
+                    className="text-sm text-hero-foreground/70 transition-colors hover:text-accent"
                   >
                     {l.label}
                   </Link>
@@ -98,7 +98,7 @@ export function SiteFooter() {
                     href={p.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-sm text-primary-foreground/70 transition-colors hover:text-accent"
+                    className="text-sm text-hero-foreground/70 transition-colors hover:text-accent"
                   >
                     {p.label}
                   </a>
@@ -109,7 +109,7 @@ export function SiteFooter() {
 
           <div>
             <h3 className="text-sm font-bold uppercase tracking-widest text-accent">Kontak</h3>
-            <ul className="mt-5 space-y-4 text-sm text-primary-foreground/70">
+            <ul className="mt-5 space-y-4 text-sm text-hero-foreground/70">
               <li className="flex gap-3">
                 <MapPin className="mt-0.5 size-4 shrink-0 text-accent" />
                 <span>{footer.address}</span>
@@ -154,7 +154,7 @@ export function SiteFooter() {
 
           <div>
             <h3 className="text-sm font-bold uppercase tracking-widest text-accent">Lokasi Kampus</h3>
-            <div className="mt-5 overflow-hidden rounded-2xl border border-primary-foreground/15">
+            <div className="mt-5 overflow-hidden rounded-2xl border border-hero-foreground/15">
               <iframe
                 title="Peta lokasi Universitas Ivet Semarang"
                 src={`https://www.google.com/maps?q=${encodeURIComponent(footer.mapQuery)}&output=embed`}
@@ -166,7 +166,7 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-primary-foreground/10 pt-6 text-xs text-primary-foreground/55 sm:flex-row">
+        <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-hero-foreground/10 pt-6 text-xs text-hero-foreground/55 sm:flex-row">
           <p>© {new Date().getFullYear()} Program Studi Pendidikan Informatika — Universitas Ivet Semarang.</p>
           <p>{footer.note}</p>
         </div>

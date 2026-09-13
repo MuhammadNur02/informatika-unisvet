@@ -78,7 +78,7 @@ export function Tracks() {
                 className={cn(
                   "inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-semibold transition-all duration-300",
                   active === t.id
-                    ? "border-transparent bg-[image:var(--gradient-hero)] text-primary-foreground shadow-[var(--shadow-card)] pulse-glow"
+                    ? "border-transparent bg-[image:var(--gradient-hero)] text-hero-foreground shadow-[var(--shadow-card)] pulse-glow"
                     : "border-border bg-card text-foreground/70 hover:border-accent/50 hover:text-primary hover:shadow-[var(--shadow-glow-accent)]",
                 )}
               >
@@ -100,7 +100,7 @@ export function Tracks() {
               className="card-elevated grid gap-8 rounded-3xl p-8 lg:grid-cols-[1.1fr_1fr] sm:p-10 border-accent-glow"
             >
               <div>
-                <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-[image:var(--gradient-hero)] text-primary-foreground icon-glow">
+                <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-[image:var(--gradient-hero)] text-hero-foreground icon-glow">
                   <current.icon className="size-5" />
                 </span>
                 <h3 className="mt-5 text-2xl font-bold tracking-tight text-foreground">{current.headline}</h3>

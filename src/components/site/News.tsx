@@ -57,7 +57,7 @@ export function News() {
                 onClick={() => setActive(tab)}
                 className={cn(
                   "relative rounded-full px-5 py-2 text-sm font-semibold transition-colors",
-                  active === tab ? "text-primary-foreground" : "text-muted-foreground hover:text-primary",
+                  active === tab ? "text-hero-foreground" : "text-muted-foreground hover:text-primary",
                 )}
               >
                 {active === tab ? (
@@ -80,50 +80,76 @@ export function News() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+            className="mt-10"
           >
             {items.length === 0 ? (
-              <p className="col-span-full rounded-3xl border border-dashed border-border bg-card/60 p-10 text-center text-sm text-muted-foreground">
+              <p className="rounded-3xl border border-dashed border-border bg-card/60 p-10 text-center text-sm text-muted-foreground">
                 Belum ada {active.toLowerCase()} yang diterbitkan.
               </p>
             ) : (
-              items.map((item, i) => (
-                <article
-                  key={item.id}
-                  className="card-elevated group flex h-full flex-col overflow-hidden rounded-3xl border-accent-glow"
-                >
-                  <div className="relative h-44 overflow-hidden">
-                    <img
-                      src={item.gambar_url || PLACEHOLDERS[i % PLACEHOLDERS.length]}
-                      alt={item.judul}
-                      loading="lazy"
-                      width={900}
-                      height={700}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-card/90 px-3 py-1 text-xs font-semibold text-primary backdrop-blur-md shadow-[var(--shadow-card)]">
-                      <CalendarDays className="size-3.5" /> {formatTanggalId(item.tanggal)}
+              <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+                <article className="card-elevated group relative flex h-full min-h-[22rem] flex-col justify-end overflow-hidden rounded-3xl border-accent-glow">
+                  <img
+                    src={items[0]!.gambar_url || PLACEHOLDERS[0]}
+                    alt={items[0]!.judul}
+                    loading="lazy"
+                    width={1200}
+                    height={900}
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-[linear-gradient(to_top,oklch(0.21_0.075_265/0.92),transparent_65%)]" />
+                  <div className="relative p-7 sm:p-8">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-foreground/90 px-3 py-1 text-xs font-semibold text-primary backdrop-blur-md">
+                      <CalendarDays className="size-3.5" /> {formatTanggalId(items[0]!.tanggal)}
                     </span>
-                  </div>
-                  <div className="flex flex-1 flex-col p-6">
-                    {item.tag ? (
-                      <span className="text-xs font-bold uppercase tracking-widest text-accent-gradient">
-                        {item.tag}
-                      </span>
-                    ) : null}
-                    <h3 className="mt-2 text-lg font-bold leading-snug text-foreground">{item.judul}</h3>
-                    <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
-                      {item.ringkasan}
+                    <h3 className="mt-4 text-2xl font-bold leading-snug text-hero-foreground">
+                      {items[0]!.judul}
+                    </h3>
+                    <p className="mt-2 max-w-md text-sm leading-relaxed text-hero-foreground/80">
+                      {items[0]!.ringkasan}
                     </p>
                     <Link
                       to="/informasi/berita"
-                      className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary transition-colors hover:text-accent-foreground hover:underline-offset-4 hover:underline"
+                      className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-accent transition-colors hover:text-hero-foreground"
                     >
                       Baca Selengkapnya <ArrowUpRight className="size-4" />
                     </Link>
                   </div>
                 </article>
-              ))
+
+                {items.length > 1 ? (
+                  <div className="flex flex-col gap-5">
+                    {items.slice(1).map((item, i) => (
+                      <article
+                        key={item.id}
+                        className="card-elevated group flex h-full gap-4 rounded-2xl p-4 border-accent-glow"
+                      >
+                        <div className="h-20 w-24 shrink-0 overflow-hidden rounded-xl">
+                          <img
+                            src={item.gambar_url || PLACEHOLDERS[(i + 1) % PLACEHOLDERS.length]}
+                            alt={item.judul}
+                            loading="lazy"
+                            width={300}
+                            height={300}
+                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          {item.tag ? (
+                            <span className="text-[11px] font-bold uppercase tracking-widest text-accent-gradient">
+                              {item.tag}
+                            </span>
+                          ) : null}
+                          <h3 className="mt-1 line-clamp-2 text-sm font-bold leading-snug text-foreground">
+                            {item.judul}
+                          </h3>
+                          <p className="mt-1 text-xs text-muted-foreground">{formatTanggalId(item.tanggal)}</p>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
             )}
           </motion.div>
         </AnimatePresence>

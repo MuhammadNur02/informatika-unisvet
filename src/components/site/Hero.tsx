@@ -20,13 +20,13 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-accent backdrop-blur-md">
+          <span className="inline-flex items-center gap-2 rounded-full border border-hero-foreground/20 bg-hero-foreground/10 px-4 py-1.5 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-accent backdrop-blur-md">
             <Sparkles className="size-3.5" /> {hero.badge}
           </span>
-          <h1 className="mt-6 text-4xl font-extrabold leading-[1.08] tracking-tight text-primary-foreground sm:text-5xl lg:text-[3.4rem]">
+          <h1 className="mt-6 text-4xl font-extrabold leading-[1.08] tracking-tight text-hero-foreground sm:text-5xl lg:text-[3.4rem] xl:text-[3.8rem]">
             {hero.titleLead} <span className="text-gradient-gold">{hero.titleAccent}</span> {hero.titleTail}
           </h1>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-primary-foreground/75 sm:text-lg">
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-hero-foreground/75 sm:text-lg xl:max-w-2xl xl:text-xl">
             {hero.subtitle}
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-3">
@@ -35,15 +35,21 @@ export function Hero() {
                 {hero.primaryLabel} <ArrowRight />
               </Link>
             </Button>
-            <Button asChild variant="heroGhost" size="xl">
-              <Link to="/akademik/kurikulum">{hero.secondaryLabel}</Link>
+            <Button
+              asChild
+              variant="linkArrow"
+              className="h-auto p-0 text-base text-hero-foreground/90 hover:text-hero-foreground"
+            >
+              <Link to="/akademik/kurikulum">
+                {hero.secondaryLabel} <ArrowRight />
+              </Link>
             </Button>
           </div>
           <div className="mt-8 flex flex-wrap gap-2">
             {hero.badges.map((b) => (
               <span
                 key={b}
-                className="rounded-full border border-primary-foreground/15 bg-primary-foreground/8 px-3 py-1.5 text-xs font-medium text-primary-foreground/80 backdrop-blur-md"
+                className="rounded-full border border-hero-foreground/15 bg-hero-foreground/8 px-3 py-1.5 text-xs font-medium text-hero-foreground/80 backdrop-blur-md"
               >
                 {b}
               </span>
@@ -57,7 +63,7 @@ export function Hero() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="overflow-hidden rounded-[2rem] border border-primary-foreground/15 shadow-[var(--shadow-lift)]">
+          <div className="overflow-hidden rounded-[2rem] border border-hero-foreground/15 shadow-[var(--shadow-lift)]">
             <img
               src="/banner-kampus.jpg"
               alt="Gedung FKIP Universitas Ivet Semarang, kampus Program Studi Pendidikan Informatika"

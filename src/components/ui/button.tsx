@@ -22,6 +22,8 @@ const buttonVariants = cva(
           "border border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground backdrop-blur-md transition-all duration-300 hover:border-accent/70 hover:bg-primary-foreground/20 hover:-translate-y-0.5",
         outlineNavy:
           "border border-primary/25 bg-background text-primary font-medium transition-all duration-300 hover:border-accent hover:shadow-[var(--shadow-card)] hover:-translate-y-0.5",
+        linkArrow:
+          "gap-1.5 px-0 font-semibold text-current underline-offset-4 hover:underline [&_svg]:transition-transform [&_svg]:duration-300 hover:[&_svg]:translate-x-1",
       },
       size: {
         default: "h-9 px-4 py-2",
