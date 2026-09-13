@@ -51,7 +51,7 @@ export function BeritaList({ kategori, heading = "Berita Terbaru", emptyText }: 
               className={cn(
                 "rounded-full border px-4 py-1.5 text-sm font-semibold transition-colors",
                 active === f
-                  ? "border-transparent bg-[image:var(--gradient-hero)] text-primary-foreground"
+                  ? "border-transparent bg-[image:var(--gradient-hero)] text-hero-foreground"
                   : "border-border bg-card text-muted-foreground hover:text-primary",
               )}
             >

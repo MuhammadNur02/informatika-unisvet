@@ -13,13 +13,13 @@ export function CtaBanner() {
         <div className="relative isolate overflow-hidden rounded-[2.5rem] bg-hero-gradient px-6 py-16 text-center sm:px-14 sm:py-20">
           <VideoBackground />
           <div className="relative">
-            <span className="inline-flex rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+            <span className="inline-flex rounded-full border border-hero-foreground/20 bg-hero-foreground/10 px-4 py-1.5 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-accent">
               {cta.badge}
             </span>
-            <h2 className="mx-auto mt-6 max-w-3xl text-3xl font-extrabold leading-tight tracking-tight text-primary-foreground sm:text-4xl">
+            <h2 className="mx-auto mt-6 max-w-4xl text-3xl font-extrabold leading-tight tracking-tight text-hero-foreground sm:text-4xl xl:text-5xl">
               {cta.title}
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-primary-foreground/75">
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-hero-foreground/75 xl:text-lg">
               {cta.desc}
             </p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
@@ -28,7 +28,11 @@ export function CtaBanner() {
                   {cta.primaryLabel} <ArrowRight />
                 </a>
               </Button>
-              <Button asChild variant="heroGhost" size="xl">
+              <Button
+                asChild
+                variant="linkArrow"
+                className="h-auto p-0 text-base text-hero-foreground/90 hover:text-hero-foreground"
+              >
                 <a href={cta.secondaryHref} target="_blank" rel="noreferrer">
                   <PhoneCall /> {cta.secondaryLabel}
                 </a>

@@ -17,28 +17,27 @@ export function Stats() {
 
   return (
     <section id="statistik" className="relative z-10 -mt-14 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl rounded-[2rem] border border-accent/30 bg-card/95 backdrop-blur-md p-6 shadow-[var(--shadow-lift)] sm:p-8">
+      <div className="mx-auto max-w-6xl rounded-[2rem] border border-accent/30 bg-card/95 backdrop-blur-md p-5 shadow-[var(--shadow-lift)] sm:p-7">
         {/* Subtle gradient accent at top */}
         <div className="absolute -top-1 left-1/2 h-1 w-24 -translate-x-1/2 rounded-full bg-gradient-to-r from-transparent via-accent to-transparent" aria-hidden />
-        
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat, i) => {
             const Icon = ICONS[i % ICONS.length]!;
             const parsed = parseValue(stat.value);
             return (
               <Reveal key={`${stat.label}-${i}`} delay={i * 0.08}>
-                <div className="group flex flex-col items-center gap-3 rounded-2xl px-4 py-5 text-center transition-all duration-300 hover:bg-slate-surface hover:shadow-[var(--shadow-glow-accent)]">
-                  <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-[image:var(--gradient-gold)] text-accent-foreground shadow-[var(--shadow-card)] icon-glow transition-transform duration-300 group-hover:scale-110">
-                    <Icon className="size-5" />
-                  </span>
-                  <span className="text-3xl font-extrabold tracking-tight text-primary">
+                <div className="stat-figure group flex flex-col items-center gap-1.5 px-3 py-1.5 text-center">
+                  <span className="flex min-h-11 items-center justify-center text-xl font-semibold tracking-tight text-primary sm:min-h-12 sm:text-2xl">
                     {"text" in parsed ? (
                       parsed.text
                     ) : (
                       <Counter value={parsed.number} suffix={parsed.suffix} />
                     )}
                   </span>
-                  <span className="text-sm font-medium text-muted-foreground">{stat.label}</span>
+                  <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                    <Icon className="size-3 text-accent" /> {stat.label}
+                  </span>
                 </div>
               </Reveal>
             );

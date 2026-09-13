@@ -27,9 +27,9 @@ export function GaleriDinamis() {
               <div className="absolute inset-0 bg-[linear-gradient(to_top,oklch(0.21_0.075_265/0.92),transparent_60%)]" />
               <div className="absolute inset-x-0 bottom-0 p-6">
                 <p className="text-xs font-semibold uppercase tracking-widest text-accent">{item.tanggal}</p>
-                <h3 className="mt-1 text-lg font-bold text-primary-foreground">{item.judul}</h3>
+                <h3 className="mt-1 text-lg font-bold text-hero-foreground">{item.judul}</h3>
                 {item.deskripsi ? (
-                  <p className="mt-1 text-sm text-primary-foreground/75">{item.deskripsi}</p>
+                  <p className="mt-1 text-sm text-hero-foreground/75">{item.deskripsi}</p>
                 ) : null}
               </div>
             </article>
