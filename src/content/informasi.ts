@@ -4,12 +4,10 @@ import labSmart from "@/assets/lab-smart.jpg";
 import labMicroteaching from "@/assets/lab-microteaching.jpg";
 import libCampus from "@/assets/lib-campus.jpg";
 import heroLab from "@/assets/hero-lab.jpg";
-import labKomputerAsset from "@/assets/lab-komputer.webp.asset.json";
-import kegiatanProyekAsset from "@/assets/kegiatan-proyek.webp.asset.json";
-import kegiatanDosenAsset from "@/assets/kegiatan-dosen.webp.asset.json";
-const labKomputer = labKomputerAsset.url;
-const kegiatanProyek = kegiatanProyekAsset.url;
-const kegiatanDosen = kegiatanDosenAsset.url;
+import dosen1 from "@/assets/dosen-1.jpg";
+const labKomputer = heroLab;
+const kegiatanProyek = labMicroteaching;
+const kegiatanDosen = dosen1;
 
 export const INFORMASI_PAGES: Record<string, PageContent> = {
   "/informasi/berita": {

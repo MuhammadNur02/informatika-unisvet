@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import bannerAsset from "@/assets/banner-kampus.jpg.asset.json";
 
 /* ------------------------------- Tipe konten ------------------------------- */
 
@@ -88,7 +87,7 @@ export const DEFAULT_HOME: HomeContent = {
     primaryLabel: "Daftar PMB Sekarang",
     secondaryLabel: "Lihat Kurikulum",
     badges: ["Akreditasi LAMDIK Baik Sekali", "Kelas Reguler & Karyawan", "4 Laboratorium Praktik"],
-    image: bannerAsset.url,
+    image: "/banner-kampus.jpg",
     floating: ["Akreditasi Baik Sekali", "Kurikulum Berbasis Proyek", "Kelas Reguler & Karyawan"],
   },
   stats: [

@@ -277,10 +277,11 @@
 }
 
 /*
- * Langit berbintang dekoratif di dashboard admin — hanya tampak saat mode
- * gelap + tema admin aktif bersamaan. Posisinya fixed terhadap viewport
- * (diatur di AdminStarfield.tsx) sehingga tetap diam di tempat walau konten
- * di atasnya digulir.
+ * Langit berbintang dekoratif — dipakai di dashboard admin (mode gelap +
+ * tema admin) dan di beranda situs publik (mode gelap saja, dibatasi ke
+ * rentang section tertentu lewat class "is-visible" yang diatur JS via
+ * IntersectionObserver). Posisinya fixed terhadap viewport sehingga tetap
+ * diam di tempat walau konten di atasnya digulir.
  */
 .admin-starfield {
   opacity: 0;
@@ -293,7 +294,18 @@
   visibility: visible;
 }
 
-@keyframes admin-star-twinkle {
+.site-starfield {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.7s ease;
+}
+
+.dark .site-starfield.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+@keyframes star-twinkle {
   0%,
   100% {
     opacity: 0.15;
@@ -305,7 +317,7 @@
   }
 }
 
-@keyframes admin-shooting-star {
+@keyframes shooting-star {
   0% {
     transform: translate3d(0, 0, 0) rotate(var(--sa));
     opacity: 0;
@@ -327,7 +339,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .admin-starfield span {
+  .admin-starfield span,
+  .site-starfield span {
     animation: none !important;
   }
 }
