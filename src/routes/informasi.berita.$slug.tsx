@@ -77,7 +77,7 @@ function BeritaDetail() {
           <VideoBackground />
           <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
             <Reveal y={16}>
-              <nav className="flex flex-wrap items-center gap-2 text-xs font-medium text-primary-foreground/60">
+              <nav className="flex flex-wrap items-center gap-2 text-xs font-medium text-hero-foreground/60">
                 <Link to="/" className="transition-colors hover:text-accent">
                   Beranda
                 </Link>
@@ -91,16 +91,16 @@ function BeritaDetail() {
                   <span className="mt-6 inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-accent">
                     {berita.kategori}
                   </span>
-                  <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-primary-foreground sm:text-4xl">
+                  <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-hero-foreground sm:text-4xl">
                     {berita.judul}
                   </h1>
-                  <p className="mt-4 inline-flex items-center gap-2 text-sm text-primary-foreground/70">
+                  <p className="mt-4 inline-flex items-center gap-2 text-sm text-hero-foreground/70">
                     <CalendarDays className="size-4" /> {formatTanggalId(berita.tanggal)}
                     {berita.tag ? <span className="text-accent">#{berita.tag}</span> : null}
                   </p>
                 </>
               ) : (
-                <h1 className="mt-6 text-3xl font-extrabold tracking-tight text-primary-foreground sm:text-4xl">
+                <h1 className="mt-6 text-3xl font-extrabold tracking-tight text-hero-foreground sm:text-4xl">
                   {isLoading ? "Memuat berita…" : "Berita tidak ditemukan"}
                 </h1>
               )}
