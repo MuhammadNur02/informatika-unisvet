@@ -7,9 +7,10 @@ export type HomeContent = {
   seo: { title: string; description: string; ogTitle: string; ogDescription: string; ogImage: string };
   hero: {
     badge: string;
-    titleLead: string;
-    titleAccent: string;
-    titleTail: string;
+    /** Satu kata tetap di awal judul, sebelum bagian yang berganti-ganti. */
+    titleFixed: string;
+    /** Judul-judul yang bergantian tampil dengan animasi ketik & hapus (biasanya 3). */
+    titleRotating: string[];
     subtitle: string;
     primaryLabel: string;
     secondaryLabel: string;
@@ -79,9 +80,12 @@ export const DEFAULT_HOME: HomeContent = {
   },
   hero: {
     badge: "S1 Pendidikan Informatika — UNISVET",
-    titleLead: "Menyiapkan Guru Informatika &",
-    titleAccent: "Talenta Teknologi",
-    titleTail: "yang Siap Kerja",
+    titleFixed: "Mencetak",
+    titleRotating: [
+      "Pendidik IT Profesional & Inovator Teknologi Masa Depan",
+      "Talenta Digital Siap Kerja di Industri & Dunia Pendidikan",
+      "Generasi Guru Informatika yang Kreatif & Adaptif",
+    ],
     subtitle:
       "Program studi yang memadukan ilmu kependidikan dengan keahlian informatika — pemrograman, jaringan, multimedia, hingga kecerdasan artifisial — di Universitas Ivet Semarang.",
     primaryLabel: "Daftar PMB Sekarang",

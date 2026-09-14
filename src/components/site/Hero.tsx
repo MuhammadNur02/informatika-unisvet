@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useHomeContent } from "@/lib/site-content";
 import { usePointerGlow, radialGlowBackground } from "@/lib/use-pointer-glow";
 import { VideoBackground } from "./VideoBackground";
+import { TypewriterText } from "./TypewriterText";
 
 /**
  * Foto hero bereaksi ke posisi pointer: sedikit miring 3D mengikuti arah
@@ -67,7 +68,7 @@ export function Hero() {
             <Sparkles className="size-3.5" /> {hero.badge}
           </span>
           <h1 className="mt-6 text-4xl font-extrabold leading-[1.08] tracking-tight text-hero-foreground sm:text-5xl lg:text-[3.4rem] xl:text-[3.8rem]">
-            {hero.titleLead} <span className="text-gradient-gold">{hero.titleAccent}</span> {hero.titleTail}
+            {hero.titleFixed} <TypewriterText items={hero.titleRotating} className="text-gradient-gold" />
           </h1>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-hero-foreground/75 sm:text-lg xl:max-w-2xl xl:text-xl">
             {hero.subtitle}

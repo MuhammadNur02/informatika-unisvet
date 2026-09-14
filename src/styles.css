@@ -556,3 +556,30 @@
     background-position: -200% center;
   }
 }
+
+@keyframes typewriter-blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  50.01%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  width: 3px;
+  margin-left: 3px;
+  height: 0.9em;
+  vertical-align: -0.1em;
+  background: currentColor;
+  animation: typewriter-blink 1s step-end infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .typewriter-cursor {
+    animation: none;
+  }
+}

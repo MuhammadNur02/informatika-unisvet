@@ -222,11 +222,18 @@ export function BerandaEditor({ userId }: { userId: string }) {
         <TabsContent value="hero" className="mt-5 space-y-6">
           <Card title="Bagian Hero">
             <Field label="Badge atas" value={home.hero.badge} onChange={(badge) => patchHome({ hero: { ...home.hero, badge } })} />
-            <div className="grid gap-4 sm:grid-cols-3">
-              <Field label="Judul (awal)" value={home.hero.titleLead} onChange={(v) => patchHome({ hero: { ...home.hero, titleLead: v } })} />
-              <Field label="Judul (aksen emas)" value={home.hero.titleAccent} onChange={(v) => patchHome({ hero: { ...home.hero, titleAccent: v } })} />
-              <Field label="Judul (akhir)" value={home.hero.titleTail} onChange={(v) => patchHome({ hero: { ...home.hero, titleTail: v } })} />
-            </div>
+            <Field
+              label="Kata tetap di awal judul"
+              value={home.hero.titleFixed}
+              onChange={(v) => patchHome({ hero: { ...home.hero, titleFixed: v } })}
+              hint="Satu kata/frasa pendek yang tidak berubah, tampil sebelum judul yang berganti-ganti."
+            />
+            <Lines
+              label="Judul bergantian (animasi ketik & hapus)"
+              items={home.hero.titleRotating}
+              onChange={(titleRotating) => patchHome({ hero: { ...home.hero, titleRotating } })}
+              hint="Satu judul per baris — akan tampil bergantian dengan animasi mengetik lalu menghapus."
+            />
             <Area label="Subjudul" rows={3} value={home.hero.subtitle} onChange={(v) => patchHome({ hero: { ...home.hero, subtitle: v } })} />
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Tombol utama" value={home.hero.primaryLabel} onChange={(v) => patchHome({ hero: { ...home.hero, primaryLabel: v } })} />
