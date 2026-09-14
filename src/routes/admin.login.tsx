@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AdminEmbers } from "@/components/admin/AdminEmbers";
+import { AdminStarfield } from "@/components/admin/AdminStarfield";
 
 export const Route = createFileRoute("/admin/login")({
   ssr: false,
@@ -39,6 +40,15 @@ function AdminLogin() {
     });
   }, [navigate]);
 
+  // Pakai identitas warna dashboard admin (biru-teal, bukan maroon situs
+  // publik) sejak gerbang login — konsisten dengan tampilan setelah masuk.
+  // Ditaruh di <body> supaya ikut menjangkau dialog/toast yang dirender ke
+  // <body> lewat portal (lihat komentar sama di AdminShell.tsx).
+  useEffect(() => {
+    document.body.classList.add("admin-theme");
+    return () => document.body.classList.remove("admin-theme");
+  }, []);
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
@@ -55,6 +65,7 @@ function AdminLogin() {
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-hero-gradient px-4 py-16">
       <div className="pointer-events-none absolute inset-0" />
+      <AdminStarfield />
       <AdminEmbers />
       <motion.div
         aria-hidden
@@ -82,8 +93,15 @@ function AdminLogin() {
           <ArrowLeft className="size-3.5" /> Kembali ke situs
         </Link>
 
-        <div className="rounded-3xl border border-hero-foreground/12 bg-card/95 p-8 shadow-[0_30px_80px_-40px_oklch(0.21_0.075_265/0.8)] backdrop-blur">
-          <div className="inline-flex size-12 items-center justify-center rounded-2xl bg-[image:var(--gradient-hero)]">
+        <div className="hud-border rounded-3xl bg-card/95 p-8 shadow-[0_30px_80px_-40px_oklch(0.21_0.075_265/0.8)] backdrop-blur">
+          <div className="hud-scanline" />
+          {/* Aksen sudut ala panel HUD */}
+          <span className="pointer-events-none absolute -left-px -top-px size-5 rounded-tl-3xl border-l-2 border-t-2 border-accent/80" aria-hidden />
+          <span className="pointer-events-none absolute -right-px -top-px size-5 rounded-tr-3xl border-r-2 border-t-2 border-accent/80" aria-hidden />
+          <span className="pointer-events-none absolute -bottom-px -left-px size-5 rounded-bl-3xl border-b-2 border-l-2 border-accent/80" aria-hidden />
+          <span className="pointer-events-none absolute -bottom-px -right-px size-5 rounded-br-3xl border-b-2 border-r-2 border-accent/80" aria-hidden />
+
+          <div className="icon-glow pulse-glow inline-flex size-12 items-center justify-center rounded-2xl bg-hero-gradient">
             <Lock className="size-5 text-hero-foreground" />
           </div>
           <h1 className="mt-5 text-2xl font-extrabold tracking-tight text-foreground">Panel Pengelola Prodi</h1>
