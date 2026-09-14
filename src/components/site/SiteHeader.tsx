@@ -49,6 +49,9 @@ export function SiteHeader() {
   const [openGroup, setOpenGroup] = useState<string | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const activeLabel = NAV.find(
+    (item) => pathname === item.to || (item.children?.some((c) => pathname === c.to) ?? false),
+  )?.label;
   const { scrollYProgress } = useScroll();
   const scrollProgress = useSpring(scrollYProgress, { stiffness: 200, damping: 30, restDelta: 0.001 });
 
@@ -145,6 +148,11 @@ export function SiteHeader() {
         <nav className="hidden items-center gap-0.5 xl:flex" onMouseLeave={() => setHovered(null)}>
           {NAV.map((item) => {
             const active = pathname === item.to || (item.children?.some((c) => pathname === c.to) ?? false);
+            // Garis kuning ikut kursor saat hover; begitu pointer keluar dari
+            // nav, hovered jadi null dan garis kembali ke halaman aktif —
+            // layoutId yang sama membuat framer-motion menganimasikan
+            // perpindahannya secara otomatis.
+            const showIndicator = (hovered ?? activeLabel) === item.label;
             return (
             <div key={item.label} className="group relative" onMouseEnter={() => setHovered(item.label)}>
               <Link
@@ -174,7 +182,7 @@ export function SiteHeader() {
                 {item.children ? (
                   <ChevronDown className="size-3.5 transition-transform group-hover:rotate-180" />
                 ) : null}
-                {active ? (
+                {showIndicator ? (
                   <motion.span
                     layoutId="nav-active-indicator"
                     className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-accent"
