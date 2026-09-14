@@ -1,14 +1,81 @@
+import { useRef, useState } from "react";
 import { motion } from "motion/react";
-import { ArrowRight, ShieldCheck, Sparkles, Cpu, Laptop } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useHomeContent } from "@/lib/site-content";
 import { VideoBackground } from "./VideoBackground";
 
+type PointerState = { rx: number; ry: number; mx: number; my: number; active: boolean };
+
+const POINTER_REST: PointerState = { rx: 0, ry: 0, mx: 50, my: 50, active: false };
+
+/**
+ * Foto hero bereaksi ke posisi pointer: sedikit miring 3D mengikuti arah
+ * kursor, plus lapisan shading radial di titik kursor — gelap tepat di
+ * tengah (kesan permukaan "terdorong masuk") dan cincin terang di luarnya
+ * (kesan sedikit "menonjol keluar"), memakai mix-blend-mode agar menyatu
+ * alami dengan foto, bukan sekadar overlay polos.
+ */
+function HeroImage({ src, alt }: { src: string; alt: string }) {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [pointer, setPointer] = useState<PointerState>(POINTER_REST);
+
+  function handlePointerMove(e: React.PointerEvent<HTMLDivElement>) {
+    const rect = wrapRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+    setPointer({
+      rx: (py - 0.5) * -8,
+      ry: (px - 0.5) * 8,
+      mx: px * 100,
+      my: py * 100,
+      active: true,
+    });
+  }
+
+  return (
+    <div
+      ref={wrapRef}
+      className="perspective-distant"
+      onPointerMove={handlePointerMove}
+      onPointerLeave={() => setPointer(POINTER_REST)}
+    >
+      <div
+        className="relative overflow-hidden rounded-[2rem] border border-hero-foreground/15 shadow-(--shadow-lift) transition-transform duration-300 ease-out transform-3d will-change-transform"
+        style={{
+          transform: `rotateX(${pointer.rx}deg) rotateY(${pointer.ry}deg) scale(${pointer.active ? 1.015 : 1})`,
+        }}
+      >
+        <img src={src} alt={alt} width={1600} height={1104} className="h-full w-full object-cover" />
+        <div
+          className="pointer-events-none absolute inset-0 transition-opacity duration-300 mix-blend-overlay"
+          style={{
+            opacity: pointer.active ? 1 : 0,
+            background: `radial-gradient(circle at ${pointer.mx}% ${pointer.my}%, oklch(0 0 0 / 0.55) 0%, oklch(0 0 0 / 0.28) 8%, transparent 18%, oklch(1 0 0 / 0.35) 24%, transparent 40%)`,
+          }}
+          aria-hidden
+        />
+      </div>
+    </div>
+  );
+}
+
+const DEFAULT_HERO_IMAGE = "/banner-kampus.jpg";
+
+// Data lama dari sebelum migrasi keluar dari Lovable masih bisa menyimpan
+// path proxy aset platform (/__l5e/assets-v1/...) yang tidak pernah resolve
+// di luar editor Lovable — jangan pernah tampilkan path itu, pakai foto
+// default. URL asli yang diunggah lewat dashboard admin tidak pernah
+// berbentuk seperti ini, jadi pengecekan ini aman.
+function resolveHeroImage(url: string | undefined) {
+  return url && !url.startsWith("/__l5e/") ? url : DEFAULT_HERO_IMAGE;
+}
+
 export function Hero() {
   const home = useHomeContent();
   const hero = home.hero;
-  const floating = hero.floating.slice(0, 3);
 
   return (
     <section id="beranda" className="relative isolate overflow-hidden bg-black/40 pb-24 pt-32 sm:pb-32 sm:pt-40 backdrop-blur-[2px]">
@@ -63,45 +130,10 @@ export function Hero() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="overflow-hidden rounded-[2rem] border border-hero-foreground/15 shadow-[var(--shadow-lift)]">
-            <img
-              src="/banner-kampus.jpg"
-              alt="Gedung FKIP Universitas Ivet Semarang, kampus Program Studi Pendidikan Informatika"
-              width={1600}
-              height={1104}
-              className="h-full w-full object-cover"
-            />
-          </div>
-
-          {floating[0] ? (
-            <motion.div
-              className="absolute -left-4 top-8 flex items-center gap-2 rounded-2xl border border-primary-foreground/20 bg-primary-foreground/85 px-4 py-3 text-sm font-semibold text-primary shadow-[var(--shadow-lift)] backdrop-blur-md sm:-left-8"
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <ShieldCheck className="size-4 text-accent-foreground" /> {floating[0]}
-            </motion.div>
-          ) : null}
-
-          {floating[1] ? (
-            <motion.div
-              className="absolute -bottom-6 right-2 flex max-w-[16rem] items-center gap-2 rounded-2xl border border-primary-foreground/20 bg-primary-foreground/85 px-4 py-3 text-sm font-semibold text-primary shadow-[var(--shadow-lift)] backdrop-blur-md sm:right-[-1.5rem]"
-              animate={{ y: [0, 12, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-            >
-              <Cpu className="size-4 text-accent-foreground" /> {floating[1]}
-            </motion.div>
-          ) : null}
-
-          {floating[2] ? (
-            <motion.div
-              className="absolute -right-2 top-1/2 hidden items-center gap-2 rounded-2xl border border-primary-foreground/20 bg-primary-foreground/85 px-4 py-3 text-sm font-semibold text-primary shadow-[var(--shadow-lift)] backdrop-blur-md sm:flex"
-              animate={{ y: [0, -14, 0] }}
-              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
-            >
-              <Laptop className="size-4 text-accent-foreground" /> {floating[2]}
-            </motion.div>
-          ) : null}
+          <HeroImage
+            src={resolveHeroImage(hero.image)}
+            alt="Gedung FKIP Universitas Ivet Semarang, kampus Program Studi Pendidikan Informatika"
+          />
         </motion.div>
       </div>
     </section>
