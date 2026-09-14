@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "motion/react";
 import { Reveal } from "./Reveal";
 import { LensFlare } from "./LensFlare";
-import { EmberField } from "./EmberField";
 import { fetchPageOverride, staticPage } from "@/lib/cms";
 import { usePointerGlow, lightGlowBackground } from "@/lib/use-pointer-glow";
 import type { Block } from "@/content/types";
@@ -59,7 +58,7 @@ const DOSEN_CARD_BODY = (
   showMessage = false,
 ) => (
   <>
-    <div className={`shrink-0 overflow-hidden rounded-3xl bg-hero-foreground/10 ${photoClass}`}>
+    <div className={`shrink-0 overflow-hidden rounded-2xl bg-hero-foreground/10 ring-1 ring-accent/25 ${photoClass}`}>
       {d.photo ? (
         <img
           src={d.photo}
@@ -75,7 +74,11 @@ const DOSEN_CARD_BODY = (
     </div>
 
     <h3 className={`leading-snug text-hero-foreground ${nameClass}`}>{d.name}</h3>
-    <p className={`mt-1 font-semibold text-accent ${roleClass}`}>{d.role}</p>
+    <span
+      className={`mt-2 inline-flex items-center justify-center rounded-full border border-accent/30 bg-accent/10 px-3 py-1 font-mono font-semibold uppercase tracking-wide text-accent ${roleClass}`}
+    >
+      {d.role}
+    </span>
 
     {showMessage && d.message ? (
       <p className="mx-auto mt-6 max-w-sm text-balance text-base italic leading-relaxed text-hero-foreground/80">
@@ -83,7 +86,8 @@ const DOSEN_CARD_BODY = (
       </p>
     ) : null}
 
-    <div className="mt-auto flex w-full items-center justify-center border-t border-hero-foreground/15 pt-4">
+    <div className="mt-auto flex w-full flex-col items-center gap-4 pt-4">
+      <span className="h-px w-14 bg-gradient-to-r from-transparent via-accent/50 to-transparent" aria-hidden />
       <span className="inline-block rounded-full bg-hero-foreground/10 px-3.5 py-1.5 text-xs font-semibold text-hero-foreground/85">
         {d.interest}
       </span>
@@ -133,9 +137,13 @@ function DosenCard({ d, delay }: { d: DosenItem; delay: number }) {
             setSettled(false);
             setExpanded(true);
           }}
-          className="card-glass-dark flex h-full flex-col items-center rounded-3xl p-7 text-center"
+          className="card-glass-dark relative flex h-full flex-col items-center rounded-3xl p-7 text-center"
         >
-          {DOSEN_CARD_BODY(d, "mb-5 h-36 w-36", "min-h-14 text-lg font-bold", "min-h-8 text-sm")}
+          <span
+            className="pointer-events-none absolute inset-x-7 top-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent"
+            aria-hidden
+          />
+          {DOSEN_CARD_BODY(d, "mb-5 h-36 w-36", "min-h-14 text-lg font-bold", "min-h-8 max-w-full text-sm")}
         </motion.article>
       </div>
 
@@ -199,12 +207,10 @@ export function Faculty() {
       <div className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-40" aria-hidden />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Sapuan cahaya lensa dipertahankan apa adanya untuk mode gelap; mode
-            terang penggantinya percikan bara api — sesuai referensi footer,
-            dibatasi cuma di area kartu dosen lewat overflow-hidden. */}
+        {/* Bagian ini sengaja tanpa animasi — cuma tekstur kertas hitam kusut
+            statis, supaya perhatian jatuh ke kartu dosennya sendiri. */}
         <div className="relative overflow-hidden">
-          <LensFlare seed="dosen" className="hidden dark:block" />
-          <EmberField className="absolute inset-0 z-0 block dark:hidden" />
+          <div className="pointer-events-none absolute inset-0 bg-paper-texture opacity-70" aria-hidden />
 
           <DarkSectionHeading
             eyebrow="Profil Pengajar"
