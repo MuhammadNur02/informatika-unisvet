@@ -56,6 +56,7 @@ export function News() {
         <SectionHeading eyebrow={news.eyebrow} title={news.title} description={news.description} />
 
         <Reveal className="mt-10 flex justify-center">
+          <div className="max-w-full overflow-x-auto px-4 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:px-0 [&::-webkit-scrollbar]:hidden">
           <div className="inline-flex rounded-full border border-border bg-card p-1 shadow-[var(--shadow-card)]">
             {KATEGORI_BERITA.map((tab) => {
               const Icon = KATEGORI_ICON[tab] ?? Newspaper;
@@ -87,6 +88,7 @@ export function News() {
                 </button>
               );
             })}
+          </div>
           </div>
         </Reveal>
 

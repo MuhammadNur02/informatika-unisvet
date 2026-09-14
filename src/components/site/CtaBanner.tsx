@@ -8,7 +8,7 @@ export function CtaBanner() {
   const { cta } = useHomeContent();
 
   return (
-    <section id="pmb" className="px-4 pb-20 sm:px-6 sm:pb-28 lg:px-8">
+    <section id="pmb" className="px-4 pt-20 pb-20 sm:px-6 sm:pt-28 sm:pb-28 lg:px-8">
       <Reveal className="mx-auto max-w-7xl">
         <div className="relative isolate overflow-hidden rounded-[2.5rem] bg-hero-gradient px-6 py-16 text-center sm:px-14 sm:py-20">
           <VideoBackground />
