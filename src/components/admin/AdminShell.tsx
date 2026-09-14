@@ -62,6 +62,7 @@ export function AdminShell({
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [desktopSidebarOpen, setDesktopSidebarOpen] = useState(true);
 
   // Ditaruh di <body> (bukan hanya div sidebar) supaya palet gelap admin juga menjangkau
   // dialog konfirmasi & notifikasi toast, yang di-render lewat portal langsung ke <body>.
@@ -204,10 +205,15 @@ export function AdminShell({
 
   return (
     <div className="min-h-screen bg-slate-surface">
-      {/* Desktop sidebar */}
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-72 bg-hero-gradient lg:block">
+      {/* Desktop sidebar — bisa disembunyikan lewat tombol menu di header */}
+      <motion.aside
+        initial={false}
+        animate={{ x: desktopSidebarOpen ? 0 : "-100%" }}
+        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        className="fixed inset-y-0 left-0 z-40 hidden w-72 bg-hero-gradient lg:block"
+      >
         <div className="h-full">{sidebarInner}</div>
-      </aside>
+      </motion.aside>
 
       {/* Mobile sidebar */}
       <AnimatePresence>
@@ -241,7 +247,7 @@ export function AdminShell({
         ) : null}
       </AnimatePresence>
 
-      <div className="lg:pl-72">
+      <div className={cn("transition-[padding-left] duration-300 ease-out", desktopSidebarOpen ? "lg:pl-72" : "lg:pl-0")}>
         <header className="glass-header sticky top-0 z-30">
           <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3.5 sm:px-6">
             <Button
@@ -250,6 +256,15 @@ export function AdminShell({
               className="lg:hidden"
               aria-label="Buka menu"
               onClick={() => setMobileOpen(true)}
+            >
+              <Menu />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="hidden lg:inline-flex"
+              aria-label={desktopSidebarOpen ? "Sembunyikan menu" : "Tampilkan menu"}
+              onClick={() => setDesktopSidebarOpen((v) => !v)}
             >
               <Menu />
             </Button>

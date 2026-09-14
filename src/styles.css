@@ -194,12 +194,48 @@
 }
 
 /*
- * Palet gelap khusus dashboard admin — sengaja TIDAK memakai warna identitas
- * situs (maroon/emas). Dipasang lewat class "admin-theme" di <body> (bukan
- * cuma pembungkus sidebar) supaya ikut menjangkau dialog & toast yang
- * dirender lewat portal ke <body>. Hanya aktif saat mode gelap; mode terang
- * dashboard admin tetap memakai warna identitas seperti biasa.
+ * Palet dashboard admin — identitas visual TERSENDIRI (biru-teal), terpisah
+ * dari warna identitas situs publik (maroon/emas), di mode terang MAUPUN
+ * gelap. Dipasang lewat class "admin-theme" di <body> (bukan cuma pembungkus
+ * sidebar) supaya ikut menjangkau dialog & toast yang dirender lewat portal
+ * ke <body>. Blok ".dark .admin-theme" di bawah ini punya spesifisitas lebih
+ * tinggi sehingga otomatis menimpa blok terang ini saat mode gelap aktif.
  */
+.admin-theme {
+  --background: oklch(0.985 0.004 250);
+  --foreground: oklch(0.22 0.02 255);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.22 0.02 255);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.22 0.02 255);
+  --primary: oklch(0.42 0.16 250);
+  --primary-foreground: oklch(0.99 0.005 250);
+  --secondary: oklch(0.96 0.008 250);
+  --secondary-foreground: oklch(0.42 0.16 250);
+  --muted: oklch(0.965 0.007 250);
+  --muted-foreground: oklch(0.5 0.02 255);
+  --accent: oklch(0.62 0.14 195);
+  --accent-foreground: oklch(0.99 0.01 195);
+  --accent-soft: oklch(0.88 0.06 195);
+  --slate-surface: oklch(0.975 0.006 250);
+  --destructive: oklch(0.58 0.22 27);
+  --destructive-foreground: oklch(0.99 0.005 250);
+  --border: oklch(0.9 0.012 250);
+  --input: oklch(0.9 0.012 250);
+  --ring: oklch(0.62 0.14 195);
+  --primary-deep: oklch(0.12 0.02 250);
+  --gradient-hero: linear-gradient(
+    135deg,
+    oklch(0.16 0.03 250) 0%,
+    oklch(0.24 0.05 235) 50%,
+    oklch(0.3 0.07 210) 100%
+  );
+  --shadow-card: 0 1px 2px oklch(0.42 0.16 250 / 0.06), 0 12px 32px -12px oklch(0.42 0.16 250 / 0.14);
+  --shadow-lift: 0 24px 48px -20px oklch(0.42 0.16 250 / 0.22);
+  --shadow-glow: 0 0 0 1px oklch(0.62 0.14 195 / 0.4), 0 12px 32px -10px oklch(0.62 0.14 195 / 0.3);
+  --shadow-glow-accent: 0 0 20px -5px oklch(0.62 0.14 195 / 0.3);
+}
+
 .dark .admin-theme {
   --background: oklch(0.15 0.02 250);
   --foreground: oklch(0.89 0.01 250);

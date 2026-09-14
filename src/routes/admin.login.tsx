@@ -75,14 +75,14 @@ function AdminLogin() {
       >
         <Link
           to="/"
-          className="mb-5 inline-flex items-center gap-2 text-xs font-semibold text-primary-foreground/70 transition-colors hover:text-primary-foreground"
+          className="mb-5 inline-flex items-center gap-2 text-xs font-semibold text-hero-foreground/70 transition-colors hover:text-hero-foreground"
         >
           <ArrowLeft className="size-3.5" /> Kembali ke situs
         </Link>
 
-        <div className="rounded-3xl border border-primary-foreground/12 bg-card/95 p-8 shadow-[0_30px_80px_-40px_oklch(0.21_0.075_265/0.8)] backdrop-blur">
+        <div className="rounded-3xl border border-hero-foreground/12 bg-card/95 p-8 shadow-[0_30px_80px_-40px_oklch(0.21_0.075_265/0.8)] backdrop-blur">
           <div className="inline-flex size-12 items-center justify-center rounded-2xl bg-[image:var(--gradient-hero)]">
-            <Lock className="size-5 text-primary-foreground" />
+            <Lock className="size-5 text-hero-foreground" />
           </div>
           <h1 className="mt-5 text-2xl font-extrabold tracking-tight text-foreground">Panel Pengelola Prodi</h1>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
