@@ -14,7 +14,7 @@ import { VideoBackground } from "./VideoBackground";
  * alami dengan foto, bukan sekadar overlay polos.
  */
 function HeroImage({ src, alt }: { src: string; alt: string }) {
-  const { ref, pointer, onPointerMove, onPointerLeave } = usePointerGlow(8);
+  const { ref, pointer, onPointerMove, onPointerLeave } = usePointerGlow<HTMLDivElement>(8);
 
   return (
     <div ref={ref} className="perspective-distant" onPointerMove={onPointerMove} onPointerLeave={onPointerLeave}>
