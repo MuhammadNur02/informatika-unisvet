@@ -261,7 +261,7 @@ export function AdminShell({
 
       <div className={cn("transition-[padding-left] duration-300 ease-out", desktopSidebarOpen ? "lg:pl-72" : "lg:pl-0")}>
         <header className="admin-glass-header sticky top-0 z-30">
-          <div className="mx-auto flex max-w-6xl items-center gap-2 px-4 py-3.5 sm:px-6">
+          <div className="mx-auto flex max-w-[1600px] items-center gap-2 px-4 py-3.5 sm:px-6">
             <Button
               variant="outline"
               size="icon"
@@ -312,7 +312,7 @@ export function AdminShell({
 
         </header>
 
-        <main className="mx-auto max-w-6xl px-4 pb-16 pt-8 sm:px-6">{children}</main>
+        <main className="mx-auto max-w-[1600px] px-4 pb-16 pt-8 sm:px-6">{children}</main>
       </div>
     </div>
   );

@@ -322,13 +322,13 @@ export function BeritaEditor({ userId }: { userId: string }) {
         </div>
 
         {listQuery.isLoading ? (
-          <div className="mt-5 space-y-4">
-            {Array.from({ length: 3 }).map((_, i) => (
+          <div className="mt-5 grid gap-4 xl:grid-cols-2">
+            {Array.from({ length: 4 }).map((_, i) => (
               <Skeleton key={i} className="h-28 w-full rounded-3xl" />
             ))}
           </div>
         ) : visibleItems.length > 0 ? (
-          <div className="mt-5 space-y-4">
+          <div className="mt-5 grid gap-4 xl:grid-cols-2">
             <AnimatePresence mode="popLayout">
               {visibleItems.map((item) => (
                 <motion.article

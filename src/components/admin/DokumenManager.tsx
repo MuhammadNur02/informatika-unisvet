@@ -173,8 +173,8 @@ export function DokumenManager({ userId }: { userId: string }) {
         </p>
 
         {dokumenQuery.isLoading ? (
-          <div className="mt-5 space-y-4">
-            {Array.from({ length: 3 }).map((_, i) => (
+          <div className="mt-5 grid gap-4 xl:grid-cols-2">
+            {Array.from({ length: 4 }).map((_, i) => (
               <div key={i} className="rounded-3xl border border-border bg-card p-6">
                 <Skeleton className="h-4 w-52" />
                 <Skeleton className="mt-3 h-3 w-full" />
@@ -182,7 +182,7 @@ export function DokumenManager({ userId }: { userId: string }) {
             ))}
           </div>
         ) : items.length > 0 ? (
-          <div className="mt-5 space-y-4">
+          <div className="mt-5 grid gap-4 xl:grid-cols-2">
             <AnimatePresence mode="popLayout">
               {items.map((item, i) => (
                 <motion.article
