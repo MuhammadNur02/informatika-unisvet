@@ -43,7 +43,7 @@ export function radialGlowBackground(mx: number, my: number) {
   return `radial-gradient(circle at ${mx}% ${my}%, oklch(0 0 0 / 0.55) 0%, oklch(0 0 0 / 0.28) 8%, transparent 18%, oklch(1 0 0 / 0.35) 24%, transparent 40%)`;
 }
 
-/** Versi tipis dari radialGlowBackground — cincin lebih kecil & lebih transparan, untuk permukaan besar yang tidak boleh terasa berat. */
-export function thinRadialGlowBackground(mx: number, my: number) {
-  return `radial-gradient(circle at ${mx}% ${my}%, oklch(0 0 0 / 0.22) 0%, oklch(0 0 0 / 0.08) 4%, transparent 10%, oklch(1 0 0 / 0.16) 13%, transparent 22%)`;
+/** Cahaya keemasan lembut yang mengikuti kursor — tanpa bagian gelap, cuma pijar tipis (dipakai di kartu dosen versi terbuka). */
+export function lightGlowBackground(mx: number, my: number) {
+  return `radial-gradient(circle at ${mx}% ${my}%, oklch(0.9 0.1 85 / 0.4) 0%, oklch(0.85 0.12 85 / 0.16) 10%, transparent 24%)`;
 }

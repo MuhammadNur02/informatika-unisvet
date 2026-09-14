@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Reveal } from "./Reveal";
 import { LensFlare } from "./LensFlare";
 import { fetchPageOverride, staticPage } from "@/lib/cms";
-import { usePointerGlow, thinRadialGlowBackground } from "@/lib/use-pointer-glow";
+import { usePointerGlow, lightGlowBackground } from "@/lib/use-pointer-glow";
 import type { Block } from "@/content/types";
 
 type DosenItem = Extract<Block, { type: "people" }>["items"][number];
@@ -98,7 +98,13 @@ const DOSEN_CARD_BODY = (
  */
 function DosenCard({ d, delay }: { d: DosenItem; delay: number }) {
   const [expanded, setExpanded] = useState(false);
-  const { ref, pointer, onPointerMove } = usePointerGlow(6);
+  // Kartu di kolom kiri/kanan menempuh jarak geser jauh lebih besar daripada
+  // kolom tengah saat membesar (FLIP-nya menggabungkan translate+scale besar).
+  // Kalau tilt ikut aktif SELAMA perjalanan itu, hasilnya numpuk jadi liar,
+  // terutama untuk kartu yang jauh dari tengah. Jadi tilt baru dinyalakan
+  // setelah animasi membesarnya benar-benar selesai (settled).
+  const [settled, setSettled] = useState(false);
+  const { ref, pointer, onPointerMove, onPointerLeave } = usePointerGlow(6);
   const layoutId = `dosen-card-${d.name}`;
 
   useEffect(() => {
@@ -115,7 +121,10 @@ function DosenCard({ d, delay }: { d: DosenItem; delay: number }) {
       <div style={{ visibility: expanded ? "hidden" : "visible" }} className="h-full">
         <motion.article
           {...(!expanded ? { layoutId } : {})}
-          onMouseEnter={() => setExpanded(true)}
+          onMouseEnter={() => {
+            setSettled(false);
+            setExpanded(true);
+          }}
           className="card-glass-dark flex h-full flex-col items-center rounded-3xl p-7 text-center"
         >
           {DOSEN_CARD_BODY(d, "mb-5 h-36 w-36", "min-h-14 text-lg font-bold", "min-h-8 text-sm")}
@@ -140,10 +149,12 @@ function DosenCard({ d, delay }: { d: DosenItem; delay: number }) {
               layoutId={layoutId}
               ref={ref}
               onPointerMove={onPointerMove}
+              onPointerLeave={onPointerLeave}
+              onLayoutAnimationComplete={() => setSettled(true)}
               transition={WATER_SPRING}
               style={{
-                rotateX: pointer.rx,
-                rotateY: pointer.ry,
+                rotateX: settled ? pointer.rx : 0,
+                rotateY: settled ? pointer.ry : 0,
                 transformPerspective: 1200,
                 // card-glass-dark sendiri punya CSS "transition: transform 0.35s"
                 // untuk efek hover kartu lain — di sini transform-nya sudah
@@ -158,8 +169,8 @@ function DosenCard({ d, delay }: { d: DosenItem; delay: number }) {
             >
               {DOSEN_CARD_BODY(d, "mb-7 h-56 w-56", "text-3xl font-bold", "text-lg")}
               <div
-                className="pointer-events-none absolute inset-0 rounded-[2rem] transition-opacity duration-300 mix-blend-overlay"
-                style={{ opacity: pointer.active ? 1 : 0, background: thinRadialGlowBackground(pointer.mx, pointer.my) }}
+                className="pointer-events-none absolute inset-0 rounded-[2rem] transition-opacity duration-300 mix-blend-screen"
+                style={{ opacity: pointer.active ? 1 : 0, background: lightGlowBackground(pointer.mx, pointer.my) }}
                 aria-hidden
               />
             </motion.article>
