@@ -17,11 +17,11 @@ export function Stats() {
 
   return (
     <section id="statistik" className="relative z-10 -mt-14 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl rounded-[2rem] border border-black bg-stats-panel p-5 shadow-[var(--shadow-lift)] dark:border-accent/30 dark:bg-white/90 sm:p-7">
+      <div className="mx-auto max-w-6xl rounded-[2rem] border-2 border-black bg-stats-panel p-5 shadow-[var(--shadow-lift)] dark:border-accent/40 dark:bg-white sm:p-7">
         {/* Subtle gradient accent at top */}
         <div className="absolute -top-1 left-1/2 h-1 w-24 -translate-x-1/2 rounded-full bg-gradient-to-r from-transparent via-accent to-transparent" aria-hidden />
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-border dark:divide-black/15">
           {stats.map((stat, i) => {
             const Icon = ICONS[i % ICONS.length]!;
             const parsed = parseValue(stat.value);
