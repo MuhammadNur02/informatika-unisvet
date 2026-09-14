@@ -78,6 +78,29 @@ export const NAV: NavGroup[] = [
   { label: "Kontak", to: "/kontak" },
 ];
 
+/** Kelompokkan halaman yang bisa diedit sesuai kategori menu situs publik, untuk dropdown di Editor Konten. */
+export function pageGroups(availablePaths: string[]): { label: string; items: NavChild[] }[] {
+  const available = new Set(availablePaths);
+  const groups: { label: string; items: NavChild[] }[] = [];
+  const loose: NavChild[] = [];
+
+  for (const g of NAV) {
+    if (g.children && g.children.length) {
+      const items = g.children.filter((c) => available.has(c.to));
+      if (items.length) groups.push({ label: g.label, items });
+    } else if (available.has(g.to)) {
+      loose.push({ label: g.label, to: g.to });
+    }
+  }
+  if (loose.length) groups.push({ label: "Lainnya", items: loose });
+
+  const known = new Set(groups.flatMap((g) => g.items.map((i) => i.to)));
+  const unmatched = availablePaths.filter((p) => !known.has(p));
+  if (unmatched.length) groups.push({ label: "Lainnya", items: unmatched.map((to) => ({ label: to, to })) });
+
+  return groups;
+}
+
 export const PORTAL_LINKS = [
   { label: "SIAKAD", href: "https://siakad.ivet.ac.id" },
   { label: "E-Learning", href: "https://elearning.ivet.ac.id" },

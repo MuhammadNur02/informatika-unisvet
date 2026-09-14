@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fetchPesan, tandaiPesan, hapusPesan } from "@/lib/kontak";
+import { friendlyError } from "@/lib/friendly-error";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -52,7 +53,7 @@ export function PesanInbox() {
       await queryClient.invalidateQueries({ queryKey: ["pesan-kontak"] });
     } catch (err) {
       toast.error("Gagal memperbarui status", {
-        description: err instanceof Error ? err.message : "Silakan coba lagi.",
+        description: friendlyError(err),
       });
     } finally {
       setBusyId(null);
@@ -67,7 +68,7 @@ export function PesanInbox() {
       await queryClient.invalidateQueries({ queryKey: ["pesan-kontak"] });
     } catch (err) {
       toast.error("Gagal menghapus pesan", {
-        description: err instanceof Error ? err.message : "Silakan coba lagi.",
+        description: friendlyError(err),
       });
     } finally {
       setBusyId(null);

@@ -152,47 +152,59 @@ export const PROFIL_PAGES: Record<string, PageContent> = {
         type: "people",
         title: "Dosen Tetap & Pejabat Struktural",
         items: [
-          { 
-            name: "R. Irlanto Sudomo", 
-            degree: "M.Pd.", 
-            role: "Wakil Rektor II Unisvet", 
-            interest: "Pendidikan, Profesi Kependidikan, & Manajemen Tata Kelola Institusi", 
-            photo: dosen1 
+          {
+            name: "R. Irlanto Sudomo",
+            degree: "M.Pd.",
+            role: "Wakil Rektor II Unisvet",
+            interest: "Pendidikan, Profesi Kependidikan, & Manajemen Tata Kelola Institusi",
+            photo: dosen1,
+            photoPosX: 50,
+            photoPosY: 25,
           },
-          { 
-            name: "Dr. Herry Sulendro Mangiri", 
-            degree: "S.T., M.Eng.", 
-            role: "Dekan F. Maritim", 
-            interest: "Teknik, Invensi Teknologi Terapan, & Penjaminan Mutu", 
-            photo: dosen2 
+          {
+            name: "Dr. Herry Sulendro Mangiri",
+            degree: "S.T., M.Eng.",
+            role: "Dekan F. Maritim",
+            interest: "Teknik, Invensi Teknologi Terapan, & Penjaminan Mutu",
+            photo: dosen2,
+            photoPosX: 50,
+            photoPosY: 25,
           },
-          { 
-            name: "Dr. Afis Pratama", 
-            degree: "S.T., M.Pd.", 
-            role: "Ka. LPPM Unisvet", 
-            interest: "Pendidikan Informatika & Penjaminan Mutu Akademik", 
-            photo: dosen3 
+          {
+            name: "Dr. Afis Pratama",
+            degree: "S.T., M.Pd.",
+            role: "Ka. LPPM Unisvet",
+            interest: "Pendidikan Informatika & Penjaminan Mutu Akademik",
+            photo: dosen3,
+            photoPosX: 50,
+            photoPosY: 25,
           },
-          { 
-            name: "Handini Arga Damar Rani", 
-            degree: "M.Kom.", 
-            role: "Ka. Lab. TIK F.SAINTEK", 
-            interest: "Data Mining & Ilmu Komputer", 
-            photo: dosen4 
+          {
+            name: "Handini Arga Damar Rani",
+            degree: "M.Kom.",
+            role: "Ka. Lab. TIK F.SAINTEK",
+            interest: "Data Mining & Ilmu Komputer",
+            photo: dosen4,
+            photoPosX: 50,
+            photoPosY: 25,
           },
-          { 
-            name: "Adi Nova Trisetiyanto", 
-            degree: "S.Pd., M.Pd.", 
-            role: "Ka. Prodi P. Informatika", 
-            interest: "Media Pembelajaran Digital & Research & Development", 
-            photo: dosen5 
+          {
+            name: "Adi Nova Trisetiyanto",
+            degree: "S.Pd., M.Pd.",
+            role: "Ka. Prodi P. Informatika",
+            interest: "Media Pembelajaran Digital & Research & Development",
+            photo: dosen5,
+            photoPosX: 50,
+            photoPosY: 25,
           },
-          { 
-            name: "Henny Prasetyani", 
-            degree: "M.Pd.", 
-            role: "Koord. PMB P. Informatika", 
-            interest: "Teknologi Informasi & Pengabdian Masyarakat", 
-            photo: dosen6 
+          {
+            name: "Henny Prasetyani",
+            degree: "M.Pd.",
+            role: "Koord. PMB P. Informatika",
+            interest: "Teknologi Informasi & Pengabdian Masyarakat",
+            photo: dosen6,
+            photoPosX: 50,
+            photoPosY: 25,
           },
         ],
       },

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Download, FileText, Loader2, Trash2, UploadCloud } from "lucide-react";
@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
+import { FileDropzone } from "@/components/admin/FileDropzone";
 import {
   fetchDokumen,
   uploadDokumen,
@@ -16,12 +17,12 @@ import {
   formatUkuran,
   KATEGORI_DOKUMEN,
 } from "@/lib/dokumen";
+import { friendlyError } from "@/lib/friendly-error";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
 export function DokumenManager({ userId }: { userId: string }) {
   const queryClient = useQueryClient();
-  const fileRef = useRef<HTMLInputElement>(null);
   const [judul, setJudul] = useState("");
   const [deskripsi, setDeskripsi] = useState("");
   const [kategori, setKategori] = useState<string>(KATEGORI_DOKUMEN[0]);
@@ -52,7 +53,6 @@ export function DokumenManager({ userId }: { userId: string }) {
       setJudul("");
       setDeskripsi("");
       setFile(null);
-      if (fileRef.current) fileRef.current.value = "";
       toast.success("Dokumen berhasil diunggah", {
         id,
         description: "Dokumen langsung bisa diunduh di halaman publik.",
@@ -61,7 +61,7 @@ export function DokumenManager({ userId }: { userId: string }) {
     } catch (err) {
       toast.error("Gagal mengunggah dokumen", {
         id,
-        description: err instanceof Error ? err.message : "Silakan coba lagi.",
+        description: friendlyError(err),
       });
     } finally {
       setBusy(false);
@@ -79,7 +79,7 @@ export function DokumenManager({ userId }: { userId: string }) {
       await queryClient.invalidateQueries({ queryKey: ["dokumen"] });
     } catch (err) {
       toast.error("Gagal mengubah urutan", {
-        description: err instanceof Error ? err.message : "Silakan coba lagi.",
+        description: friendlyError(err),
       });
     } finally {
       setBusyId(null);
@@ -94,7 +94,7 @@ export function DokumenManager({ userId }: { userId: string }) {
       await queryClient.invalidateQueries({ queryKey: ["dokumen"] });
     } catch (err) {
       toast.error("Gagal menghapus dokumen", {
-        description: err instanceof Error ? err.message : "Silakan coba lagi.",
+        description: friendlyError(err),
       });
     } finally {
       setBusyId(null);
@@ -112,17 +112,16 @@ export function DokumenManager({ userId }: { userId: string }) {
         <form onSubmit={handleUpload} className="mt-6 space-y-5">
           <div className="space-y-2">
             <Label htmlFor="dokumen-file">Berkas</Label>
-            <Input
-              ref={fileRef}
+            <FileDropzone
               id="dokumen-file"
-              type="file"
               accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
-              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+              hint="PDF, Word, Excel, atau PowerPoint"
+              file={file}
+              onFile={setFile}
+              isImage={false}
             />
             {file ? (
-              <p className="truncate text-xs text-muted-foreground">
-                {file.name} • {formatUkuran(file.size)}
-              </p>
+              <p className="truncate text-xs text-muted-foreground">{formatUkuran(file.size)}</p>
             ) : null}
           </div>
           <div className="space-y-2">

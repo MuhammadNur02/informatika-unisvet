@@ -40,6 +40,9 @@ import {
   type BeritaItem,
 } from "@/lib/berita";
 import { uploadMedia } from "@/lib/cms";
+import { friendlyError } from "@/lib/friendly-error";
+import { useUnsavedGuard } from "@/lib/use-unsaved-guard";
+import { FileDropzone } from "@/components/admin/FileDropzone";
 
 type Draft = {
   id?: string;
@@ -69,7 +72,10 @@ function emptyDraft(): Draft {
 export function BeritaEditor({ userId }: { userId: string }) {
   const queryClient = useQueryClient();
   const [draft, setDraft] = useState<Draft>(emptyDraft);
+  const [baseline, setBaseline] = useState<Draft>(draft);
   const [busy, setBusy] = useState(false);
+  const isDirty = JSON.stringify(draft) !== JSON.stringify(baseline);
+  useUnsavedGuard(isDirty);
   const [uploading, setUploading] = useState(false);
   const [pendingDelete, setPendingDelete] = useState<BeritaItem | null>(null);
   const [search, setSearch] = useState("");
@@ -97,6 +103,11 @@ export function BeritaEditor({ userId }: { userId: string }) {
     setDraft((d) => ({ ...d, ...next }));
   }
 
+  function resetDraft(next: Draft = emptyDraft()) {
+    setDraft(next);
+    setBaseline(next);
+  }
+
   async function handleImage(file: File | null) {
     if (!file) return;
     if (!file.type.startsWith("image/")) {
@@ -113,7 +124,7 @@ export function BeritaEditor({ userId }: { userId: string }) {
     } catch (err) {
       toast.error("Gagal mengunggah gambar", {
         id,
-        description: err instanceof Error ? err.message : "Silakan coba lagi.",
+        description: friendlyError(err),
       });
     } finally {
       setUploading(false);
@@ -130,13 +141,13 @@ export function BeritaEditor({ userId }: { userId: string }) {
         id,
         description: draft.published ? "Sudah tampil di halaman publik." : "Disimpan sebagai draf.",
       });
-      setDraft(emptyDraft());
+      resetDraft();
       await queryClient.invalidateQueries({ queryKey: ["berita-admin"] });
       await queryClient.invalidateQueries({ queryKey: ["berita-publik"] });
     } catch (err) {
       toast.error("Gagal menyimpan berita", {
         id,
-        description: err instanceof Error ? err.message : "Silakan coba lagi.",
+        description: friendlyError(err),
       });
     } finally {
       setBusy(false);
@@ -149,13 +160,13 @@ export function BeritaEditor({ userId }: { userId: string }) {
     setPendingDelete(null);
     try {
       await deleteBerita(item.id);
-      if (draft.id === item.id) setDraft(emptyDraft());
+      if (draft.id === item.id) resetDraft();
       toast.success("Berita dihapus", { description: item.judul });
       await queryClient.invalidateQueries({ queryKey: ["berita-admin"] });
       await queryClient.invalidateQueries({ queryKey: ["berita-publik"] });
     } catch (err) {
       toast.error("Gagal menghapus berita", {
-        description: err instanceof Error ? err.message : "Silakan coba lagi.",
+        description: friendlyError(err),
       });
     }
   }
@@ -173,7 +184,7 @@ export function BeritaEditor({ userId }: { userId: string }) {
             </p>
           </div>
           {draft.id ? (
-            <Button type="button" variant="outline" size="sm" onClick={() => setDraft(emptyDraft())}>
+            <Button type="button" variant="outline" size="sm" onClick={() => resetDraft()}>
               <X /> Batal
             </Button>
           ) : null}
@@ -253,25 +264,14 @@ export function BeritaEditor({ userId }: { userId: string }) {
 
           <div className="space-y-2">
             <Label htmlFor="b-gambar">Foto Berita</Label>
-            {draft.gambar_url ? (
-              <div className="relative overflow-hidden rounded-2xl border border-border">
-                <img src={draft.gambar_url} alt="Pratinjau foto berita" className="aspect-[4/3] w-full object-cover" />
-                <button
-                  type="button"
-                  aria-label="Hapus foto"
-                  onClick={() => patch({ gambar_url: "" })}
-                  className="absolute right-3 top-3 inline-flex size-8 items-center justify-center rounded-full bg-primary-deep/70 text-primary-foreground backdrop-blur"
-                >
-                  <X className="size-4" />
-                </button>
-              </div>
-            ) : null}
-            <Input
+            <FileDropzone
               id="b-gambar"
-              type="file"
               accept="image/*"
+              hint="JPG, PNG, atau WEBP"
+              file={null}
+              previewUrl={draft.gambar_url || null}
+              onFile={(f) => handleImage(f)}
               disabled={uploading}
-              onChange={(e) => handleImage(e.target.files?.[0] ?? null)}
             />
             <p className="text-xs text-muted-foreground">
               {uploading ? "Mengunggah…" : "Foto otomatis tersimpan di pustaka media."}
@@ -373,7 +373,7 @@ export function BeritaEditor({ userId }: { userId: string }) {
                         variant="outline"
                         size="sm"
                         onClick={() =>
-                          setDraft({
+                          resetDraft({
                             id: item.id,
                             judul: item.judul,
                             kategori: item.kategori,
