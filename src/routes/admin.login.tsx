@@ -65,7 +65,7 @@ function AdminLogin() {
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-hero-gradient px-4 py-16">
       <div className="pointer-events-none absolute inset-0" />
-      <AdminStarfield showShootingStars={false} />
+      <AdminStarfield />
       <AdminEmbers />
       <motion.div
         aria-hidden

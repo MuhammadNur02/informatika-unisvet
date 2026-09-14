@@ -286,27 +286,6 @@
   }
 }
 
-@keyframes shooting-star {
-  0% {
-    transform: translate3d(0, 0, 0) rotate(var(--sa));
-    opacity: 0;
-  }
-  4% {
-    opacity: 1;
-  }
-  22% {
-    opacity: 1;
-  }
-  30% {
-    transform: translate3d(var(--sx), var(--sy), 0) rotate(var(--sa));
-    opacity: 0;
-  }
-  100% {
-    transform: translate3d(var(--sx), var(--sy), 0) rotate(var(--sa));
-    opacity: 0;
-  }
-}
-
 /*
  * Percik bara api naik dari bawah lalu meredup — lahir kuning-putih panas,
  * lewat oranye lalu merah tua, dan akhirnya menghitam sambil menghilang.
