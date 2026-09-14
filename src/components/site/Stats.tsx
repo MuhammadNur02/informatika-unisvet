@@ -21,7 +21,7 @@ export function Stats() {
         {/* Subtle gradient accent at top */}
         <div className="absolute -top-1 left-1/2 h-1 w-24 -translate-x-1/2 rounded-full bg-gradient-to-r from-transparent via-accent to-transparent" aria-hidden />
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-border dark:divide-black/15">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:divide-x-2 lg:divide-black/20">
           {stats.map((stat, i) => {
             const Icon = ICONS[i % ICONS.length]!;
             const parsed = parseValue(stat.value);
