@@ -21,7 +21,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { AdminStarfield } from "@/components/admin/AdminStarfield";
-import { AdminEmbers } from "@/components/admin/AdminEmbers";
+import { EmberField } from "@/components/site/EmberField";
 import { AdminMarquee } from "@/components/admin/AdminMarquee";
 import { cn } from "@/lib/utils";
 
@@ -216,7 +216,7 @@ export function AdminShell({
   return (
     <div className="min-h-screen bg-slate-surface">
       <AdminStarfield />
-      <AdminEmbers />
+      <EmberField />
 
       {/* Desktop sidebar — bisa disembunyikan lewat tombol menu di header */}
       <motion.aside

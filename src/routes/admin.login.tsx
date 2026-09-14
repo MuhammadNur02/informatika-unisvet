@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AdminEmbers } from "@/components/admin/AdminEmbers";
+import { EmberField } from "@/components/site/EmberField";
 import { AdminStarfield } from "@/components/admin/AdminStarfield";
 
 export const Route = createFileRoute("/admin/login")({
@@ -66,7 +66,7 @@ function AdminLogin() {
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-hero-gradient px-4 py-16">
       <div className="pointer-events-none absolute inset-0" />
       <AdminStarfield />
-      <AdminEmbers />
+      <EmberField />
       <motion.div
         aria-hidden
         animate={{ scale: [1, 1.15, 1], opacity: [0.35, 0.55, 0.35] }}

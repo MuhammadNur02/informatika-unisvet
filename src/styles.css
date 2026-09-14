@@ -491,6 +491,18 @@
   background-image: var(--gradient-hero);
 }
 
+/* Gradien footer situs — hitam pekat di atas, meredup lewat merah tua, jadi pijar oranye hangat di dasar (meniru foto referensi percikan bara api). */
+@utility bg-footer-ember {
+  background-image: linear-gradient(
+    to bottom,
+    oklch(0.035 0.01 20) 0%,
+    oklch(0.07 0.03 20) 38%,
+    oklch(0.13 0.06 25) 68%,
+    oklch(0.2 0.09 30) 88%,
+    oklch(0.24 0.1 35) 100%
+  );
+}
+
 @utility bg-gradient-advantages {
   background-image: var(--gradient-advantages);
 }

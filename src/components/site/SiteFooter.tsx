@@ -2,6 +2,7 @@ import { MapPin, Mail, Phone, MessageCircle, Instagram, Facebook, Youtube, Music
 import { Link } from "@tanstack/react-router";
 import logo from "@/assets/logo-unisvet.png";
 import { useFooterContent } from "@/lib/site-content";
+import { EmberField } from "@/components/site/EmberField";
 
 const LINKS = [
   { label: "Beranda", to: "/" },
@@ -33,8 +34,9 @@ export function SiteFooter() {
   ].filter((s) => !!s.href);
 
   return (
-    <footer id="kontak" className="bg-primary-deep text-hero-foreground">
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <footer id="kontak" className="relative overflow-hidden bg-footer-ember text-hero-foreground">
+      <EmberField className="absolute inset-0" />
+      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3">
