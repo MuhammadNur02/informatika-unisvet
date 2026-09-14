@@ -45,7 +45,7 @@ export function Advantages() {
                   className="absolute inset-0"
                   style={{
                     background:
-                      "linear-gradient(to top, oklch(from var(--primary-deep) l c h / 0.94) 0%, oklch(from var(--primary-deep) l c h / 0.6) 40%, oklch(from var(--primary-deep) l c h / 0.05) 75%)",
+                      "linear-gradient(to top, oklch(0.08 0 0 / 0.88) 0%, oklch(0.08 0 0 / 0.45) 28%, oklch(0.08 0 0 / 0) 55%)",
                   }}
                 />
                 <div className="relative">

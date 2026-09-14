@@ -48,7 +48,7 @@ export function Tracks() {
                   className={cn(
                     "relative inline-flex items-center gap-2 overflow-hidden rounded-full border px-4 py-2.5 text-sm font-semibold transition-colors duration-300",
                     indicated
-                      ? "border-transparent text-hero-foreground"
+                      ? "border-transparent bg-primary text-hero-foreground"
                       : "border-border bg-card text-foreground/70 hover:border-accent/50 hover:text-primary hover:shadow-[var(--shadow-glow-accent)]",
                   )}
                 >
