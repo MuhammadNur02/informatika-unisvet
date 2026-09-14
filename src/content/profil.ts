@@ -158,6 +158,7 @@ export const PROFIL_PAGES: Record<string, PageContent> = {
             photo: dosen1,
             photoPosX: 50,
             photoPosY: 25,
+            message: "Pendidikan yang baik lahir dari niat yang kuat dan proses yang konsisten. Tetap semangat membangun masa depan lewat ilmu.",
           },
           {
             name: "Dr. Herry Sulendro Mangiri",
@@ -167,6 +168,7 @@ export const PROFIL_PAGES: Record<string, PageContent> = {
             photo: dosen2,
             photoPosX: 50,
             photoPosY: 25,
+            message: "Teknologi terbaik lahir dari rasa ingin tahu yang tidak pernah berhenti. Teruslah mencoba, teruslah berinovasi.",
           },
           {
             name: "Dr. Afis Pratama",
@@ -176,6 +178,7 @@ export const PROFIL_PAGES: Record<string, PageContent> = {
             photo: dosen3,
             photoPosX: 50,
             photoPosY: 25,
+            message: "Kualitas bukan kebetulan, melainkan hasil kerja keras dan ketekunan. Jadilah generasi yang berani belajar dan terus berkembang.",
           },
           {
             name: "Handini Arga Damar Rani",
@@ -185,6 +188,7 @@ export const PROFIL_PAGES: Record<string, PageContent> = {
             photo: dosen4,
             photoPosX: 50,
             photoPosY: 25,
+            message: "Di balik setiap baris kode ada peluang untuk menyelesaikan masalah nyata. Jangan takut mencoba dan gagal, itu bagian dari belajar.",
           },
           {
             name: "Adi Nova Trisetiyanto",
@@ -194,6 +198,7 @@ export const PROFIL_PAGES: Record<string, PageContent> = {
             photo: dosen5,
             photoPosX: 50,
             photoPosY: 25,
+            message: "Jadilah pendidik yang terus belajar sebelum mengajar. Dunia digital berubah cepat, dan kalianlah generasi yang akan memimpinnya.",
           },
           {
             name: "Henny Prasetyani",
@@ -203,6 +208,7 @@ export const PROFIL_PAGES: Record<string, PageContent> = {
             photo: dosen6,
             photoPosX: 50,
             photoPosY: 25,
+            message: "Setiap langkah menuju kampus ini adalah awal dari perjalanan besar. Selamat datang, dan jangan pernah berhenti bermimpi.",
           },
         ],
       },

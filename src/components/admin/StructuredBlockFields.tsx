@@ -335,7 +335,16 @@ export function StructuredBlockFields({
           label="Daftar orang"
           addLabel="Tambah orang"
           items={block.items}
-          blank={() => ({ name: "", role: "", degree: "", interest: "", photo: "", photoPosX: 50, photoPosY: 50 })}
+          blank={() => ({
+            name: "",
+            role: "",
+            degree: "",
+            interest: "",
+            photo: "",
+            photoPosX: 50,
+            photoPosY: 50,
+            message: "",
+          })}
           onChange={(items) => onChange({ ...block, items })}
           render={(item, update) => (
             <div className="grid gap-3 sm:grid-cols-2">
@@ -347,6 +356,15 @@ export function StructuredBlockFields({
                 value={item.interest}
                 onChange={(interest) => update({ ...item, interest })}
               />
+              <div className="sm:col-span-2">
+                <Field
+                  label="Pesan/kata semangat untuk mahasiswa (opsional, tampil saat kartu profil dibuka)"
+                  rows={3}
+                  value={item.message ?? ""}
+                  onChange={(message) => update({ ...item, message })}
+                  placeholder="Pastikan kalimat ini sudah disetujui oleh dosen yang bersangkutan sebelum diterbitkan."
+                />
+              </div>
               <div className="space-y-2 sm:col-span-2">
                 <Label>Foto</Label>
                 <Picker media={media} kind="image" onPick={(photo) => update({ ...item, photo })} />

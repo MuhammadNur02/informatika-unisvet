@@ -55,6 +55,7 @@ const DOSEN_CARD_BODY = (
   photoClass: string,
   nameClass: string,
   roleClass: string,
+  showMessage = false,
 ) => (
   <>
     <div className={`shrink-0 overflow-hidden rounded-3xl bg-hero-foreground/10 ${photoClass}`}>
@@ -74,6 +75,12 @@ const DOSEN_CARD_BODY = (
 
     <h3 className={`leading-snug text-hero-foreground ${nameClass}`}>{d.name}</h3>
     <p className={`mt-1 font-semibold text-accent ${roleClass}`}>{d.role}</p>
+
+    {showMessage && d.message ? (
+      <p className="mx-auto mt-6 max-w-sm text-balance text-base italic leading-relaxed text-hero-foreground/80">
+        &ldquo;{d.message}&rdquo;
+      </p>
+    ) : null}
 
     <div className="mt-auto flex w-full items-center justify-center border-t border-hero-foreground/15 pt-4">
       <span className="inline-block rounded-full bg-hero-foreground/10 px-3.5 py-1.5 text-xs font-semibold text-hero-foreground/85">
@@ -167,7 +174,7 @@ function DosenCard({ d, delay }: { d: DosenItem; delay: number }) {
               }}
               className="card-glass-dark fixed inset-0 z-[101] m-auto flex h-[min(85vh,780px)] w-[min(92vw,640px)] flex-col items-center justify-center overflow-hidden rounded-[2rem] p-10 text-center"
             >
-              {DOSEN_CARD_BODY(d, "mb-7 h-56 w-56", "text-3xl font-bold", "text-lg")}
+              {DOSEN_CARD_BODY(d, "mb-7 h-56 w-56", "text-3xl font-bold", "text-lg", true)}
               <div
                 className="pointer-events-none absolute inset-0 rounded-[2rem] transition-opacity duration-300 mix-blend-screen"
                 style={{ opacity: pointer.active ? 1 : 0, background: lightGlowBackground(pointer.mx, pointer.my) }}
