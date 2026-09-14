@@ -41,7 +41,13 @@ export function Advantages() {
                   transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
                   className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-hero-gradient opacity-90" />
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      "linear-gradient(to top, oklch(from var(--primary-deep) l c h / 0.94) 0%, oklch(from var(--primary-deep) l c h / 0.6) 40%, oklch(from var(--primary-deep) l c h / 0.05) 75%)",
+                  }}
+                />
                 <div className="relative">
                   <span className="inline-flex size-14 items-center justify-center rounded-2xl bg-hero-foreground/15 text-hero-foreground icon-glow transition-transform duration-300 group-hover:scale-110">
                     <FeaturedIcon className="size-6" />
