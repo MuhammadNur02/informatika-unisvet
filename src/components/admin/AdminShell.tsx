@@ -21,6 +21,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/site/ThemeToggle";
+import { AdminStarfield } from "@/components/admin/AdminStarfield";
 import { cn } from "@/lib/utils";
 
 type NavItem = {
@@ -205,6 +206,8 @@ export function AdminShell({
 
   return (
     <div className="min-h-screen bg-slate-surface">
+      <AdminStarfield />
+
       {/* Desktop sidebar — bisa disembunyikan lewat tombol menu di header */}
       <motion.aside
         initial={false}
