@@ -277,11 +277,9 @@
 }
 
 /*
- * Langit berbintang dekoratif — dipakai di dashboard admin (mode gelap +
- * tema admin) dan di beranda situs publik (mode gelap saja, dibatasi ke
- * rentang section tertentu lewat class "is-visible" yang diatur JS via
- * IntersectionObserver). Posisinya fixed terhadap viewport sehingga tetap
- * diam di tempat walau konten di atasnya digulir.
+ * Langit berbintang dekoratif dashboard admin — mode gelap + tema admin
+ * saja. Posisinya fixed terhadap viewport sehingga tetap diam di tempat
+ * walau konten di atasnya digulir.
  */
 .admin-starfield {
   opacity: 0;
@@ -294,15 +292,19 @@
   visibility: visible;
 }
 
-.site-starfield {
+/*
+ * Bintang berkedip kecil yang menyatu dengan efek sapuan cahaya lensa
+ * (LensFlare) di tiap section beranda — bukan layer terpisah, jadi
+ * lokasinya otomatis mengikuti section tempat LensFlare dipasang. Hanya
+ * tampak saat mode gelap aktif.
+ */
+.lens-flare-stars {
   opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.7s ease;
+  transition: opacity 0.5s ease;
 }
 
-.dark .site-starfield.is-visible {
+.dark .lens-flare-stars {
   opacity: 1;
-  visibility: visible;
 }
 
 @keyframes star-twinkle {
@@ -340,7 +342,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .admin-starfield span,
-  .site-starfield span {
+  .lens-flare-stars span {
     animation: none !important;
   }
 }

@@ -11,6 +11,8 @@ function seededRandom(seed: string, salt = 0) {
   return Math.abs((h % 1000) / 1000);
 }
 
+const STAR_COUNT = 22;
+
 /**
  * Pengganti dekorasi blob mengambang yang berjalan terus-menerus: satu sapuan
  * cahaya lensa lembut (berkas cahaya + inti glow + cincin iris + titik pantulan)
@@ -18,6 +20,8 @@ function seededRandom(seed: string, salt = 0) {
  * muncul, melintas diagonal, lalu memudar saat section meninggalkan viewport.
  * Ukuran & lintasan tiap elemen dirandom berdasarkan `seed` (unik per section)
  * supaya setiap section terasa beda, tapi tetap konsisten antara server & client.
+ * Disertai taburan bintang kecil berkedip (hanya tampak di mode gelap) yang
+ * menyatu dengan cahaya & cincin iris, bukan layer terpisah.
  */
 export function LensFlare({ className = "", seed = "flare" }: { className?: string; seed?: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -35,6 +39,19 @@ export function LensFlare({ className = "", seed = "flare" }: { className?: stri
       rotateFrom: -14 + seededRandom(seed, 8) * 10,
       rotateTo: -2 + seededRandom(seed, 9) * 16,
     }),
+    [seed],
+  );
+
+  const stars = useMemo(
+    () =>
+      Array.from({ length: STAR_COUNT }, (_, i) => ({
+        id: i,
+        top: seededRandom(seed, 50 + i * 3.1) * 100,
+        left: seededRandom(seed, 90 + i * 5.7) * 100,
+        size: 1 + seededRandom(seed, 130 + i * 2.3) * 1.6,
+        duration: 2.2 + seededRandom(seed, 170 + i * 4.1) * 3.5,
+        delay: seededRandom(seed, 210 + i * 6.3) * 6,
+      })),
     [seed],
   );
 
@@ -103,6 +120,22 @@ export function LensFlare({ className = "", seed = "flare" }: { className?: stri
           filter: "blur(3px)",
         }}
       />
+      {/* Taburan bintang kecil berkedip — hanya tampak di mode gelap */}
+      <div className="lens-flare-stars absolute inset-0">
+        {stars.map((s) => (
+          <span
+            key={s.id}
+            className="absolute rounded-full bg-white"
+            style={{
+              top: `${s.top}%`,
+              left: `${s.left}%`,
+              width: s.size,
+              height: s.size,
+              animation: `star-twinkle ${s.duration}s ease-in-out ${s.delay}s infinite backwards`,
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 }

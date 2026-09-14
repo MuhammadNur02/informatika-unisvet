@@ -10,7 +10,6 @@ import { Faculty } from "@/components/site/Faculty";
 import { Testimonials } from "@/components/site/Testimonials";
 import { CtaBanner } from "@/components/site/CtaBanner";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { StarFieldRegion } from "@/components/site/StarFieldRegion";
 
 const title = "Pendidikan Informatika — Universitas Ivet (UNISVET) Semarang";
 const description =
@@ -35,13 +34,11 @@ function Index() {
       <main>
         <Hero />
         <Stats />
-        <StarFieldRegion>
-          <Advantages />
-          <VisiMisi />
-          <Tracks />
-          <News />
-          <Faculty />
-        </StarFieldRegion>
+        <Advantages />
+        <VisiMisi />
+        <Tracks />
+        <News />
+        <Faculty />
         <Testimonials />
         <CtaBanner />
       </main>
