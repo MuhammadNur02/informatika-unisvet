@@ -14,11 +14,11 @@ const REST: PointerGlowState = { rx: 0, ry: 0, mx: 50, my: 50, active: false };
  * sebelum sempat fade out. Cuma tilt & status aktif yang direset di sini;
  * keduanya properti yang memang bisa transisi mulus lewat CSS.
  */
-export function usePointerGlow(maxTilt = 8) {
-  const ref = useRef<HTMLDivElement>(null);
+export function usePointerGlow<T extends HTMLElement = HTMLElement>(maxTilt = 8) {
+  const ref = useRef<T>(null);
   const [pointer, setPointer] = useState<PointerGlowState>(REST);
 
-  function onPointerMove(e: PointerEvent<HTMLDivElement>) {
+  function onPointerMove(e: PointerEvent<T>) {
     const rect = ref.current?.getBoundingClientRect();
     if (!rect) return;
     const px = (e.clientX - rect.left) / rect.width;
