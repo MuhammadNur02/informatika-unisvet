@@ -15,6 +15,7 @@ export type Block =
         photo: string;
         photoPosX?: number;
         photoPosY?: number;
+        message?: string;
       }[];
     }
   | { type: "org"; title?: string; top: string; topName: string; nodes: { role: string; name: string }[] }
