@@ -1,7 +1,9 @@
+import { motion } from "motion/react";
 import { Layers, CalendarClock, MonitorSmartphone, Network } from "lucide-react";
 import { Reveal, SectionHeading } from "./Reveal";
 import { LensFlare } from "./LensFlare";
 import { useHomeContent } from "@/lib/site-content";
+import kegiatanPraktikum from "@/assets/hero-lab.jpg";
 
 const ICONS = [Layers, CalendarClock, MonitorSmartphone, Network];
 
@@ -27,12 +29,26 @@ export function Advantages() {
         <div className="mt-14 grid gap-6 lg:grid-cols-[1.1fr_1fr]">
           {featured ? (
             <Reveal>
-              <article className="card-elevated group flex h-full min-h-80 flex-col justify-end rounded-3xl bg-[image:var(--gradient-hero)] p-8 border-accent-glow">
-                <span className="inline-flex size-14 items-center justify-center rounded-2xl bg-hero-foreground/15 text-hero-foreground icon-glow transition-transform duration-300 group-hover:scale-110">
-                  <FeaturedIcon className="size-6" />
-                </span>
-                <h3 className="mt-6 text-2xl font-bold tracking-tight text-hero-foreground">{featured.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-hero-foreground/75">{featured.desc}</p>
+              <article className="card-elevated group relative flex h-full min-h-80 flex-col justify-end overflow-hidden rounded-3xl border-accent-glow p-8">
+                <motion.img
+                  src={kegiatanPraktikum}
+                  alt=""
+                  aria-hidden
+                  loading="lazy"
+                  initial={{ scale: 1.12 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-hero-gradient opacity-90" />
+                <div className="relative">
+                  <span className="inline-flex size-14 items-center justify-center rounded-2xl bg-hero-foreground/15 text-hero-foreground icon-glow transition-transform duration-300 group-hover:scale-110">
+                    <FeaturedIcon className="size-6" />
+                  </span>
+                  <h3 className="mt-6 text-2xl font-bold tracking-tight text-hero-foreground">{featured.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-hero-foreground/75">{featured.desc}</p>
+                </div>
               </article>
             </Reveal>
           ) : null}

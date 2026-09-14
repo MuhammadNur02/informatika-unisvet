@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ArrowUpRight, CalendarDays } from "lucide-react";
+import { ArrowUpRight, CalendarDays, Newspaper, Users, Megaphone, PartyPopper, CalendarClock } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Reveal, SectionHeading } from "./Reveal";
@@ -13,6 +13,14 @@ import labMultimedia from "@/assets/lab-multimedia.jpg";
 import labSmart from "@/assets/lab-smart.jpg";
 
 const PLACEHOLDERS = [labMultimedia, labSmart, labIot];
+
+const KATEGORI_ICON: Record<string, typeof Newspaper> = {
+  Berita: Newspaper,
+  Kegiatan: Users,
+  Pengumuman: Megaphone,
+  Event: PartyPopper,
+  Agenda: CalendarClock,
+};
 
 export function News() {
   const { news } = useHomeContent();
@@ -49,26 +57,36 @@ export function News() {
 
         <Reveal className="mt-10 flex justify-center">
           <div className="inline-flex rounded-full border border-border bg-card p-1 shadow-[var(--shadow-card)]">
-            {KATEGORI_BERITA.map((tab) => (
-              <button
-                key={tab}
-                type="button"
-                onClick={() => setActive(tab)}
-                className={cn(
-                  "relative rounded-full px-5 py-2 text-sm font-semibold transition-colors",
-                  active === tab ? "text-hero-foreground" : "text-muted-foreground hover:text-primary",
-                )}
-              >
-                {active === tab ? (
+            {KATEGORI_BERITA.map((tab) => {
+              const Icon = KATEGORI_ICON[tab] ?? Newspaper;
+              return (
+                <button
+                  key={tab}
+                  type="button"
+                  onClick={() => setActive(tab)}
+                  className={cn(
+                    "relative flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-semibold transition-colors",
+                    active === tab ? "text-hero-foreground" : "text-muted-foreground hover:text-primary",
+                  )}
+                >
+                  {active === tab ? (
+                    <motion.span
+                      layoutId="news-tab"
+                      className="absolute inset-0 rounded-full bg-[image:var(--gradient-gold)]"
+                      transition={{ type: "spring", stiffness: 320, damping: 30 }}
+                    />
+                  ) : null}
                   <motion.span
-                    layoutId="news-tab"
-                    className="absolute inset-0 rounded-full bg-[image:var(--gradient-gold)]"
-                    transition={{ type: "spring", stiffness: 320, damping: 30 }}
-                  />
-                ) : null}
-                <span className="relative">{tab}</span>
-              </button>
-            ))}
+                    className="relative inline-flex"
+                    animate={active === tab ? { rotate: [0, -12, 12, 0] } : { rotate: 0 }}
+                    transition={{ duration: 0.4, ease: "easeInOut" }}
+                  >
+                    <Icon className="size-3.5" />
+                  </motion.span>
+                  <span className="relative">{tab}</span>
+                </button>
+              );
+            })}
           </div>
         </Reveal>
 
