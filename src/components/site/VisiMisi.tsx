@@ -12,11 +12,6 @@ export function VisiMisi() {
       {/* Mesh gradient statis + sapuan cahaya lensa yang mengikuti scroll */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-40" aria-hidden />
       <LensFlare seed="profil" />
-      <Eye
-        className="pointer-events-none absolute -right-6 -top-6 size-64 text-hero-foreground/5 sm:size-80"
-        strokeWidth={0.6}
-        aria-hidden
-      />
 
       <div className="relative mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-14 lg:px-8">
         <Reveal>

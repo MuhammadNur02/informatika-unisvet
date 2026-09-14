@@ -6,24 +6,26 @@ function seededRandom(seed: number) {
   return x - Math.floor(x);
 }
 
-const STAR_COUNT = 110;
-const SHOOTING_STAR_COUNT = 4;
+const STAR_COUNT = 100;
+const SHOOTING_STAR_COUNT = 3;
 
 /**
- * Langit berbintang untuk latar dashboard admin mode gelap — dipasang fixed
- * terhadap viewport (bukan ikut scroll konten) supaya bintangnya "tertinggal
- * di tempat" saat halaman digulir. Hanya terlihat saat .dark + .admin-theme
- * aktif bersamaan (lihat styles.css); di luar itu selalu tersembunyi.
+ * Langit berbintang dekoratif untuk beranda mode gelap. Fixed terhadap
+ * viewport (bukan ikut scroll konten) supaya bintangnya "tertinggal di
+ * tempat" saat halaman digulir — sama seperti di dashboard admin. Hanya
+ * tampak saat mode gelap AKTIF dan `visible` true (dikontrol pembungkusnya
+ * lewat IntersectionObserver, supaya cuma nyala sepanjang rentang section
+ * tertentu, bukan di seluruh halaman).
  */
-export function AdminStarfield() {
+export function StarField({ visible }: { visible: boolean }) {
   const stars = useMemo(
     () =>
       Array.from({ length: STAR_COUNT }, (_, i) => {
-        const top = seededRandom(i * 12.9898 + 1) * 100;
-        const left = seededRandom(i * 78.233 + 1) * 100;
-        const size = 1 + seededRandom(i * 37.719 + 1) * 1.6;
-        const duration = 2.2 + seededRandom(i * 93.989 + 1) * 3.5;
-        const delay = seededRandom(i * 26.651 + 1) * 6;
+        const top = seededRandom(i * 11.311 + 3) * 100;
+        const left = seededRandom(i * 71.917 + 3) * 100;
+        const size = 1 + seededRandom(i * 34.271 + 3) * 1.6;
+        const duration = 2.2 + seededRandom(i * 89.113 + 3) * 3.5;
+        const delay = seededRandom(i * 23.657 + 3) * 6;
         return { id: i, top, left, size, duration, delay };
       }),
     [],
@@ -32,21 +34,24 @@ export function AdminStarfield() {
   const shootingStars = useMemo(
     () =>
       Array.from({ length: SHOOTING_STAR_COUNT }, (_, i) => {
-        const top = 4 + seededRandom(i * 15.234 + 7) * 45;
-        const left = seededRandom(i * 51.234 + 7) * 55;
-        const dx = 360 + seededRandom(i * 33.897 + 7) * 260;
-        const dy = 220 + seededRandom(i * 61.113 + 7) * 180;
+        const top = 4 + seededRandom(i * 14.891 + 11) * 45;
+        const left = seededRandom(i * 48.617 + 11) * 55;
+        const dx = 360 + seededRandom(i * 31.229 + 11) * 260;
+        const dy = 220 + seededRandom(i * 58.443 + 11) * 180;
         const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
-        const length = 110 + seededRandom(i * 44.31 + 7) * 90;
-        const duration = 7 + seededRandom(i * 71.51 + 7) * 6;
-        const delay = seededRandom(i * 19.71 + 7) * 14;
+        const length = 110 + seededRandom(i * 41.717 + 11) * 90;
+        const duration = 8 + seededRandom(i * 67.331 + 11) * 6;
+        const delay = seededRandom(i * 18.191 + 11) * 14;
         return { id: i, top, left, dx, dy, angle, length, duration, delay };
       }),
     [],
   );
 
   return (
-    <div aria-hidden className="admin-starfield pointer-events-none fixed inset-0 z-0 overflow-hidden">
+    <div
+      aria-hidden
+      className={`site-starfield pointer-events-none fixed inset-0 z-0 overflow-hidden ${visible ? "is-visible" : ""}`}
+    >
       {stars.map((s) => (
         <span
           key={s.id}
