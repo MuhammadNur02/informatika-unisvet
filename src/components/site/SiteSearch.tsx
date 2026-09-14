@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { FileDown, Images, Loader2, Newspaper, Search, Text } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import {
   CommandDialog,
   CommandEmpty,
@@ -93,7 +94,7 @@ async function fetchSearchItems(): Promise<SearchItem[]> {
 
 const TYPE_ICONS = { Halaman: Text, Berita: Newspaper, Galeri: Images, Dokumen: FileDown };
 
-export function SiteSearch({ compact = false }: { compact?: boolean }) {
+export function SiteSearch({ compact = false, className }: { compact?: boolean; className?: string }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -138,7 +139,7 @@ export function SiteSearch({ compact = false }: { compact?: boolean }) {
         aria-label="Cari isi situs"
         title="Cari isi situs"
         onClick={() => setOpen(true)}
-        className={compact ? "w-full justify-start" : "rounded-full"}
+        className={cn(compact ? "w-full justify-start" : "rounded-full", className)}
       >
         <Search />
         {compact ? <span>Cari isi situs</span> : null}

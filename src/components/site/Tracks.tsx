@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { GraduationCap, Code2, Palette, CheckCircle2 } from "lucide-react";
 import { Reveal, SectionHeading } from "./Reveal";
+import { LensFlare } from "./LensFlare";
 import { cn } from "@/lib/utils";
 
 const TRACKS = [
@@ -31,7 +32,7 @@ const TRACKS = [
       "Pemrograman Web (React & TypeScript) dan Mobile",
       "Keamanan Siber & Jaringan Komputer Terapan",
     ],
-    careers: ["Frontend/Backend Developer", "Mobile Developer", "QA & IT Support Specialist"],
+    careers: ["Frontend/Backend Developer", "Mobile Developer", "QA & Teknisi Dukungan Informatika"],
   },
   {
     id: "edtech",
@@ -55,11 +56,9 @@ export function Tracks() {
 
   return (
     <section id="kurikulum" className="relative overflow-hidden bg-gradient-tracks py-20 sm:py-28">
-      {/* Animated gradient mesh background */}
+      {/* Gradient mesh statis + sapuan cahaya lensa yang mengikuti scroll */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-50" aria-hidden />
-      {/* Floating decorative shapes */}
-      <div className="pointer-events-none absolute top-10 right-1/4 h-80 w-80 rounded-full bg-accent/5 blur-3xl float-shape-delayed" aria-hidden />
-      <div className="pointer-events-none absolute bottom-20 left-10 h-64 w-64 rounded-full bg-primary/5 blur-3xl float-shape-slow" aria-hidden />
+      <LensFlare seed="kurikulum" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading

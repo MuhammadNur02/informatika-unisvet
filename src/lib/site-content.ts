@@ -59,7 +59,7 @@ export const DEFAULT_HOME: HomeContent = {
   seo: {
     title: "Pendidikan Informatika — Universitas Ivet (UNISVET) Semarang",
     description:
-      "S1 Pendidikan Informatika UNISVET Semarang: mencetak pendidik IT profesional & inovator teknologi dengan kurikulum software development, cyber security, dan digital EdTech.",
+      "S1 Pendidikan Informatika UNISVET Semarang, terakreditasi Baik Sekali (LAMDIK): menyiapkan guru Informatika dan tenaga profesional bidang rekayasa perangkat lunak, jaringan, serta EdTech.",
     ogTitle: "Pendidikan Informatika — Universitas Ivet (UNISVET) Semarang",
     ogDescription:
       "Kuliah S1 Pendidikan Informatika di Semarang: kurikulum industri & EdTech, laboratorium modern, kelas reguler dan karyawan.",
@@ -67,44 +67,44 @@ export const DEFAULT_HOME: HomeContent = {
   },
   hero: {
     badge: "S1 Pendidikan Informatika — UNISVET",
-    titleLead: "Mencetak Pendidik IT Profesional &",
-    titleAccent: "Inovator Teknologi",
-    titleTail: "Masa Depan",
+    titleLead: "Menyiapkan Guru Informatika &",
+    titleAccent: "Talenta Teknologi",
+    titleTail: "yang Siap Kerja",
     subtitle:
-      "Mengintegrasikan keahlian pedagogi kependidikan dengan skill software development, cyber security & digital EdTech di Universitas Ivet Semarang.",
+      "Program studi yang memadukan ilmu kependidikan dengan keahlian informatika — pemrograman, jaringan, multimedia, hingga kecerdasan artifisial — di Universitas Ivet Semarang.",
     primaryLabel: "Daftar PMB Sekarang",
     secondaryLabel: "Lihat Kurikulum",
-    badges: ["Akreditasi LAMDIK Baik", "Kuliah Reguler & Blended Learning", "4 Laboratorium Modern"],
+    badges: ["Akreditasi LAMDIK Baik Sekali", "Kelas Reguler & Karyawan", "4 Laboratorium Praktik"],
     image: bannerAsset.url,
-    floating: ["Akreditasi Baik", "Kurikulum Berbasis Industri & EdTech", "Kelas Reguler & Karyawan"],
+    floating: ["Akreditasi Baik Sekali", "Kurikulum Berbasis Proyek", "Kelas Reguler & Karyawan"],
   },
   stats: [
     { value: "500+", label: "Mahasiswa Aktif" },
     { value: "1000+", label: "Alumni Berkarier" },
-    { value: "Baik", label: "Akreditasi LAMDIK" },
-    { value: "4", label: "Laboratorium Modern" },
+    { value: "Baik Sekali", label: "Akreditasi LAMDIK" },
+    { value: "4", label: "Laboratorium Praktik" },
   ],
   advantages: {
     eyebrow: "Keunggulan Prodi",
     title: "Mengapa Memilih Kami",
     description:
-      "Empat pilar yang membuat Pendidikan Informatika Universitas Ivet Semarang relevan dengan kebutuhan dunia pendidikan dan industri teknologi.",
+      "Empat hal yang membuat Pendidikan Informatika UNISVET jadi pilihan tepat bagi calon guru informatika sekaligus praktisi teknologi.",
     items: [
       {
-        title: "Dual Capability",
-        desc: "Lulusan siap menjadi pendidik IT profesional sekaligus software & web developer yang kompeten.",
+        title: "Dua Bekal Sekaligus",
+        desc: "Lulusan disiapkan menjadi guru Informatika bersertifikat sekaligus pengembang web/software yang kompeten — bukan salah satu saja.",
       },
       {
-        title: "Flexi-Learning",
-        desc: "Kelas reguler dan kelas karyawan dengan skema blended learning yang fleksibel bagi mahasiswa pekerja.",
+        title: "Kelas Ramah Pekerja",
+        desc: "Ada kelas reguler dan kelas karyawan dengan perkuliahan blended, jadi tetap bisa kuliah sambil bekerja.",
       },
       {
-        title: "Smart Lab & Microteaching Studio",
-        desc: "Laboratorium komputer lanjut, IoT, multimedia, dan studio microteaching untuk latihan mengajar terekam.",
+        title: "Laboratorium & Studio Microteaching",
+        desc: "Praktik langsung di lab komputer, lab IoT, dan studio microteaching berkamera untuk latihan mengajar.",
       },
       {
-        title: "Kemitraan Industri & Sekolah Mitra",
-        desc: "Kolaborasi luas dengan DUDI, startup teknologi, dan sekolah mitra untuk magang serta PLP.",
+        title: "Sekolah Mitra & Mitra Industri",
+        desc: "Jaringan sekolah mitra untuk PLP dan mitra dunia usaha/industri untuk magang mahasiswa.",
       },
     ],
   },
@@ -125,13 +125,13 @@ export const DEFAULT_HOME: HomeContent = {
     eyebrow: "Informasi Terkini",
     title: "Berita, Pengumuman & Agenda",
     description:
-      "Ikuti perkembangan terbaru dari Program Studi Pendidikan Informatika Universitas Ivet Semarang.",
+      "Kabar terbaru dari Program Studi Pendidikan Informatika Universitas Ivet Semarang.",
   },
   alumni: {
     eyebrow: "Alumni",
-    title: "Cerita Sukses Lulusan",
+    title: "Cerita Alumni",
     description:
-      "Alumni kami berkarya sebagai pendidik, spesialis TI, software engineer, hingga wirausahawan EdTech.",
+      "Sebagian cerita alumni Pendidikan Informatika UNISVET yang kini berkarya sebagai guru, software engineer, hingga perintis usaha EdTech.",
     items: [
       {
         name: "Dewi Larasati",
@@ -158,8 +158,8 @@ export const DEFAULT_HOME: HomeContent = {
   },
   cta: {
     badge: "Penerimaan Mahasiswa Baru 2026/2027",
-    title: "Mulai Langkahmu Menjadi Pendidik & Inovator Teknologi",
-    desc: "Bergabunglah dengan Program Studi Pendidikan Informatika Universitas Ivet Semarang. Kuota terbatas, tersedia beasiswa prestasi dan keringanan biaya studi.",
+    title: "Siap Kuliah di Pendidikan Informatika UNISVET?",
+    desc: "Bergabunglah dengan Program Studi Pendidikan Informatika Universitas Ivet Semarang. Kuota terbatas tiap gelombang, tersedia beasiswa prestasi dan keringanan biaya studi.",
     primaryLabel: "Daftar di Portal PMB",
     primaryHref: "https://pmb.unisvet.ac.id/",
     secondaryLabel: "Konsultasi Admisi",
@@ -169,7 +169,7 @@ export const DEFAULT_HOME: HomeContent = {
 
 export const DEFAULT_FOOTER: FooterContent = {
   about:
-    "Program studi yang memadukan kompetensi kependidikan dan teknologi informasi untuk mencetak pendidik serta profesional TI masa depan.",
+    "Program Studi Pendidikan Informatika Universitas Ivet Semarang — memadukan ilmu kependidikan dengan keahlian informatika untuk menyiapkan guru dan praktisi teknologi.",
   address:
     "Universitas Ivet, Jl. Pawiyatan Luhur IV No.18, Bendan Duwur, Kec. Gajahmungkur, Kota Semarang, Jawa Tengah 50235",
   phone: "(024) 8316375",

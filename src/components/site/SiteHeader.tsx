@@ -204,7 +204,9 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <SiteSearch />
+          <SiteSearch
+            className={cn(scrolled ? "text-primary hover:bg-secondary" : "text-hero-foreground hover:bg-hero-foreground/10")}
+          />
           <ThemeToggle
             className={cn(
               "hidden sm:inline-flex",

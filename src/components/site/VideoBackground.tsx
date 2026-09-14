@@ -14,8 +14,8 @@ export function VideoBackground({ className = "" }: { className?: string }) {
         <source src="/tech-bg.webm" type="video/webm" />
         <source src="/tech-bg.mp4" type="video/mp4" />
       </video>
-      <div className="absolute inset-0 bg-primary-deep/80 mix-blend-multiply" />
-      <div className="absolute inset-0 bg-hero-gradient opacity-50" />
+      <div className="absolute inset-0 bg-primary-deep/80 mix-blend-multiply dark:bg-primary-deep/40" />
+      <div className="absolute inset-0 bg-hero-gradient opacity-50 dark:opacity-25" />
     </div>
   );
 }

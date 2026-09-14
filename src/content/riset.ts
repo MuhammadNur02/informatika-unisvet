@@ -192,7 +192,7 @@ export const RISET_PAGES: Record<string, PageContent> = {
         head: ["Mitra", "Ruang Lingkup", "Bentuk Kegiatan"],
         rows: [
           ["SMA/SMK/MTs mitra", "Pendidikan", "PLP, asistensi mengajar, pelatihan guru"],
-          ["Software house & startup", "Industri TI", "Magang bersertifikat, kuliah praktisi, rekrutmen"],
+          ["Software house & startup", "Industri Teknologi", "Magang bersertifikat, kuliah praktisi, rekrutmen"],
           ["Komunitas developer", "Pengembangan kompetensi", "Workshop, bootcamp, mentoring"],
           ["Pemerintah daerah & desa", "Layanan masyarakat", "KKN tematik, digitalisasi layanan"],
           ["Perguruan tinggi mitra", "Akademik", "Pertukaran mahasiswa, riset kolaboratif, penyunting jurnal"],

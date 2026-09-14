@@ -141,7 +141,7 @@ export const KEMAHASISWAAN_PAGES: Record<string, PageContent> = {
           { label: "Total Alumni", value: "1000+" },
           { label: "Bekerja < 6 Bulan", value: "82%" },
           { label: "Bidang Pendidikan", value: "54%" },
-          { label: "Industri TI & Wirausaha", value: "38%" },
+          { label: "Industri Teknologi & Wirausaha", value: "38%" },
         ],
       },
       {
