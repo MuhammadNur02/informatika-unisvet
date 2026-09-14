@@ -11,6 +11,7 @@ const ICONS = [GraduationCap, Code2, Palette];
 export function Tracks() {
   const { tracks } = useHomeContent();
   const [active, setActive] = useState(tracks.items[0]?.id ?? "");
+  const [hovered, setHovered] = useState<string | null>(null);
   const activeIndex = Math.max(0, tracks.items.findIndex((t) => t.id === active));
   const current = tracks.items[activeIndex];
 
@@ -27,23 +28,42 @@ export function Tracks() {
         <SectionHeading eyebrow={tracks.eyebrow} title={tracks.title} description={tracks.description} />
 
         <Reveal className="mt-12">
-          <div className="mx-auto flex max-w-3xl flex-wrap justify-center gap-2">
+          <div
+            className="mx-auto flex max-w-3xl flex-wrap justify-center gap-2"
+            onMouseLeave={() => setHovered(null)}
+          >
             {tracks.items.map((t, i) => {
               const Icon = ICONS[i % ICONS.length]!;
+              const trulyActive = active === t.id;
+              // Pill mengikuti kursor saat hover (tanpa perlu klik); begitu
+              // pointer keluar dari grup tombol, kembali ke tab yang benar-benar
+              // dipilih — layoutId yang sama membuat transisinya meluncur mulus.
+              const indicated = (hovered ?? active) === t.id;
               return (
                 <button
                   key={t.id}
                   type="button"
                   onClick={() => setActive(t.id)}
+                  onMouseEnter={() => setHovered(t.id)}
                   className={cn(
-                    "inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-semibold transition-all duration-300",
-                    active === t.id
-                      ? "border-transparent bg-[image:var(--gradient-hero)] text-hero-foreground shadow-[var(--shadow-card)] pulse-glow"
+                    "relative inline-flex items-center gap-2 overflow-hidden rounded-full border px-4 py-2.5 text-sm font-semibold transition-colors duration-300",
+                    indicated
+                      ? "border-transparent text-hero-foreground"
                       : "border-border bg-card text-foreground/70 hover:border-accent/50 hover:text-primary hover:shadow-[var(--shadow-glow-accent)]",
                   )}
                 >
-                  <Icon className="size-4" />
-                  {t.label}
+                  {indicated ? (
+                    <motion.span
+                      layoutId="tracks-tab-pill"
+                      className={cn(
+                        "absolute inset-0 -z-10 rounded-full bg-hero-gradient shadow-(--shadow-card)",
+                        trulyActive && "pulse-glow",
+                      )}
+                      transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                    />
+                  ) : null}
+                  <Icon className="relative size-4" />
+                  <span className="relative">{t.label}</span>
                 </button>
               );
             })}
