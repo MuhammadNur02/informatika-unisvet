@@ -22,6 +22,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { AdminStarfield } from "@/components/admin/AdminStarfield";
 import { AdminEmbers } from "@/components/admin/AdminEmbers";
+import { AdminMarquee } from "@/components/admin/AdminMarquee";
 import { cn } from "@/lib/utils";
 
 type NavItem = {
@@ -310,6 +311,7 @@ export function AdminShell({
             </span>
           </div>
 
+          <AdminMarquee />
         </header>
 
         <main className="mx-auto max-w-[1600px] px-4 pb-16 pt-8 sm:px-6">{children}</main>

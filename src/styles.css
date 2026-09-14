@@ -397,6 +397,65 @@
   box-shadow: 0 8px 30px -18px oklch(0 0 0 / 0.6);
 }
 
+/* Pita teks berjalan di bawah header admin — lihat komentar di AdminMarquee.tsx untuk teknik loop mulusnya. */
+.admin-marquee {
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  border-top: 1px solid oklch(1 0 0 / 0.06);
+  background: linear-gradient(90deg, oklch(0.06 0.02 22) 0%, oklch(0.11 0.035 24) 50%, oklch(0.06 0.02 22) 100%);
+  padding-block: 0.5rem;
+}
+
+.admin-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: admin-marquee-scroll 26s linear infinite;
+}
+
+.admin-marquee-set {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.admin-marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding-inline: 0.875rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.admin-marquee-dot {
+  width: 4px;
+  height: 4px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 6px 1px oklch(from var(--accent) l c h / 0.6);
+}
+
+@keyframes admin-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-marquee-track {
+    animation: none;
+  }
+}
+
 @utility card-elevated {
   background: var(--color-card);
   border: 1px solid var(--color-border);
