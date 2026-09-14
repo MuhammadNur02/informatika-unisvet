@@ -24,9 +24,9 @@ export const PROFIL_PAGES: Record<string, PageContent> = {
         type: "prose",
         title: "Sekilas Prodi",
         paragraphs: [
-          "Program Studi Pendidikan Informatika Universitas Ivet Semarang hadir untuk menjawab kebutuhan guru informatika dan tenaga profesional teknologi di era transformasi digital. Kurikulum disusun berbasis Outcome Based Education (OBE) dan mengacu pada KKNI level 6.",
-          "Mahasiswa dibekali dua kompetensi sekaligus: kemampuan pedagogi untuk mengajar mata pelajaran Informatika di sekolah, serta keahlian teknis pengembangan perangkat lunak, jaringan, multimedia, dan kecerdasan artifisial.",
-          "Pembelajaran diselenggarakan dalam kelas reguler dan kelas karyawan dengan skema blended learning, sehingga fleksibel bagi mahasiswa yang telah bekerja maupun lulusan SMA/SMK/MA.",
+          "Program Studi Pendidikan Informatika berada di bawah Fakultas Ilmu Pendidikan Universitas Ivet (UNISVET) Semarang, dan sudah terakreditasi Baik Sekali oleh LAMDIK. Kurikulum disusun dengan pendekatan Outcome Based Education (OBE) mengacu KKNI level 6.",
+          "Mahasiswa dibekali dua kompetensi sekaligus: kemampuan pedagogik untuk mengajar mata pelajaran Informatika di sekolah, serta keterampilan teknis seperti pemrograman, jaringan komputer, multimedia, robotika, hingga kecerdasan artifisial.",
+          "Perkuliahan dibuka dalam kelas reguler dan kelas karyawan dengan skema blended learning, sehingga tetap bisa diikuti mahasiswa yang sudah bekerja maupun lulusan SMA/SMK/MA dari jurusan mana pun.",
         ],
       },
       {
@@ -145,7 +145,7 @@ export const PROFIL_PAGES: Record<string, PageContent> = {
     eyebrow: "Profil",
     title: "Dosen & Tenaga Kependidikan",
     description:
-      "Didampingi tenaga pengajar profesional dengan fokus riset pendidikan, teknologi informasi, manajemen institusi, serta tenaga kependidikan yang siap melayani.",
+      "Didampingi tenaga pengajar profesional dengan fokus riset pendidikan, informatika, manajemen institusi, serta tenaga kependidikan yang siap melayani.",
     metaTitle: "Dosen & Tendik — Pendidikan Informatika UNISVET Semarang",
     blocks: [
       {
@@ -253,14 +253,14 @@ export const PROFIL_PAGES: Record<string, PageContent> = {
     eyebrow: "Profil",
     title: "Akreditasi & Penjaminan Mutu",
     description:
-      "Program studi terakreditasi LAMDIK dengan sistem penjaminan mutu internal yang berjalan berkelanjutan.",
+      "Program studi terakreditasi Baik Sekali oleh LAMDIK, didukung sistem penjaminan mutu internal yang berjalan berkelanjutan.",
     metaTitle: "Akreditasi — Pendidikan Informatika UNISVET Semarang",
     blocks: [
       {
         type: "stats",
         title: "Status Akreditasi",
         items: [
-          { label: "Peringkat Prodi (LAMDIK)", value: "Baik" },
+          { label: "Peringkat Prodi (LAMDIK)", value: "Baik Sekali" },
           { label: "Akreditasi Institusi (BAN-PT)", value: "B" },
           { label: "Kurikulum", value: "OBE / KKNI 6" },
           { label: "Audit Mutu Internal", value: "1x / Tahun" },

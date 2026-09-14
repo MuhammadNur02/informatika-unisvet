@@ -1,4 +1,5 @@
 import { Reveal } from "./Reveal";
+import { LensFlare } from "./LensFlare";
 import labIot from "@/assets/lab-iot.jpg";
 import labSmart from "@/assets/lab-smart.jpg";
 import labMicroteaching from "@/assets/lab-microteaching.jpg";
@@ -90,14 +91,13 @@ export function Faculty() {
   return (
     <section id="dosen" className="relative overflow-hidden bg-hero-gradient py-20 sm:py-28">
       <div className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-40" aria-hidden />
-      <div className="pointer-events-none absolute top-20 right-10 h-80 w-80 rounded-full bg-accent/10 blur-3xl float-shape-delayed" aria-hidden />
-      <div className="pointer-events-none absolute bottom-20 left-1/4 h-64 w-64 rounded-full bg-hero-foreground/5 blur-3xl float-shape-slow" aria-hidden />
+      <LensFlare seed="dosen" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <DarkSectionHeading
           eyebrow="Profil Pengajar"
           title="Dosen & Tenaga Pendidik"
-          description="Didampingi dosen berkualifikasi magister dan doktor dengan fokus riset pendidikan dan teknologi informasi."
+          description="Didampingi dosen berkualifikasi magister dan doktor dengan fokus riset pendidikan dan informatika."
         />
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

@@ -1,5 +1,6 @@
 import { Quote } from "lucide-react";
 import { Reveal, SectionHeading } from "./Reveal";
+import { LensFlare } from "./LensFlare";
 import { useHomeContent } from "@/lib/site-content";
 
 function initials(name: string) {
@@ -17,11 +18,9 @@ export function Testimonials() {
 
   return (
     <section id="alumni" className="relative overflow-hidden bg-gradient-testimonials py-20 sm:py-28">
-      {/* Animated gradient mesh background */}
+      {/* Gradient mesh statis + sapuan cahaya lensa yang mengikuti scroll */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-50" aria-hidden />
-      {/* Floating decorative shapes */}
-      <div className="pointer-events-none absolute top-10 left-1/3 h-72 w-72 rounded-full bg-accent/5 blur-3xl float-shape" aria-hidden />
-      <div className="pointer-events-none absolute bottom-20 right-1/4 h-80 w-80 rounded-full bg-primary/5 blur-3xl float-shape-delayed" aria-hidden />
+      <LensFlare seed="alumni" />
 
       <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <SectionHeading eyebrow={alumni.eyebrow} title={alumni.title} description={alumni.description} />

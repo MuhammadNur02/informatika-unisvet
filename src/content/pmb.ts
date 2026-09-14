@@ -5,7 +5,7 @@ export const PMB_PAGES: Record<string, PageContent> = {
     eyebrow: "PMB UNISVET",
     title: "Mengapa Memilih Pendidikan Informatika UNISVET?",
     description:
-      "Satu prodi, dua kompetensi: menjadi pendidik TI profesional sekaligus pengembang teknologi digital.",
+      "Satu prodi, dua kompetensi: disiapkan menjadi guru Informatika bersertifikat sekaligus pengembang teknologi digital.",
     metaTitle: "Mengapa Memilih Kami — PMB Pendidikan Informatika UNISVET",
     blocks: [
       {
@@ -13,17 +13,17 @@ export const PMB_PAGES: Record<string, PageContent> = {
         title: "Alasan Utama",
         items: [
           {
-            title: "Dual Competency",
+            title: "Kompetensi Ganda",
             desc: "Lulusan siap menjadi guru informatika bersertifikat maupun software/web developer.",
             tag: "Keunggulan",
           },
           {
             title: "Kurikulum Berbasis OBE & Industri",
-            desc: "Capaian pembelajaran disusun mengikuti KKNI, kebutuhan sekolah mitra, dan tren industri TI.",
+            desc: "Capaian pembelajaran disusun mengikuti KKNI, kebutuhan sekolah mitra, dan tren industri teknologi.",
             tag: "Akademik",
           },
           {
-            title: "Flexi-Learning",
+            title: "Kelas Ramah Pekerja",
             desc: "Kelas reguler dan blended learning yang ramah bagi mahasiswa yang sudah bekerja.",
             tag: "Fleksibel",
           },
@@ -50,7 +50,7 @@ export const PMB_PAGES: Record<string, PageContent> = {
         items: [
           { label: "Mahasiswa Aktif", value: "500+" },
           { label: "Alumni Tersebar", value: "1000+" },
-          { label: "Akreditasi", value: "LAMDIK" },
+          { label: "Akreditasi LAMDIK", value: "Baik Sekali" },
           { label: "Laboratorium", value: "4 Lab" },
         ],
       },
@@ -134,7 +134,7 @@ export const PMB_PAGES: Record<string, PageContent> = {
         type: "faq",
         title: "Pertanyaan Seputar Berkas",
         items: [
-          { q: "Apakah lulusan SMK non-TI boleh mendaftar?", a: "Boleh. Prodi menerima lulusan semua jurusan dan menyediakan mata kuliah dasar pemrograman dari nol." },
+          { q: "Apakah lulusan SMK jurusan non-Informatika boleh mendaftar?", a: "Boleh. Prodi menerima lulusan semua jurusan dan menyediakan mata kuliah dasar pemrograman dari nol." },
           { q: "Belum menerima ijazah, bagaimana?", a: "Gunakan Surat Keterangan Lulus (SKL) terlebih dahulu, ijazah dapat menyusul saat registrasi." },
         ],
       },
@@ -190,7 +190,7 @@ export const PMB_PAGES: Record<string, PageContent> = {
         items: [
           { title: "KIP-Kuliah", desc: "Pembebasan biaya kuliah dan bantuan biaya hidup dari pemerintah.", tag: "Pemerintah" },
           { title: "Beasiswa Prestasi Akademik", desc: "Potongan SPP bagi pendaftar dengan nilai rapor terbaik.", tag: "Prestasi" },
-          { title: "Beasiswa Prestasi Non-Akademik", desc: "Bagi juara olimpiade, olahraga, seni, atau kompetisi TI.", tag: "Prestasi" },
+          { title: "Beasiswa Prestasi Non-Akademik", desc: "Bagi juara olimpiade, olahraga, seni, atau kompetisi teknologi.", tag: "Prestasi" },
           { title: "Beasiswa Hafiz & Keagamaan", desc: "Apresiasi bagi penghafal Al-Qur'an dan aktivis keagamaan.", tag: "Khusus" },
           { title: "Beasiswa Mitra Sekolah", desc: "Kuota potongan bagi lulusan sekolah mitra UNISVET.", tag: "Mitra" },
           { title: "Beasiswa Alumni & Keluarga", desc: "Potongan bagi keluarga alumni UNISVET.", tag: "Keluarga" },
@@ -219,12 +219,12 @@ export const PMB_PAGES: Record<string, PageContent> = {
         title: "Pertanyaan Umum",
         items: [
           { q: "Apa gelar lulusan prodi ini?", a: "Lulusan menyandang gelar Sarjana Pendidikan (S.Pd.) bidang Pendidikan Informatika." },
-          { q: "Apakah bisa bekerja di industri TI, bukan hanya mengajar?", a: "Ya. Kurikulum dual competency membekali kemampuan pengembangan web, aplikasi, jaringan, dan multimedia sehingga lulusan juga terserap di industri." },
+          { q: "Apakah bisa bekerja di industri teknologi, bukan hanya mengajar?", a: "Ya. Kurikulum yang membekali dua kompetensi ini juga mengajarkan pengembangan web, aplikasi, jaringan, dan multimedia, sehingga lulusan juga terserap di industri." },
           { q: "Apakah tersedia kelas untuk yang sudah bekerja?", a: "Tersedia kelas blended dengan perkuliahan akhir pekan dan daring." },
           { q: "Berapa lama masa studi?", a: "Delapan semester (empat tahun) dengan total sekitar 146 SKS." },
           { q: "Apakah harus punya laptop sendiri?", a: "Sangat disarankan, namun laboratorium komputer kampus tersedia untuk praktikum dan tugas." },
           { q: "Apakah ada program magang?", a: "Ada, melalui MBKM, magang industri, serta PPL di sekolah mitra." },
-          { q: "Bagaimana status akreditasinya?", a: "Prodi terakreditasi oleh LAMDIK dan menjalankan penjaminan mutu internal secara berkala." },
+          { q: "Bagaimana status akreditasinya?", a: "Prodi terakreditasi Baik Sekali oleh LAMDIK, dan menjalankan penjaminan mutu internal secara berkala." },
           { q: "Kapan pendaftaran ditutup?", a: "Pendaftaran dibuka bergelombang; gelombang awal memberi potongan biaya dan pilihan kelas lebih leluasa." },
         ],
       },

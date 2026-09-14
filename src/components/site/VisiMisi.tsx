@@ -1,5 +1,6 @@
 import { Eye, Target } from "lucide-react";
 import { Reveal } from "./Reveal";
+import { LensFlare } from "./LensFlare";
 import { useHomeContent } from "@/lib/site-content";
 
 /** Section gelap full-bleed — pemecah ritme antara Advantages (terang) dan Tracks (terang). */
@@ -8,11 +9,9 @@ export function VisiMisi() {
 
   return (
     <section id="profil" className="relative overflow-hidden bg-hero-gradient py-20 sm:py-28">
-      {/* Mesh gradient + kelap-kelip aksen berjalan, senada dengan section gelap lain */}
+      {/* Mesh gradient statis + sapuan cahaya lensa yang mengikuti scroll */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-40" aria-hidden />
-      <div className="pointer-events-none absolute -left-16 top-10 h-72 w-72 rounded-full bg-accent/10 blur-3xl float-shape" aria-hidden />
-      <div className="pointer-events-none absolute -right-10 top-1/3 h-96 w-96 rounded-full bg-hero-foreground/5 blur-3xl float-shape-delayed" aria-hidden />
-      <div className="pointer-events-none absolute bottom-0 left-1/3 h-64 w-64 rounded-full bg-accent/10 blur-3xl float-shape-slow" aria-hidden />
+      <LensFlare seed="profil" />
       <Eye
         className="pointer-events-none absolute -right-6 -top-6 size-64 text-hero-foreground/5 sm:size-80"
         strokeWidth={0.6}

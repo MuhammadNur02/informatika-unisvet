@@ -1,5 +1,6 @@
 import { Layers, CalendarClock, MonitorSmartphone, Network } from "lucide-react";
 import { Reveal, SectionHeading } from "./Reveal";
+import { LensFlare } from "./LensFlare";
 import { useHomeContent } from "@/lib/site-content";
 
 const ICONS = [Layers, CalendarClock, MonitorSmartphone, Network];
@@ -11,12 +12,9 @@ export function Advantages() {
 
   return (
     <section id="akademik" className="relative overflow-hidden bg-gradient-advantages py-20 sm:py-28">
-      {/* Animated gradient mesh background */}
+      {/* Gradient mesh statis + sapuan cahaya lensa yang mengikuti scroll */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-60" aria-hidden />
-      {/* Floating decorative shapes */}
-      <div className="pointer-events-none absolute left-0 top-20 h-72 w-72 rounded-full bg-accent/5 blur-3xl float-shape" aria-hidden />
-      <div className="pointer-events-none absolute right-0 bottom-10 h-96 w-96 rounded-full bg-primary/5 blur-3xl float-shape-delayed" aria-hidden />
-      <div className="pointer-events-none absolute left-1/3 bottom-20 h-64 w-64 rounded-full bg-accent-soft/40 blur-3xl float-shape-slow" aria-hidden />
+      <LensFlare seed="akademik" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading

@@ -13,7 +13,7 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 
 const title = "Pendidikan Informatika — Universitas Ivet (UNISVET) Semarang";
 const description =
-  "S1 Pendidikan Informatika UNISVET Semarang: mencetak pendidik IT profesional & inovator teknologi dengan kurikulum software development, cyber security, dan digital EdTech.";
+  "S1 Pendidikan Informatika UNISVET Semarang, terakreditasi Baik Sekali (LAMDIK): menyiapkan guru Informatika dan tenaga profesional bidang rekayasa perangkat lunak, jaringan, serta EdTech.";
 
 export const Route = createFileRoute("/")({
   head: () => ({

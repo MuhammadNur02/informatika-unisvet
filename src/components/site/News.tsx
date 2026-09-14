@@ -4,6 +4,7 @@ import { ArrowUpRight, CalendarDays } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Reveal, SectionHeading } from "./Reveal";
+import { LensFlare } from "./LensFlare";
 import { cn } from "@/lib/utils";
 import { fetchBeritaPublik, formatTanggalId, KATEGORI_BERITA, type BeritaItem } from "@/lib/berita";
 import { useHomeContent } from "@/lib/site-content";
@@ -39,11 +40,9 @@ export function News() {
 
   return (
     <section id="berita" className="relative overflow-hidden bg-gradient-news py-20 sm:py-28">
-      {/* Animated gradient mesh background */}
+      {/* Gradient mesh statis + sapuan cahaya lensa yang mengikuti scroll */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-40" aria-hidden />
-      {/* Floating decorative shapes */}
-      <div className="pointer-events-none absolute top-20 left-1/4 h-72 w-72 rounded-full bg-accent/5 blur-3xl float-shape" aria-hidden />
-      <div className="pointer-events-none absolute bottom-10 right-1/3 h-80 w-80 rounded-full bg-primary/5 blur-3xl float-shape-delayed" aria-hidden />
+      <LensFlare seed="berita" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading eyebrow={news.eyebrow} title={news.title} description={news.description} />
