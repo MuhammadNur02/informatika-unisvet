@@ -385,6 +385,18 @@
   }
 }
 
+/*
+ * Header khusus dashboard admin — hitam agak ke maroon, SELALU begitu
+ * (tidak bergantung ke ".dark" situs publik, beda dari glass-header biasa
+ * yang warnanya berubah sesuai toggle terang/gelap situs publik).
+ */
+@utility admin-glass-header {
+  background: oklch(0.08 0.025 22 / 0.82);
+  backdrop-filter: blur(16px) saturate(160%);
+  border-bottom: 1px solid oklch(1 0 0 / 0.08);
+  box-shadow: 0 8px 30px -18px oklch(0 0 0 / 0.6);
+}
+
 @utility card-elevated {
   background: var(--color-card);
   border: 1px solid var(--color-border);
