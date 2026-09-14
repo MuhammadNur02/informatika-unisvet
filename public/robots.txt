@@ -13,5 +13,3 @@ Allow: /
 User-agent: *
 Allow: /
 Disallow: /admin
-
-Sitemap: https://informatika-unisvet.lovable.app/sitemap.xml
