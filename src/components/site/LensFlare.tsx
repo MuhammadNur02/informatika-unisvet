@@ -11,7 +11,7 @@ function seededRandom(seed: string, salt = 0) {
   return Math.abs((h % 1000) / 1000);
 }
 
-const STAR_COUNT = 22;
+const STAR_COUNT = 34;
 
 /**
  * Pengganti dekorasi blob mengambang yang berjalan terus-menerus: satu sapuan
@@ -54,6 +54,18 @@ export function LensFlare({ className = "", seed = "flare" }: { className?: stri
       })),
     [seed],
   );
+
+  // 3 lapis kedalaman (dekat/tengah/jauh) supaya bintang ikut bergerak saat
+  // digulir dengan kecepatan berbeda-beda — efek paralaks sederhana yang
+  // terasa seperti melayang nyata di luar angkasa, bukan cuma nempel diam.
+  const starsYNear = useTransform(scrollYProgress, [0, 1], [70, -70]);
+  const starsYMid = useTransform(scrollYProgress, [0, 1], [40, -40]);
+  const starsYFar = useTransform(scrollYProgress, [0, 1], [18, -18]);
+  const starLayers = [
+    { y: starsYNear, items: stars.filter((_, i) => i % 3 === 0) },
+    { y: starsYMid, items: stars.filter((_, i) => i % 3 === 1) },
+    { y: starsYFar, items: stars.filter((_, i) => i % 3 === 2) },
+  ];
 
   const left = useTransform(scrollYProgress, [0, 1], [`${rnd.startX}%`, `${rnd.endX}%`]);
   const top = useTransform(scrollYProgress, [0, 1], [`${rnd.startY}%`, `${rnd.endY}%`]);
@@ -120,20 +132,25 @@ export function LensFlare({ className = "", seed = "flare" }: { className?: stri
           filter: "blur(3px)",
         }}
       />
-      {/* Taburan bintang kecil berkedip — hanya tampak di mode gelap */}
+      {/* Taburan bintang kecil berkedip — hanya tampak di mode gelap, 3 lapis
+          paralaks supaya benar-benar ikut bergerak saat digulir */}
       <div className="lens-flare-stars absolute inset-0">
-        {stars.map((s) => (
-          <span
-            key={s.id}
-            className="absolute rounded-full bg-white"
-            style={{
-              top: `${s.top}%`,
-              left: `${s.left}%`,
-              width: s.size,
-              height: s.size,
-              animation: `star-twinkle ${s.duration}s ease-in-out ${s.delay}s infinite backwards`,
-            }}
-          />
+        {starLayers.map((layer, li) => (
+          <motion.div key={li} className="absolute inset-0" style={{ y: layer.y }}>
+            {layer.items.map((s) => (
+              <span
+                key={s.id}
+                className="absolute rounded-full bg-white"
+                style={{
+                  top: `${s.top}%`,
+                  left: `${s.left}%`,
+                  width: s.size,
+                  height: s.size,
+                  animation: `star-twinkle ${s.duration}s ease-in-out ${s.delay}s infinite backwards`,
+                }}
+              />
+            ))}
+          </motion.div>
         ))}
       </div>
     </div>
