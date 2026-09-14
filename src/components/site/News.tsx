@@ -25,6 +25,7 @@ const KATEGORI_ICON: Record<string, typeof Newspaper> = {
 export function News() {
   const { news } = useHomeContent();
   const [active, setActive] = useState<string>(KATEGORI_BERITA[0]);
+  const [hovered, setHovered] = useState<string | null>(null);
 
   const { data } = useQuery({
     queryKey: ["berita", "publik"],
@@ -57,20 +58,27 @@ export function News() {
 
         <Reveal className="mt-10 flex justify-center">
           <div className="max-w-full overflow-x-auto px-4 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:px-0 [&::-webkit-scrollbar]:hidden">
-          <div className="inline-flex rounded-full border border-border bg-card p-1 shadow-[var(--shadow-card)]">
+          <div
+            className="inline-flex rounded-full border border-border bg-card p-1 shadow-[var(--shadow-card)]"
+            onMouseLeave={() => setHovered(null)}
+          >
             {KATEGORI_BERITA.map((tab) => {
               const Icon = KATEGORI_ICON[tab] ?? Newspaper;
+              // Pill emas ikut kursor saat hover (tanpa klik); kembali ke tab
+              // yang benar-benar aktif begitu pointer keluar dari grup tab.
+              const indicated = (hovered ?? active) === tab;
               return (
                 <button
                   key={tab}
                   type="button"
                   onClick={() => setActive(tab)}
+                  onMouseEnter={() => setHovered(tab)}
                   className={cn(
                     "relative flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-semibold transition-colors",
-                    active === tab ? "text-hero-foreground" : "text-muted-foreground hover:text-primary",
+                    indicated ? "text-hero-foreground" : "text-muted-foreground hover:text-primary",
                   )}
                 >
-                  {active === tab ? (
+                  {indicated ? (
                     <motion.span
                       layoutId="news-tab"
                       className="absolute inset-0 rounded-full bg-[image:var(--gradient-gold)]"
