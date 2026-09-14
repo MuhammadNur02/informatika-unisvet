@@ -33,7 +33,7 @@ export function AdminEmbers() {
   );
 
   return (
-    <div aria-hidden className="ember-field pointer-events-none absolute inset-0 overflow-hidden">
+    <div aria-hidden className="ember-field pointer-events-none fixed inset-0 z-0 overflow-hidden">
       {embers.map((e) => (
         <span
           key={e.id}

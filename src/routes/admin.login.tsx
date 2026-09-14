@@ -169,7 +169,7 @@ function AdminLogin() {
               type="submit"
               size="pill"
               disabled={loading}
-              className="btn-shine w-full transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.015] hover:shadow-[0_0_24px_-4px_var(--accent)]"
+              className="btn-shine btn-silver w-full transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.015] hover:shadow-[0_0_24px_-4px_var(--accent)]"
             >
               {loading ? <Loader2 className="animate-spin" /> : <ShieldCheck />}
               {loading ? "Memverifikasi…" : "Masuk"}

@@ -20,8 +20,8 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/site/ThemeToggle";
 import { AdminStarfield } from "@/components/admin/AdminStarfield";
+import { AdminEmbers } from "@/components/admin/AdminEmbers";
 import { cn } from "@/lib/utils";
 
 type NavItem = {
@@ -207,6 +207,7 @@ export function AdminShell({
   return (
     <div className="min-h-screen bg-slate-surface">
       <AdminStarfield />
+      <AdminEmbers />
 
       {/* Desktop sidebar — bisa disembunyikan lewat tombol menu di header */}
       <motion.aside
@@ -288,7 +289,6 @@ export function AdminShell({
             >
               Lihat situs <ExternalLink className="size-3.5" />
             </Link>
-            <ThemeToggle className="border-border text-muted-foreground hover:bg-secondary hover:text-foreground" />
             <span
               className={cn(
                 "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-semibold",
