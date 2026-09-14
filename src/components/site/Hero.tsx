@@ -1,14 +1,10 @@
-import { useRef, useState } from "react";
 import { motion } from "motion/react";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useHomeContent } from "@/lib/site-content";
+import { usePointerGlow, radialGlowBackground } from "@/lib/use-pointer-glow";
 import { VideoBackground } from "./VideoBackground";
-
-type PointerState = { rx: number; ry: number; mx: number; my: number; active: boolean };
-
-const POINTER_REST: PointerState = { rx: 0, ry: 0, mx: 50, my: 50, active: false };
 
 /**
  * Foto hero bereaksi ke posisi pointer: sedikit miring 3D mengikuti arah
@@ -18,36 +14,10 @@ const POINTER_REST: PointerState = { rx: 0, ry: 0, mx: 50, my: 50, active: false
  * alami dengan foto, bukan sekadar overlay polos.
  */
 function HeroImage({ src, alt }: { src: string; alt: string }) {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const [pointer, setPointer] = useState<PointerState>(POINTER_REST);
-
-  function handlePointerMove(e: React.PointerEvent<HTMLDivElement>) {
-    const rect = wrapRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    const px = (e.clientX - rect.left) / rect.width;
-    const py = (e.clientY - rect.top) / rect.height;
-    setPointer({
-      rx: (py - 0.5) * -8,
-      ry: (px - 0.5) * 8,
-      mx: px * 100,
-      my: py * 100,
-      active: true,
-    });
-  }
+  const { ref, pointer, onPointerMove, onPointerLeave } = usePointerGlow(8);
 
   return (
-    <div
-      ref={wrapRef}
-      className="perspective-distant"
-      onPointerMove={handlePointerMove}
-      onPointerLeave={() =>
-        // Pertahankan posisi mx/my terakhir (background-position radial-gradient
-        // tidak bisa di-transition CSS, jadi kalau di-reset ke 50/50 di sini akan
-        // langsung "meloncat" ke tengah sebelum sempat fade out). Cuma matikan
-        // tilt (rx/ry, yang transform-nya memang bisa di-transition mulus) & opacity.
-        setPointer((p) => ({ ...p, rx: 0, ry: 0, active: false }))
-      }
-    >
+    <div ref={ref} className="perspective-distant" onPointerMove={onPointerMove} onPointerLeave={onPointerLeave}>
       <div
         className="relative overflow-hidden rounded-[2rem] border border-hero-foreground/15 shadow-(--shadow-lift) transition-transform duration-300 ease-out transform-3d will-change-transform"
         style={{
@@ -59,7 +29,7 @@ function HeroImage({ src, alt }: { src: string; alt: string }) {
           className="pointer-events-none absolute inset-0 transition-opacity duration-300 mix-blend-overlay"
           style={{
             opacity: pointer.active ? 1 : 0,
-            background: `radial-gradient(circle at ${pointer.mx}% ${pointer.my}%, oklch(0 0 0 / 0.55) 0%, oklch(0 0 0 / 0.28) 8%, transparent 18%, oklch(1 0 0 / 0.35) 24%, transparent 40%)`,
+            background: radialGlowBackground(pointer.mx, pointer.my),
           }}
           aria-hidden
         />
