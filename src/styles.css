@@ -340,9 +340,51 @@
   }
 }
 
+/*
+ * Percik bara api naik dari bawah lalu meredup — lahir kuning-putih panas,
+ * lewat oranye lalu merah tua, dan akhirnya menghitam sambil menghilang.
+ * Goyangan kiri-kanan (bukan garis lurus) didapat dari beberapa titik
+ * transform di tengah animasi yang bergantian arah memakai --dx per elemen.
+ */
+@keyframes ember-rise {
+  0% {
+    transform: translate(0, 0) scale(0.6);
+    opacity: 0;
+    background: oklch(0.9 0.18 85);
+    box-shadow: 0 0 6px 2px oklch(0.85 0.19 60 / 0.9);
+  }
+  12% {
+    opacity: 1;
+    transform: translate(calc(var(--dx) * 0.3), calc(var(--rise-y) * 0.12)) scale(1);
+  }
+  40% {
+    background: oklch(0.72 0.2 45);
+    box-shadow: 0 0 7px 2px oklch(0.7 0.2 40 / 0.75);
+    transform: translate(calc(var(--dx) * -0.6), calc(var(--rise-y) * 0.42)) scale(0.9);
+  }
+  65% {
+    background: oklch(0.45 0.14 30);
+    box-shadow: 0 0 5px 1.5px oklch(0.45 0.14 28 / 0.5);
+    transform: translate(calc(var(--dx) * 0.5), calc(var(--rise-y) * 0.68)) scale(0.65);
+  }
+  85% {
+    background: oklch(0.22 0.03 30);
+    box-shadow: 0 0 2px 1px oklch(0.2 0.02 30 / 0.35);
+    opacity: 0.55;
+    transform: translate(calc(var(--dx) * -0.2), calc(var(--rise-y) * 0.88)) scale(0.4);
+  }
+  100% {
+    background: oklch(0.1 0.01 30);
+    box-shadow: none;
+    opacity: 0;
+    transform: translate(0, var(--rise-y)) scale(0.2);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .admin-starfield span,
-  .lens-flare-stars span {
+  .lens-flare-stars span,
+  .ember-field span {
     animation: none !important;
   }
 }
