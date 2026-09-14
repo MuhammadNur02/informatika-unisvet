@@ -64,6 +64,7 @@ export function AdminShell({
   const queryClient = useQueryClient();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [desktopSidebarOpen, setDesktopSidebarOpen] = useState(true);
+  const [hoveredNav, setHoveredNav] = useState<string | null>(null);
 
   // Ditaruh di <body> (bukan hanya div sidebar) supaya palet gelap admin juga menjangkau
   // dialog konfirmasi & notifikasi toast, yang di-render lewat portal langsung ke <body>.
@@ -90,7 +91,7 @@ export function AdminShell({
 
   let navIndex = -1;
   const nav = (
-    <nav className="space-y-5">
+    <nav className="space-y-5" onMouseLeave={() => setHoveredNav(null)}>
       {groups.map((group) => (
         <div key={group.group} className="space-y-1.5">
           <p className="px-3.5 text-[10px] font-bold uppercase tracking-[0.22em] text-hero-foreground/40">
@@ -98,6 +99,11 @@ export function AdminShell({
           </p>
           {group.items.map((item) => {
             const isActive = active === item.id;
+            // Sorotan (background, marker, ikon) ikut kursor saat hover
+            // (tanpa klik) — kembali ke menu yang benar-benar aktif begitu
+            // pointer keluar dari daftar menu, sama seperti pola navbar
+            // situs publik & tab kategori berita.
+            const isIndicated = (hoveredNav ?? active) === item.id;
             navIndex += 1;
             const index = navIndex;
             return (
@@ -107,6 +113,7 @@ export function AdminShell({
                 initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.05 * index, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                onMouseEnter={() => setHoveredNav(item.id)}
                 onClick={() => {
                   onNavigate(item.id);
                   setMobileOpen(false);
@@ -114,21 +121,22 @@ export function AdminShell({
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
                   "group relative flex w-full items-start gap-3 rounded-2xl px-3.5 py-3 text-left transition-all duration-300",
-                  isActive
+                  isIndicated
                     ? "bg-hero-foreground/10 text-hero-foreground shadow-[inset_0_0_0_1px_oklch(0.79_0.15_78/0.35)]"
                     : "text-hero-foreground/65 hover:bg-hero-foreground/5 hover:text-hero-foreground",
                 )}
               >
-                {isActive ? (
+                {isIndicated ? (
                   <motion.span
                     layoutId="admin-nav-marker"
                     className="absolute left-0 top-1/2 h-7 w-1 -translate-y-1/2 rounded-full bg-accent"
+                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
                   />
                 ) : null}
                 <span
                   className={cn(
                     "mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-xl transition-colors duration-300",
-                    isActive
+                    isIndicated
                       ? "bg-accent text-accent-foreground"
                       : "bg-hero-foreground/10 text-hero-foreground/70 group-hover:bg-hero-foreground/15",
                   )}
@@ -216,7 +224,7 @@ export function AdminShell({
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         className="fixed inset-y-0 left-0 z-40 hidden w-72 bg-hero-gradient lg:block"
       >
-        <div className="h-full">{sidebarInner}</div>
+        <div className="h-full overflow-y-auto">{sidebarInner}</div>
       </motion.aside>
 
       {/* Mobile sidebar */}
@@ -245,7 +253,7 @@ export function AdminShell({
               >
                 <X className="size-4" />
               </button>
-              <div className="h-full">{sidebarInner}</div>
+              <div className="h-full overflow-y-auto">{sidebarInner}</div>
             </motion.aside>
           </>
         ) : null}
