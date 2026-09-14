@@ -271,6 +271,62 @@
   --shadow-glow-accent: 0 0 20px -5px oklch(0.76 0.13 175 / 0.4);
 }
 
+/*
+ * Langit berbintang dekoratif di dashboard admin — hanya tampak saat mode
+ * gelap + tema admin aktif bersamaan. Posisinya fixed terhadap viewport
+ * (diatur di AdminStarfield.tsx) sehingga tetap diam di tempat walau konten
+ * di atasnya digulir.
+ */
+.admin-starfield {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease;
+}
+
+.dark .admin-theme .admin-starfield {
+  opacity: 1;
+  visibility: visible;
+}
+
+@keyframes admin-star-twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes admin-shooting-star {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(var(--sa));
+    opacity: 0;
+  }
+  4% {
+    opacity: 1;
+  }
+  22% {
+    opacity: 1;
+  }
+  30% {
+    transform: translate3d(var(--sx), var(--sy), 0) rotate(var(--sa));
+    opacity: 0;
+  }
+  100% {
+    transform: translate3d(var(--sx), var(--sy), 0) rotate(var(--sa));
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-starfield span {
+    animation: none !important;
+  }
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
