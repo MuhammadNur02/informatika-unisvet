@@ -40,7 +40,13 @@ function HeroImage({ src, alt }: { src: string; alt: string }) {
       ref={wrapRef}
       className="perspective-distant"
       onPointerMove={handlePointerMove}
-      onPointerLeave={() => setPointer(POINTER_REST)}
+      onPointerLeave={() =>
+        // Pertahankan posisi mx/my terakhir (background-position radial-gradient
+        // tidak bisa di-transition CSS, jadi kalau di-reset ke 50/50 di sini akan
+        // langsung "meloncat" ke tengah sebelum sempat fade out). Cuma matikan
+        // tilt (rx/ry, yang transform-nya memang bisa di-transition mulus) & opacity.
+        setPointer((p) => ({ ...p, rx: 0, ry: 0, active: false }))
+      }
     >
       <div
         className="relative overflow-hidden rounded-[2rem] border border-hero-foreground/15 shadow-(--shadow-lift) transition-transform duration-300 ease-out transform-3d will-change-transform"
