@@ -14,8 +14,11 @@ const SHOOTING_STAR_COUNT = 4;
  * terhadap viewport (bukan ikut scroll konten) supaya bintangnya "tertinggal
  * di tempat" saat halaman digulir. Hanya terlihat saat .dark + .admin-theme
  * aktif bersamaan (lihat styles.css); di luar itu selalu tersembunyi.
+ *
+ * `showShootingStars` default true (dipakai dashboard); halaman login
+ * mematikannya lewat prop ini supaya cuma bintang berkedip yang tersisa.
  */
-export function AdminStarfield() {
+export function AdminStarfield({ showShootingStars = true }: { showShootingStars?: boolean }) {
   const stars = useMemo(
     () =>
       Array.from({ length: STAR_COUNT }, (_, i) => {
@@ -60,7 +63,7 @@ export function AdminStarfield() {
           }}
         />
       ))}
-      {shootingStars.map((s) => (
+      {showShootingStars && shootingStars.map((s) => (
         <span
           key={s.id}
           className="absolute rounded-full"

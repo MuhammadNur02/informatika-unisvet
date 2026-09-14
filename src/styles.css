@@ -587,13 +587,16 @@
     inset: -1.5px;
     border-radius: inherit;
     padding: 1.5px;
+    /* Dua busur cahaya identik, persis 180° terpisah (puncak di 10% & 60%,
+       lebar naik/turun sama) — supaya simetris di posisi manapun saat berputar. */
     background: conic-gradient(
       from var(--hud-angle),
       transparent 0%,
-      oklch(from var(--accent) l c h / 0.9) 8%,
-      transparent 18%,
-      transparent 82%,
-      oklch(from var(--accent) l c h / 0.9) 92%,
+      oklch(from var(--accent) l c h / 0.9) 10%,
+      transparent 22%,
+      transparent 50%,
+      oklch(from var(--accent) l c h / 0.9) 60%,
+      transparent 72%,
       transparent 100%
     );
     -webkit-mask:
@@ -637,6 +640,25 @@
   }
   100% {
     top: 100%;
+  }
+}
+
+/* Sapuan kilau yang lewat di tombol saat di-hover — dari kiri ke kanan, sekali per hover. */
+@utility btn-shine {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 35%, oklch(1 0 0 / 0.55) 50%, transparent 65%);
+    transform: translateX(-130%);
+    transition: transform 0.65s ease;
+  }
+
+  &:hover::after {
+    transform: translateX(130%);
   }
 }
 

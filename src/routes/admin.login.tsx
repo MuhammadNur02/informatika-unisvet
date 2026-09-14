@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Eye, EyeOff, Loader2, Lock, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, KeyRound, Loader2, Lock, Mail, ShieldCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -65,7 +65,7 @@ function AdminLogin() {
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-hero-gradient px-4 py-16">
       <div className="pointer-events-none absolute inset-0" />
-      <AdminStarfield />
+      <AdminStarfield showShootingStars={false} />
       <AdminEmbers />
       <motion.div
         aria-hidden
@@ -93,7 +93,7 @@ function AdminLogin() {
           <ArrowLeft className="size-3.5" /> Kembali ke situs
         </Link>
 
-        <div className="hud-border rounded-3xl bg-card/95 p-8 shadow-[0_30px_80px_-40px_oklch(0.21_0.075_265/0.8)] backdrop-blur">
+        <div className="hud-border rounded-3xl bg-card/95 p-8 shadow-[0_30px_80px_-40px_oklch(0.21_0.075_265/0.8)] backdrop-blur sm:p-9">
           <div className="hud-scanline" />
           {/* Aksen sudut ala panel HUD */}
           <span className="pointer-events-none absolute -left-px -top-px size-5 rounded-tl-3xl border-l-2 border-t-2 border-accent/80" aria-hidden />
@@ -101,30 +101,39 @@ function AdminLogin() {
           <span className="pointer-events-none absolute -bottom-px -left-px size-5 rounded-bl-3xl border-b-2 border-l-2 border-accent/80" aria-hidden />
           <span className="pointer-events-none absolute -bottom-px -right-px size-5 rounded-br-3xl border-b-2 border-r-2 border-accent/80" aria-hidden />
 
-          <div className="icon-glow pulse-glow inline-flex size-12 items-center justify-center rounded-2xl bg-hero-gradient">
-            <Lock className="size-5 text-hero-foreground" />
+          <div className="icon-glow pulse-glow inline-flex size-14 items-center justify-center rounded-2xl bg-hero-gradient">
+            <Lock className="size-6 text-hero-foreground" />
           </div>
-          <h1 className="mt-5 text-2xl font-extrabold tracking-tight text-foreground">Panel Pengelola Prodi</h1>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+          <h1 className="mt-6 text-2xl font-extrabold tracking-tight text-foreground">Panel Pengelola Prodi</h1>
+          <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
             Masuk dengan akun pengelola untuk mengelola galeri dan konten kegiatan prodi.
           </p>
 
-          <form onSubmit={handleSubmit} className="mt-7 space-y-4">
+          <form onSubmit={handleSubmit} className="mt-8 space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@unisvet.ac.id"
-              />
+              <Label htmlFor="email" className="font-mono text-[11px] font-semibold uppercase tracking-wider text-accent">
+                Email
+              </Label>
+              <div className="relative">
+                <Mail className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="admin@unisvet.ac.id"
+                  className="h-11 pl-10"
+                />
+              </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Kata Sandi</Label>
+              <Label htmlFor="password" className="font-mono text-[11px] font-semibold uppercase tracking-wider text-accent">
+                Kata Sandi
+              </Label>
               <div className="relative">
+                <KeyRound className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
@@ -133,7 +142,7 @@ function AdminLogin() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="pr-11"
+                  className="h-11 pl-10 pr-11"
                 />
                 <button
                   type="button"
@@ -156,7 +165,12 @@ function AdminLogin() {
               </motion.p>
             ) : null}
 
-            <Button type="submit" size="pill" className="w-full" disabled={loading}>
+            <Button
+              type="submit"
+              size="pill"
+              disabled={loading}
+              className="btn-shine w-full transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.015] hover:shadow-[0_0_24px_-4px_var(--accent)]"
+            >
               {loading ? <Loader2 className="animate-spin" /> : <ShieldCheck />}
               {loading ? "Memverifikasi…" : "Masuk"}
             </Button>
