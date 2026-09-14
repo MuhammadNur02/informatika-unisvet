@@ -458,7 +458,7 @@ export function PageEditor({ userId }: { userId: string }) {
           </section>
 
           <div className="sticky bottom-4 flex flex-wrap items-center gap-3 rounded-3xl border border-border bg-card/95 p-4 backdrop-blur">
-            <Button type="button" size="pill" onClick={handleSave} disabled={busy}>
+            <Button type="button" variant="success" size="pill" onClick={handleSave} disabled={busy}>
               {busy ? <Loader2 className="animate-spin" /> : <Save />} Simpan Perubahan
             </Button>
             <Button type="button" variant="outline" size="pill" onClick={() => setConfirmReset(true)} disabled={busy}>

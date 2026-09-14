@@ -293,7 +293,7 @@ export function AdminShell({
               className={cn(
                 "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-semibold",
                 isAdmin
-                  ? "bg-accent/15 text-accent-foreground"
+                  ? "bg-emerald-500/15 text-emerald-400"
                   : "bg-destructive/10 text-destructive",
               )}
             >

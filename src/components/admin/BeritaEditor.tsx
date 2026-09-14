@@ -290,7 +290,7 @@ export function BeritaEditor({ userId }: { userId: string }) {
             </span>
           </label>
 
-          <Button type="submit" size="pill" className="w-full" disabled={busy || uploading}>
+          <Button type="submit" variant="success" size="pill" className="w-full" disabled={busy || uploading}>
             {busy ? <Loader2 className="animate-spin" /> : draft.id ? <Save /> : <Plus />}
             {draft.id ? "Simpan Perubahan" : "Terbitkan Berita"}
           </Button>
@@ -350,7 +350,7 @@ export function BeritaEditor({ userId }: { userId: string }) {
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2 text-xs">
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-1 font-semibold text-primary">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-1 font-semibold text-orange-400">
                         <CalendarDays className="size-3" /> {formatTanggalId(item.tanggal)}
                       </span>
                       <span className="rounded-full bg-accent/15 px-2.5 py-1 font-semibold text-accent-foreground">
@@ -358,7 +358,7 @@ export function BeritaEditor({ userId }: { userId: string }) {
                       </span>
                       <span
                         className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-semibold ${
-                          item.published ? "bg-primary/10 text-primary" : "bg-destructive/10 text-destructive"
+                          item.published ? "bg-orange-400/10 text-orange-400" : "bg-destructive/10 text-destructive"
                         }`}
                       >
                         {item.published ? <Eye className="size-3" /> : <EyeOff className="size-3" />}
