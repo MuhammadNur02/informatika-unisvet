@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "motion/react";
 import { Reveal } from "./Reveal";
@@ -90,31 +90,16 @@ const DOSEN_CARD_BODY = (
  * ikut goyah) sementara "kembarannya" muncul di atas backdrop gelap dan
  * meluncur dari posisi asal ke tengah layar lewat layoutId yang sama
  * (shared-layout transition framer-motion), disertai shading radial tipis
- * yang mengikuti kursor. Spring dengan damping rendah membuatnya sedikit
- * "bergoyang" seperti riak air saat menetap. Pointer keluar dari kartu
- * (atau dari backdrop, atau tombol Esc) mengembalikannya ke ukuran semula.
+ * & tilt 3D ringan yang mengikuti kursor. Spring dengan damping rendah
+ * membuatnya sedikit "bergoyang" seperti riak air saat menetap. Kartu
+ * HANYA tertutup lewat klik (area gelap di sekitarnya atau tombol Esc) —
+ * tidak lagi otomatis tertutup saat pointer bergeser, supaya tidak ada
+ * lagi kesan "meloncat".
  */
 function DosenCard({ d, delay }: { d: DosenItem; delay: number }) {
   const [expanded, setExpanded] = useState(false);
-  const { ref, pointer, onPointerMove, onPointerLeave } = usePointerGlow(0);
+  const { ref, pointer, onPointerMove } = usePointerGlow(6);
   const layoutId = `dosen-card-${d.name}`;
-  const collapseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // Batal-kan rencana menutup kalau pointer sempat balik lagi dalam waktu
-  // singkat — mencegah kartu "meloncat" tertutup mendadak hanya karena
-  // sesaat keluar dari batas kartu yang masih membesar (animasi spring-nya
-  // belum selesai jadi ukurannya masih berubah saat pointer bergerak).
-  function cancelCollapse() {
-    if (collapseTimer.current) {
-      clearTimeout(collapseTimer.current);
-      collapseTimer.current = null;
-    }
-  }
-  function scheduleCollapse() {
-    cancelCollapse();
-    collapseTimer.current = setTimeout(() => setExpanded(false), 150);
-  }
-  useEffect(() => () => cancelCollapse(), []);
 
   useEffect(() => {
     if (!expanded) return;
@@ -130,10 +115,7 @@ function DosenCard({ d, delay }: { d: DosenItem; delay: number }) {
       <div style={{ visibility: expanded ? "hidden" : "visible" }} className="h-full">
         <motion.article
           {...(!expanded ? { layoutId } : {})}
-          onMouseEnter={() => {
-            cancelCollapse();
-            setExpanded(true);
-          }}
+          onMouseEnter={() => setExpanded(true)}
           className="card-glass-dark flex h-full flex-col items-center rounded-3xl p-7 text-center"
         >
           {DOSEN_CARD_BODY(d, "mb-5 h-36 w-36", "min-h-14 text-lg font-bold", "min-h-8 text-sm")}
@@ -150,26 +132,16 @@ function DosenCard({ d, delay }: { d: DosenItem; delay: number }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
-              onClick={() => {
-                cancelCollapse();
-                setExpanded(false);
-              }}
+              onClick={() => setExpanded(false)}
               aria-hidden
             />
             <motion.article
               key="expanded"
               layoutId={layoutId}
               ref={ref}
-              onPointerMove={(e) => {
-                cancelCollapse();
-                onPointerMove(e);
-              }}
-              onPointerEnter={cancelCollapse}
-              onPointerLeave={() => {
-                onPointerLeave();
-                scheduleCollapse();
-              }}
+              onPointerMove={onPointerMove}
               transition={WATER_SPRING}
+              style={{ rotateX: pointer.rx, rotateY: pointer.ry, transformPerspective: 1200 }}
               className="card-glass-dark fixed inset-0 z-[101] m-auto flex h-[min(85vh,780px)] w-[min(92vw,640px)] flex-col items-center justify-center overflow-hidden rounded-[2rem] p-10 text-center"
             >
               {DOSEN_CARD_BODY(d, "mb-7 h-56 w-56", "text-3xl font-bold", "text-lg")}
