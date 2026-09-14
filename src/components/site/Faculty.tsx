@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "motion/react";
 import { Reveal } from "./Reveal";
 import { LensFlare } from "./LensFlare";
+import { EmberField } from "./EmberField";
 import { fetchPageOverride, staticPage } from "@/lib/cms";
 import { usePointerGlow, lightGlowBackground } from "@/lib/use-pointer-glow";
 import type { Block } from "@/content/types";
@@ -196,28 +197,36 @@ export function Faculty() {
   return (
     <section id="dosen" className="relative overflow-hidden bg-hero-gradient py-20 sm:py-28">
       <div className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-40" aria-hidden />
-      <LensFlare seed="dosen" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <DarkSectionHeading
-          eyebrow="Profil Pengajar"
-          title="Dosen & Tenaga Pendidik"
-          description="Didampingi dosen berkualifikasi magister dan doktor dengan fokus riset pendidikan dan informatika."
-        />
+        {/* Sapuan cahaya lensa dipertahankan apa adanya untuk mode gelap; mode
+            terang penggantinya percikan bara api — sesuai referensi footer,
+            dibatasi cuma di area kartu dosen lewat overflow-hidden. */}
+        <div className="relative overflow-hidden">
+          <LensFlare seed="dosen" className="hidden dark:block" />
+          <EmberField className="absolute inset-0 z-0 block dark:hidden" />
 
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {dosen.map((d, i) => (
-            <DosenCard key={d.name} d={d} delay={(i % 3) * 0.08} />
-          ))}
+          <DarkSectionHeading
+            eyebrow="Profil Pengajar"
+            title="Dosen & Tenaga Pendidik"
+            description="Didampingi dosen berkualifikasi magister dan doktor dengan fokus riset pendidikan dan informatika."
+          />
+
+          <div className="relative mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {dosen.map((d, i) => (
+              <DosenCard key={d.name} d={d} delay={(i % 3) * 0.08} />
+            ))}
+          </div>
         </div>
 
-        <div id="fasilitas" className="mt-20">
+        <div id="fasilitas" className="relative mt-20 overflow-hidden">
+          <LensFlare seed="fasilitas" />
           <DarkSectionHeading
             eyebrow="Fasilitas"
             title="Ruang Belajar & Laboratorium"
             description="Fasilitas penunjang praktik yang mendukung pembelajaran berbasis proyek."
           />
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="relative mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {fasilitas.map((f, i) => (
               <Reveal key={f.name} delay={i * 0.08}>
                 <article className="card-glass-dark group relative h-72 overflow-hidden rounded-3xl">
