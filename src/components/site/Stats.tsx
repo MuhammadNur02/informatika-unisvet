@@ -17,7 +17,7 @@ export function Stats() {
 
   return (
     <section id="statistik" className="relative z-10 -mt-14 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl rounded-[2rem] border border-accent/30 bg-stats-panel p-5 shadow-[var(--shadow-lift)] sm:p-7">
+      <div className="mx-auto max-w-6xl rounded-[2rem] border border-black bg-stats-panel p-5 shadow-[var(--shadow-lift)] dark:border-accent/30 dark:bg-white/90 sm:p-7">
         {/* Subtle gradient accent at top */}
         <div className="absolute -top-1 left-1/2 h-1 w-24 -translate-x-1/2 rounded-full bg-gradient-to-r from-transparent via-accent to-transparent" aria-hidden />
 
@@ -28,14 +28,14 @@ export function Stats() {
             return (
               <Reveal key={`${stat.label}-${i}`} delay={i * 0.08}>
                 <div className="group flex flex-col items-center gap-1.5 px-3 py-1.5 text-center lg:px-6">
-                  <span className="flex min-h-11 items-center justify-center text-xl font-semibold tracking-tight text-primary sm:min-h-12 sm:text-2xl">
+                  <span className="flex min-h-11 items-center justify-center text-xl font-semibold tracking-tight text-primary sm:min-h-12 sm:text-2xl dark:text-black">
                     {"text" in parsed ? (
                       parsed.text
                     ) : (
                       <Counter value={parsed.number} suffix={parsed.suffix} />
                     )}
                   </span>
-                  <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground dark:text-neutral-600">
                     <Icon className="size-3 text-accent" /> {stat.label}
                   </span>
                 </div>
