@@ -451,6 +451,15 @@
   background-image: var(--gradient-testimonials);
 }
 
+/* Panel kartu statistik: sedikit lebih terang dari --card + blur transparan
+   tipis, supaya tidak jadi balok gelap pekat saat mode gelap aktif, tapi
+   tetap cukup solid agar angka & label terbaca jelas di kedua mode. */
+@utility bg-stats-panel {
+  background-color: oklch(from var(--card) calc(l + 0.05) c h / 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
 @utility bg-gradient-mesh {
   background-image: var(--gradient-mesh);
 }
