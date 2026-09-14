@@ -158,8 +158,8 @@ export function AdminShell({
   const sidebarInner = (
     <div className="flex h-full flex-col gap-6 p-5">
       <Link to="/" className="flex items-center gap-3 rounded-2xl p-1 transition-opacity hover:opacity-85">
-        <span className="inline-flex size-11 items-center justify-center rounded-2xl bg-accent">
-          <ShieldCheck className="size-5 text-accent-foreground" />
+        <span className="inline-flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-accent p-1.5">
+          <img src="/favicon.png" alt="Logo Universitas Ivet Semarang" className="h-full w-full object-contain" />
         </span>
         <span className="min-w-0">
           <span className="block text-sm font-extrabold tracking-tight text-hero-foreground">
@@ -252,7 +252,7 @@ export function AdminShell({
       </AnimatePresence>
 
       <div className={cn("transition-[padding-left] duration-300 ease-out", desktopSidebarOpen ? "lg:pl-72" : "lg:pl-0")}>
-        <header className="glass-header sticky top-0 z-30">
+        <header className="admin-glass-header sticky top-0 z-30">
           <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3.5 sm:px-6">
             <Button
               variant="outline"
