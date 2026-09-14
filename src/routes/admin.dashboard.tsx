@@ -183,10 +183,10 @@ function AdminDashboard() {
               <div className="pointer-events-none absolute inset-0 opacity-70" />
               <div className="relative">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Selamat datang</p>
-                <h2 className="mt-2 max-w-xl text-2xl font-extrabold tracking-tight text-primary-foreground sm:text-3xl">
+                <h2 className="mt-2 max-w-xl text-2xl font-extrabold tracking-tight text-hero-foreground sm:text-3xl">
                   Kelola konten prodi dengan tenang dan terarah
                 </h2>
-                <p className="mt-3 max-w-xl text-sm leading-relaxed text-primary-foreground/70">
+                <p className="mt-3 max-w-xl text-sm leading-relaxed text-hero-foreground/70">
                   Semua perubahan yang Anda lakukan di sini langsung tampil pada halaman publik — beranda,
                   halaman prodi, berita, galeri, dokumen, hingga pesan masuk dari pengunjung.
                 </p>

@@ -198,10 +198,10 @@ export function BerandaEditor({ userId }: { userId: string }) {
     >
       <div className="rounded-3xl bg-hero-gradient p-7">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Beranda & Footer</p>
-        <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-primary-foreground">
+        <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-hero-foreground">
           Ubah seluruh teks halaman depan
         </h2>
-        <p className="mt-2 max-w-2xl text-sm text-primary-foreground/70">
+        <p className="mt-2 max-w-2xl text-sm text-hero-foreground/70">
           Semua bagian beranda — hero, statistik, keunggulan, visi & misi, alumni, ajakan mendaftar — serta
           data kontak di footer dapat diubah di sini tanpa coding.
         </p>
