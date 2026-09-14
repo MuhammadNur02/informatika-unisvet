@@ -625,7 +625,7 @@ export function BerandaEditor({ userId }: { userId: string }) {
       </Tabs>
 
       <div className="sticky bottom-4 flex flex-wrap items-center gap-3 rounded-3xl border border-border bg-card/95 p-4 backdrop-blur-md">
-        <Button size="pill" onClick={handleSave} disabled={busy}>
+        <Button variant="success" size="pill" onClick={handleSave} disabled={busy}>
           {busy ? <Loader2 className="animate-spin" /> : <Save />} Simpan Perubahan
         </Button>
         <Button variant="outline" size="pill" onClick={() => setConfirmReset(true)} disabled={busy}>
