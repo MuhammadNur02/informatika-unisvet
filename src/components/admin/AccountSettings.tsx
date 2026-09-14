@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
+import { friendlyError } from "@/lib/friendly-error";
 
 export function AccountSettings({ email }: { email: string }) {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -47,7 +48,7 @@ export function AccountSettings({ email }: { email: string }) {
     } catch (error) {
       toast.error("Kata sandi gagal diperbarui", {
         id: toastId,
-        description: error instanceof Error ? error.message : "Silakan coba kembali.",
+        description: friendlyError(error),
       });
     } finally {
       setBusy(false);

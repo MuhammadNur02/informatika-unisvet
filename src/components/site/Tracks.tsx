@@ -3,56 +3,19 @@ import { motion, AnimatePresence } from "motion/react";
 import { GraduationCap, Code2, Palette, CheckCircle2 } from "lucide-react";
 import { Reveal, SectionHeading } from "./Reveal";
 import { LensFlare } from "./LensFlare";
+import { useHomeContent } from "@/lib/site-content";
 import { cn } from "@/lib/utils";
 
-const TRACKS = [
-  {
-    id: "pendidik",
-    icon: GraduationCap,
-    label: "Tenaga Pendidik & Duta Digital",
-    headline: "Track 1 — Guru Informatika & Duta Digital Sekolah",
-    desc: "Menguasai pedagogi informatika, perancangan pembelajaran berbasis proyek, serta kepemimpinan transformasi digital di sekolah.",
-    points: [
-      "Pedagogi & Kurikulum Informatika (CPL Kependidikan)",
-      "Microteaching & Praktik Lapangan Persekolahan (PLP)",
-      "Asesmen Digital & Manajemen Kelas Berbasis LMS",
-      "Literasi Data, AI, dan Etika Digital untuk Sekolah",
-    ],
-    careers: ["Guru Informatika SMP/SMA/SMK", "Instruktur TIK", "Koordinator Digitalisasi Sekolah"],
-  },
-  {
-    id: "developer",
-    icon: Code2,
-    label: "Software & Web Developer",
-    headline: "Track 2 — Software Engineer & Web/Mobile Developer",
-    desc: "Fokus rekayasa perangkat lunak modern: dari algoritma dan basis data hingga pengembangan aplikasi web serta mobile siap industri.",
-    points: [
-      "Algoritma, Struktur Data & Basis Data",
-      "Rekayasa Perangkat Lunak, Git & DevOps Dasar",
-      "Pemrograman Web (React & TypeScript) dan Mobile",
-      "Keamanan Siber & Jaringan Komputer Terapan",
-    ],
-    careers: ["Frontend/Backend Developer", "Mobile Developer", "QA & Teknisi Dukungan Informatika"],
-  },
-  {
-    id: "edtech",
-    icon: Palette,
-    label: "EdTech Content & Design",
-    headline: "Track 3 — EdTech Content Creator & Instructional Designer",
-    desc: "Merancang media dan pengalaman belajar digital: modul interaktif, video pembelajaran, gamifikasi, hingga produk EdTech.",
-    points: [
-      "Desain Instruksional & Model ADDIE",
-      "Produksi Video, Animasi & Multimedia Pembelajaran",
-      "Gamifikasi dan Pengembangan Media Interaktif",
-      "Kewirausahaan Digital & Manajemen Produk EdTech",
-    ],
-    careers: ["Instructional Designer", "EdTech Content Creator", "Digital Learning Specialist"],
-  },
-];
+const ICONS = [GraduationCap, Code2, Palette];
 
 export function Tracks() {
-  const [active, setActive] = useState("pendidik");
-  const current = TRACKS.find((t) => t.id === active) ?? TRACKS[0]!;
+  const { tracks } = useHomeContent();
+  const [active, setActive] = useState(tracks.items[0]?.id ?? "");
+  const activeIndex = Math.max(0, tracks.items.findIndex((t) => t.id === active));
+  const current = tracks.items[activeIndex];
+
+  if (!current) return null;
+  const CurrentIcon = ICONS[activeIndex % ICONS.length]!;
 
   return (
     <section id="kurikulum" className="relative overflow-hidden bg-gradient-tracks py-20 sm:py-28">
@@ -61,30 +24,29 @@ export function Tracks() {
       <LensFlare seed="kurikulum" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          eyebrow="Kurikulum & Profil Lulusan"
-          title="Tiga Jalur Karier Lulusan"
-          description="Kurikulum OBE dengan capaian pembelajaran lulusan (CPL) yang membuka tiga jalur profesi utama."
-        />
+        <SectionHeading eyebrow={tracks.eyebrow} title={tracks.title} description={tracks.description} />
 
         <Reveal className="mt-12">
           <div className="mx-auto flex max-w-3xl flex-wrap justify-center gap-2">
-            {TRACKS.map((t) => (
-              <button
-                key={t.id}
-                type="button"
-                onClick={() => setActive(t.id)}
-                className={cn(
-                  "inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-semibold transition-all duration-300",
-                  active === t.id
-                    ? "border-transparent bg-[image:var(--gradient-hero)] text-hero-foreground shadow-[var(--shadow-card)] pulse-glow"
-                    : "border-border bg-card text-foreground/70 hover:border-accent/50 hover:text-primary hover:shadow-[var(--shadow-glow-accent)]",
-                )}
-              >
-                <t.icon className="size-4" />
-                {t.label}
-              </button>
-            ))}
+            {tracks.items.map((t, i) => {
+              const Icon = ICONS[i % ICONS.length]!;
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => setActive(t.id)}
+                  className={cn(
+                    "inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-semibold transition-all duration-300",
+                    active === t.id
+                      ? "border-transparent bg-[image:var(--gradient-hero)] text-hero-foreground shadow-[var(--shadow-card)] pulse-glow"
+                      : "border-border bg-card text-foreground/70 hover:border-accent/50 hover:text-primary hover:shadow-[var(--shadow-glow-accent)]",
+                  )}
+                >
+                  <Icon className="size-4" />
+                  {t.label}
+                </button>
+              );
+            })}
           </div>
         </Reveal>
 
@@ -100,7 +62,7 @@ export function Tracks() {
             >
               <div>
                 <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-[image:var(--gradient-hero)] text-hero-foreground icon-glow">
-                  <current.icon className="size-5" />
+                  <CurrentIcon className="size-5" />
                 </span>
                 <h3 className="mt-5 text-2xl font-bold tracking-tight text-foreground">{current.headline}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{current.desc}</p>

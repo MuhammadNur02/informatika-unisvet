@@ -7,7 +7,15 @@ export type Block =
   | {
       type: "people";
       title?: string;
-      items: { name: string; role: string; degree: string; interest: string; photo: string }[];
+      items: {
+        name: string;
+        role: string;
+        degree: string;
+        interest: string;
+        photo: string;
+        photoPosX?: number;
+        photoPosY?: number;
+      }[];
     }
   | { type: "org"; title?: string; top: string; topName: string; nodes: { role: string; name: string }[] }
   | { type: "gallery"; title?: string; items: { name: string; desc: string; image: string }[] }

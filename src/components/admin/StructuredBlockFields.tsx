@@ -167,6 +167,36 @@ export function StructuredBlockFields({
   media: MediaOption[];
   onChange: (next: Block) => void;
 }) {
+  if (block.type === "cards") {
+    return (
+      <div className="space-y-5">
+        <TitleField value={block.title ?? ""} onChange={(title) => onChange({ ...block, title })} />
+        <Repeater
+          label="Kartu"
+          addLabel="Tambah kartu"
+          items={block.items}
+          blank={(): { title: string; desc: string; tag?: string } => ({ title: "", desc: "", tag: "" })}
+          onChange={(items) => onChange({ ...block, items })}
+          render={(item, update) => (
+            <div className="space-y-3">
+              <Field label="Judul kartu" value={item.title} onChange={(title) => update({ ...item, title })} />
+              <Field label="Keterangan" rows={2} value={item.desc} onChange={(desc) => update({ ...item, desc })} />
+              <Field
+                label="Label kecil (opsional)"
+                value={item.tag ?? ""}
+                placeholder="mis. Unggulan, Akademik, Fasilitas"
+                onChange={(tag) => {
+                  const { tag: _drop, ...rest } = item;
+                  update(tag ? { ...rest, tag } : rest);
+                }}
+              />
+            </div>
+          )}
+        />
+      </div>
+    );
+  }
+
   if (block.type === "steps") {
     return (
       <div className="space-y-5">
@@ -305,7 +335,7 @@ export function StructuredBlockFields({
           label="Daftar orang"
           addLabel="Tambah orang"
           items={block.items}
-          blank={() => ({ name: "", role: "", degree: "", interest: "", photo: "" })}
+          blank={() => ({ name: "", role: "", degree: "", interest: "", photo: "", photoPosX: 50, photoPosY: 50 })}
           onChange={(items) => onChange({ ...block, items })}
           render={(item, update) => (
             <div className="grid gap-3 sm:grid-cols-2">
@@ -325,10 +355,60 @@ export function StructuredBlockFields({
                   placeholder="atau tempel URL foto"
                   onChange={(e) => update({ ...item, photo: e.target.value })}
                 />
-                {item.photo ? (
-                  <img src={item.photo} alt="Pratinjau" className="h-28 w-24 rounded-xl object-cover" />
-                ) : null}
               </div>
+              {item.photo ? (
+                <div className="space-y-3 sm:col-span-2">
+                  <Label>Posisi foto dalam bingkai</Label>
+                  <div className="grid gap-4 sm:grid-cols-[auto_1fr]">
+                    <div className="relative h-32 w-28 shrink-0 overflow-hidden rounded-xl bg-secondary">
+                      <img
+                        src={item.photo}
+                        alt="Pratinjau"
+                        className="h-full w-full object-cover"
+                        style={{ objectPosition: `${item.photoPosX ?? 50}% ${item.photoPosY ?? 50}%` }}
+                      />
+                    </div>
+                    <div className="space-y-3">
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between text-xs text-muted-foreground">
+                          <span>Horizontal</span>
+                          <span>{item.photoPosX ?? 50}%</span>
+                        </div>
+                        <input
+                          type="range"
+                          min={0}
+                          max={100}
+                          value={item.photoPosX ?? 50}
+                          onChange={(e) => update({ ...item, photoPosX: Number(e.target.value) })}
+                          className="w-full accent-accent"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between text-xs text-muted-foreground">
+                          <span>Vertikal</span>
+                          <span>{item.photoPosY ?? 50}%</span>
+                        </div>
+                        <input
+                          type="range"
+                          min={0}
+                          max={100}
+                          value={item.photoPosY ?? 50}
+                          onChange={(e) => update({ ...item, photoPosY: Number(e.target.value) })}
+                          className="w-full accent-accent"
+                        />
+                      </div>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => update({ ...item, photoPosX: 50, photoPosY: 50 })}
+                      >
+                        Tengahkan ulang
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
             </div>
           )}
         />

@@ -22,6 +22,19 @@ export type HomeContent = {
   advantages: { eyebrow: string; title: string; description: string; items: { title: string; desc: string }[] };
   visi: { title: string; text: string };
   misi: { title: string; items: string[] };
+  tracks: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    items: {
+      id: string;
+      label: string;
+      headline: string;
+      desc: string;
+      points: string[];
+      careers: string[];
+    }[];
+  };
   news: { eyebrow: string; title: string; description: string };
   alumni: {
     eyebrow: string;
@@ -119,6 +132,52 @@ export const DEFAULT_HOME: HomeContent = {
       "Mengembangkan penelitian bidang pendidikan informatika & EdTech.",
       "Melaksanakan pengabdian masyarakat berbasis literasi digital.",
       "Memperluas kemitraan dengan sekolah, industri, dan komunitas teknologi.",
+    ],
+  },
+  tracks: {
+    eyebrow: "Kurikulum & Profil Lulusan",
+    title: "Tiga Jalur Karier Lulusan",
+    description: "Kurikulum OBE dengan capaian pembelajaran lulusan (CPL) yang membuka tiga jalur profesi utama.",
+    items: [
+      {
+        id: "pendidik",
+        label: "Tenaga Pendidik & Duta Digital",
+        headline: "Track 1 — Guru Informatika & Duta Digital Sekolah",
+        desc: "Menguasai pedagogi informatika, perancangan pembelajaran berbasis proyek, serta kepemimpinan transformasi digital di sekolah.",
+        points: [
+          "Pedagogi & Kurikulum Informatika (CPL Kependidikan)",
+          "Microteaching & Praktik Lapangan Persekolahan (PLP)",
+          "Asesmen Digital & Manajemen Kelas Berbasis LMS",
+          "Literasi Data, AI, dan Etika Digital untuk Sekolah",
+        ],
+        careers: ["Guru Informatika SMP/SMA/SMK", "Instruktur TIK", "Koordinator Digitalisasi Sekolah"],
+      },
+      {
+        id: "developer",
+        label: "Software & Web Developer",
+        headline: "Track 2 — Software Engineer & Web/Mobile Developer",
+        desc: "Fokus rekayasa perangkat lunak modern: dari algoritma dan basis data hingga pengembangan aplikasi web serta mobile siap industri.",
+        points: [
+          "Algoritma, Struktur Data & Basis Data",
+          "Rekayasa Perangkat Lunak, Git & DevOps Dasar",
+          "Pemrograman Web (React & TypeScript) dan Mobile",
+          "Keamanan Siber & Jaringan Komputer Terapan",
+        ],
+        careers: ["Frontend/Backend Developer", "Mobile Developer", "QA & Teknisi Dukungan Informatika"],
+      },
+      {
+        id: "edtech",
+        label: "EdTech Content & Design",
+        headline: "Track 3 — EdTech Content Creator & Instructional Designer",
+        desc: "Merancang media dan pengalaman belajar digital: modul interaktif, video pembelajaran, gamifikasi, hingga produk EdTech.",
+        points: [
+          "Desain Instruksional & Model ADDIE",
+          "Produksi Video, Animasi & Multimedia Pembelajaran",
+          "Gamifikasi dan Pengembangan Media Interaktif",
+          "Kewirausahaan Digital & Manajemen Produk EdTech",
+        ],
+        careers: ["Instructional Designer", "EdTech Content Creator", "Digital Learning Specialist"],
+      },
     ],
   },
   news: {

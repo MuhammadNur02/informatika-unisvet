@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { deleteMedia, fetchMedia, uploadMedia, type MediaItem } from "@/lib/cms";
+import { friendlyError } from "@/lib/friendly-error";
 
 export function MediaLibrary({ userId }: { userId: string }) {
   const queryClient = useQueryClient();
@@ -38,7 +39,7 @@ export function MediaLibrary({ userId }: { userId: string }) {
     } catch (err) {
       toast.error("Gagal mengunggah berkas", {
         id,
-        description: err instanceof Error ? err.message : "Silakan coba lagi.",
+        description: friendlyError(err),
       });
     } finally {
       setBusy(false);
@@ -53,7 +54,7 @@ export function MediaLibrary({ userId }: { userId: string }) {
       await queryClient.invalidateQueries({ queryKey: ["media"] });
     } catch (err) {
       toast.error("Gagal menghapus berkas", {
-        description: err instanceof Error ? err.message : "Silakan coba lagi.",
+        description: friendlyError(err),
       });
     } finally {
       setDeletingId(null);

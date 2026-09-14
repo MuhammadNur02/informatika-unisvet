@@ -20,6 +20,18 @@ import {
   type HomeContent,
 } from "@/lib/site-content";
 import { fetchMedia } from "@/lib/cms";
+import { friendlyError } from "@/lib/friendly-error";
+import { useUnsavedGuard } from "@/lib/use-unsaved-guard";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -99,7 +111,9 @@ export function BerandaEditor({ userId }: { userId: string }) {
   const queryClient = useQueryClient();
   const [home, setHome] = useState<HomeContent | null>(null);
   const [footer, setFooter] = useState<FooterContent | null>(null);
+  const [savedSnapshot, setSavedSnapshot] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [confirmReset, setConfirmReset] = useState(false);
 
   const homeQuery = useQuery({ queryKey: ["site-settings", "home"], queryFn: fetchHomeContent });
   const footerQuery = useQuery({ queryKey: ["site-settings", "footer"], queryFn: fetchFooterContent });
@@ -112,6 +126,13 @@ export function BerandaEditor({ userId }: { userId: string }) {
   useEffect(() => {
     if (footerQuery.data && !footer) setFooter(footerQuery.data);
   }, [footerQuery.data, footer]);
+  useEffect(() => {
+    if (home && footer && savedSnapshot === null) setSavedSnapshot(JSON.stringify({ home, footer }));
+  }, [home, footer, savedSnapshot]);
+
+  const isDirty =
+    home !== null && footer !== null && savedSnapshot !== null && JSON.stringify({ home, footer }) !== savedSnapshot;
+  useUnsavedGuard(isDirty);
 
   async function handleSave() {
     if (!home || !footer) return;
@@ -120,6 +141,7 @@ export function BerandaEditor({ userId }: { userId: string }) {
     try {
       await saveSetting("home", home, userId);
       await saveSetting("footer", footer, userId);
+      setSavedSnapshot(JSON.stringify({ home, footer }));
       await queryClient.invalidateQueries({ queryKey: ["site-settings"] });
       toast.success("Konten beranda & footer tersimpan", {
         id,
@@ -128,7 +150,7 @@ export function BerandaEditor({ userId }: { userId: string }) {
     } catch (err) {
       toast.error("Gagal menyimpan", {
         id,
-        description: err instanceof Error ? err.message : "Silakan coba lagi.",
+        description: friendlyError(err),
       });
     } finally {
       setBusy(false);
@@ -136,17 +158,19 @@ export function BerandaEditor({ userId }: { userId: string }) {
   }
 
   async function handleReset() {
+    setConfirmReset(false);
     setBusy(true);
     try {
       await resetSetting("home");
       await resetSetting("footer");
       setHome(DEFAULT_HOME);
       setFooter(DEFAULT_FOOTER);
+      setSavedSnapshot(JSON.stringify({ home: DEFAULT_HOME, footer: DEFAULT_FOOTER }));
       await queryClient.invalidateQueries({ queryKey: ["site-settings"] });
       toast.success("Konten dikembalikan ke bawaan");
     } catch (err) {
       toast.error("Gagal mengembalikan konten", {
-        description: err instanceof Error ? err.message : "Silakan coba lagi.",
+        description: friendlyError(err),
       });
     } finally {
       setBusy(false);
@@ -189,6 +213,7 @@ export function BerandaEditor({ userId }: { userId: string }) {
           <TabsTrigger value="statistik">Statistik</TabsTrigger>
           <TabsTrigger value="keunggulan">Keunggulan</TabsTrigger>
           <TabsTrigger value="visi">Visi & Misi</TabsTrigger>
+          <TabsTrigger value="jalur">Jalur Karier</TabsTrigger>
           <TabsTrigger value="alumni">Alumni & Berita</TabsTrigger>
           <TabsTrigger value="cta">Ajakan Daftar</TabsTrigger>
           <TabsTrigger value="footer">Footer</TabsTrigger>
@@ -342,6 +367,95 @@ export function BerandaEditor({ userId }: { userId: string }) {
             <Field label="Judul" value={home.misi.title} onChange={(v) => patchHome({ misi: { ...home.misi, title: v } })} />
             <Lines label="Poin misi" items={home.misi.items} onChange={(items) => patchHome({ misi: { ...home.misi, items } })} />
           </Card>
+        </TabsContent>
+
+        <TabsContent value="jalur" className="mt-5 space-y-6">
+          <Card title="Judul Bagian Jalur Karier">
+            <Field label="Eyebrow" value={home.tracks.eyebrow} onChange={(v) => patchHome({ tracks: { ...home.tracks, eyebrow: v } })} />
+            <Field label="Judul" value={home.tracks.title} onChange={(v) => patchHome({ tracks: { ...home.tracks, title: v } })} />
+            <Area label="Deskripsi" value={home.tracks.description} onChange={(v) => patchHome({ tracks: { ...home.tracks, description: v } })} />
+          </Card>
+          {home.tracks.items.map((t, i) => (
+            <Card key={i} title={`Jalur ${i + 1}${t.label ? ` — ${t.label}` : ""}`}>
+              <div className="flex items-center justify-end">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                  onClick={() =>
+                    patchHome({ tracks: { ...home.tracks, items: home.tracks.items.filter((_, idx) => idx !== i) } })
+                  }
+                >
+                  <Trash2 /> Hapus jalur
+                </Button>
+              </div>
+              <Field
+                label="Label tombol tab"
+                value={t.label}
+                onChange={(v) => {
+                  const items = [...home.tracks.items];
+                  items[i] = { ...t, label: v };
+                  patchHome({ tracks: { ...home.tracks, items } });
+                }}
+              />
+              <Field
+                label="Judul jalur"
+                value={t.headline}
+                onChange={(v) => {
+                  const items = [...home.tracks.items];
+                  items[i] = { ...t, headline: v };
+                  patchHome({ tracks: { ...home.tracks, items } });
+                }}
+              />
+              <Area
+                label="Deskripsi"
+                rows={2}
+                value={t.desc}
+                onChange={(v) => {
+                  const items = [...home.tracks.items];
+                  items[i] = { ...t, desc: v };
+                  patchHome({ tracks: { ...home.tracks, items } });
+                }}
+              />
+              <Lines
+                label="Poin kompetensi"
+                items={t.points}
+                onChange={(points) => {
+                  const items = [...home.tracks.items];
+                  items[i] = { ...t, points };
+                  patchHome({ tracks: { ...home.tracks, items } });
+                }}
+              />
+              <Lines
+                label="Prospek karier"
+                items={t.careers}
+                onChange={(careers) => {
+                  const items = [...home.tracks.items];
+                  items[i] = { ...t, careers };
+                  patchHome({ tracks: { ...home.tracks, items } });
+                }}
+              />
+            </Card>
+          ))}
+          <Button
+            type="button"
+            variant="outline"
+            size="pill"
+            onClick={() =>
+              patchHome({
+                tracks: {
+                  ...home.tracks,
+                  items: [
+                    ...home.tracks.items,
+                    { id: `jalur-${Date.now()}`, label: "", headline: "", desc: "", points: [], careers: [] },
+                  ],
+                },
+              })
+            }
+          >
+            <Plus /> Tambah jalur karier
+          </Button>
         </TabsContent>
 
         <TabsContent value="alumni" className="mt-5 space-y-6">
@@ -503,14 +617,40 @@ export function BerandaEditor({ userId }: { userId: string }) {
         </TabsContent>
       </Tabs>
 
-      <div className="sticky bottom-4 flex flex-wrap gap-3 rounded-3xl border border-border bg-card/95 p-4 backdrop-blur-md">
+      <div className="sticky bottom-4 flex flex-wrap items-center gap-3 rounded-3xl border border-border bg-card/95 p-4 backdrop-blur-md">
         <Button size="pill" onClick={handleSave} disabled={busy}>
           {busy ? <Loader2 className="animate-spin" /> : <Save />} Simpan Perubahan
         </Button>
-        <Button variant="outline" size="pill" onClick={handleReset} disabled={busy}>
+        <Button variant="outline" size="pill" onClick={() => setConfirmReset(true)} disabled={busy}>
           <RotateCcw /> Kembalikan Konten Asli
         </Button>
+        {isDirty ? (
+          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent-foreground">
+            <span className="size-1.5 rounded-full bg-accent" /> Ada perubahan belum disimpan
+          </span>
+        ) : null}
       </div>
+
+      <AlertDialog open={confirmReset} onOpenChange={setConfirmReset}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Kembalikan beranda & footer ke bawaan?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Semua perubahan yang pernah disimpan pada Beranda dan Footer akan dihapus dan digantikan
+              konten bawaan. Tindakan ini tidak dapat dibatalkan.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Batal</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleReset}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Ya, kembalikan
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </motion.div>
   );
 }

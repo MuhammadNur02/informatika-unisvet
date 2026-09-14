@@ -25,6 +25,7 @@ import {
   uploadGaleri,
   type GaleriItem,
 } from "@/lib/galeri";
+import { friendlyError } from "@/lib/friendly-error";
 
 const CATEGORIES = ["Kegiatan", "Praktikum", "Prestasi", "Fasilitas", "Umum"];
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -96,7 +97,7 @@ export function GalleryManager({ userId }: { userId: string }) {
       toast.success("Foto berhasil diunggah", { id: toastId });
       await queryClient.invalidateQueries({ queryKey: ["galeri"] });
     } catch (error) {
-      toast.error("Gagal mengunggah foto", { id: toastId, description: error instanceof Error ? error.message : "Silakan coba lagi." });
+      toast.error("Gagal mengunggah foto", { id: toastId, description: friendlyError(error) });
     } finally {
       setBusy(false);
     }
@@ -109,7 +110,7 @@ export function GalleryManager({ userId }: { userId: string }) {
       await queryClient.invalidateQueries({ queryKey: ["galeri"] });
       toast.success("Galeri diperbarui");
     } catch (error) {
-      toast.error("Gagal memperbarui galeri", { description: error instanceof Error ? error.message : "Silakan coba lagi." });
+      toast.error("Gagal memperbarui galeri", { description: friendlyError(error) });
     } finally {
       setBusyId(null);
     }
@@ -128,7 +129,7 @@ export function GalleryManager({ userId }: { userId: string }) {
       ]);
       await queryClient.invalidateQueries({ queryKey: ["galeri"] });
     } catch (error) {
-      toast.error("Gagal mengubah urutan", { description: error instanceof Error ? error.message : "Silakan coba lagi." });
+      toast.error("Gagal mengubah urutan", { description: friendlyError(error) });
     } finally {
       setBusyId(null);
     }
@@ -144,7 +145,7 @@ export function GalleryManager({ userId }: { userId: string }) {
       toast.success("Foto dihapus", { description: item.judul });
       await queryClient.invalidateQueries({ queryKey: ["galeri"] });
     } catch (error) {
-      toast.error("Gagal menghapus foto", { description: error instanceof Error ? error.message : "Silakan coba lagi." });
+      toast.error("Gagal menghapus foto", { description: friendlyError(error) });
     } finally {
       setBusyId(null);
     }

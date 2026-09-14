@@ -20,6 +20,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/site/ThemeToggle";
 import { cn } from "@/lib/utils";
 
 type NavItem = {
@@ -48,12 +49,14 @@ export function AdminShell({
   isAdmin,
   active,
   onNavigate,
+  badges,
   children,
 }: {
   email: string;
   isAdmin: boolean;
   active: string;
   onNavigate: (id: string) => void;
+  badges?: Record<string, number>;
   children: ReactNode;
 }) {
   const navigate = useNavigate();
@@ -123,8 +126,15 @@ export function AdminShell({
                 >
                   <item.icon className="size-4" />
                 </span>
-                <span className="min-w-0">
-                  <span className="block text-sm font-semibold">{item.label}</span>
+                <span className="min-w-0 flex-1">
+                  <span className="flex items-center gap-2">
+                    <span className="block text-sm font-semibold">{item.label}</span>
+                    {badges?.[item.id] ? (
+                      <span className="inline-flex size-4.5 shrink-0 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-accent-foreground">
+                        {badges[item.id]}
+                      </span>
+                    ) : null}
+                  </span>
                   <span className="block text-xs text-primary-foreground/50">{item.description}</span>
                 </span>
               </motion.button>
@@ -253,16 +263,17 @@ export function AdminShell({
             >
               Lihat situs <ExternalLink className="size-3.5" />
             </Link>
+            <ThemeToggle className="border-border text-muted-foreground hover:bg-secondary hover:text-foreground" />
             <span
               className={cn(
-                "hidden items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold sm:inline-flex",
+                "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-semibold",
                 isAdmin
                   ? "bg-accent/15 text-accent-foreground"
                   : "bg-destructive/10 text-destructive",
               )}
             >
               <ShieldCheck className="size-3.5" />
-              {isAdmin ? "Terverifikasi Admin" : "Tanpa hak admin"}
+              <span className="hidden sm:inline">{isAdmin ? "Terverifikasi Admin" : "Tanpa hak admin"}</span>
             </span>
           </div>
 

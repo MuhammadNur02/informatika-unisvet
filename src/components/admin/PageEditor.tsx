@@ -22,6 +22,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { StructuredBlockFields } from "@/components/admin/StructuredBlockFields";
+import { friendlyError } from "@/lib/friendly-error";
+import { useUnsavedGuard } from "@/lib/use-unsaved-guard";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import type { Block, PageContent } from "@/content/types";
 import {
   editablePaths,
@@ -32,6 +44,7 @@ import {
   savePageContent,
   staticPage,
 } from "@/lib/cms";
+import { pageGroups } from "@/lib/site-nav";
 
 const BLOCK_LABEL: Record<string, string> = {
   prose: "Teks / Paragraf",
@@ -71,7 +84,7 @@ function newBlock(type: string): Block {
       return {
         type: "people",
         title: "Profil Orang",
-        items: [{ name: "", role: "", degree: "", interest: "", photo: "" }],
+        items: [{ name: "", role: "", degree: "", interest: "", photo: "", photoPosX: 50, photoPosY: 50 }],
       };
     case "org":
       return { type: "org", title: "Struktur Organisasi", top: "", topName: "", nodes: [{ role: "", name: "" }] };
@@ -99,9 +112,13 @@ function newBlock(type: string): Block {
 export function PageEditor({ userId }: { userId: string }) {
   const queryClient = useQueryClient();
   const paths = useMemo(() => editablePaths(), []);
+  const groups = useMemo(() => pageGroups(paths), [paths]);
   const [path, setPath] = useState(paths[0] ?? "");
   const [draft, setDraft] = useState<PageContent | null>(null);
+  const [savedSnapshot, setSavedSnapshot] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [confirmReset, setConfirmReset] = useState(false);
+  const [pendingPath, setPendingPath] = useState<string | null>(null);
 
   const editedQuery = useQuery({ queryKey: ["edited-paths"], queryFn: fetchEditedPaths });
   const mediaQuery = useQuery({ queryKey: ["media"], queryFn: fetchMedia });
@@ -115,9 +132,23 @@ export function PageEditor({ userId }: { userId: string }) {
     if (!path) return;
     const base = contentQuery.data ?? staticPage(path);
     if (base && !contentQuery.isFetching) {
-      setDraft(structuredClone(base));
+      const cloned = structuredClone(base);
+      setDraft(cloned);
+      setSavedSnapshot(JSON.stringify(cloned));
     }
   }, [path, contentQuery.data, contentQuery.isFetching]);
+
+  const isDirty = draft !== null && savedSnapshot !== null && JSON.stringify(draft) !== savedSnapshot;
+  useUnsavedGuard(isDirty);
+
+  function requestPathChange(next: string) {
+    if (next === path) return;
+    if (isDirty) {
+      setPendingPath(next);
+      return;
+    }
+    setPath(next);
+  }
 
   function patch(next: Partial<PageContent>) {
     setDraft((d) => (d ? { ...d, ...next } : d));
@@ -154,13 +185,14 @@ export function PageEditor({ userId }: { userId: string }) {
     const id = toast.loading("Menyimpan konten…");
     try {
       await savePageContent({ path, content: draft, userId });
+      setSavedSnapshot(JSON.stringify(draft));
       toast.success("Konten tersimpan", { id, description: `Perubahan langsung tampil di ${path}` });
       await queryClient.invalidateQueries({ queryKey: ["page-content", path] });
       await queryClient.invalidateQueries({ queryKey: ["edited-paths"] });
     } catch (err) {
       toast.error("Gagal menyimpan konten", {
         id,
-        description: err instanceof Error ? err.message : "Silakan coba lagi.",
+        description: friendlyError(err),
       });
     } finally {
       setBusy(false);
@@ -168,19 +200,24 @@ export function PageEditor({ userId }: { userId: string }) {
   }
 
   async function handleReset() {
+    setConfirmReset(false);
     setBusy(true);
     const id = toast.loading("Mengembalikan konten asli…");
     try {
       await resetPageContent(path);
       const base = staticPage(path);
-      if (base) setDraft(structuredClone(base));
+      if (base) {
+        const cloned = structuredClone(base);
+        setDraft(cloned);
+        setSavedSnapshot(JSON.stringify(cloned));
+      }
       toast.success("Konten dikembalikan ke versi asli", { id });
       await queryClient.invalidateQueries({ queryKey: ["page-content", path] });
       await queryClient.invalidateQueries({ queryKey: ["edited-paths"] });
     } catch (err) {
       toast.error("Gagal mengembalikan konten", {
         id,
-        description: err instanceof Error ? err.message : "Silakan coba lagi.",
+        description: friendlyError(err),
       });
     } finally {
       setBusy(false);
@@ -199,18 +236,24 @@ export function PageEditor({ userId }: { userId: string }) {
             <select
               id="page-path"
               value={path}
-              onChange={(e) => setPath(e.target.value)}
+              onChange={(e) => requestPathChange(e.target.value)}
               className="h-11 w-full rounded-xl border border-input bg-background px-3.5 text-sm text-foreground outline-none transition-colors focus-visible:border-accent"
             >
-              {paths.map((p) => (
-                <option key={p} value={p}>
-                  {p}
-                  {editedPaths.includes(p) ? "  •  sudah diedit" : ""}
-                </option>
+              {groups.map((group) => (
+                <optgroup key={group.label} label={group.label}>
+                  {group.items.map((item) => (
+                    <option key={item.to} value={item.to}>
+                      {item.label}
+                      {editedPaths.includes(item.to) ? "  •  sudah diedit" : ""}
+                    </option>
+                  ))}
+                </optgroup>
               ))}
             </select>
             <p className="text-xs text-muted-foreground">
-              Halaman yang belum pernah diedit memakai konten asli sebagai titik awal.
+              {isDirty
+                ? "Ada perubahan yang belum disimpan pada halaman ini."
+                : "Halaman yang belum pernah diedit memakai konten asli sebagai titik awal."}
             </p>
           </div>
           <Button asChild variant="outline" size="pill">
@@ -414,16 +457,66 @@ export function PageEditor({ userId }: { userId: string }) {
             </AnimatePresence>
           </section>
 
-          <div className="sticky bottom-4 flex flex-wrap gap-3 rounded-3xl border border-border bg-card/95 p-4 backdrop-blur">
+          <div className="sticky bottom-4 flex flex-wrap items-center gap-3 rounded-3xl border border-border bg-card/95 p-4 backdrop-blur">
             <Button type="button" size="pill" onClick={handleSave} disabled={busy}>
               {busy ? <Loader2 className="animate-spin" /> : <Save />} Simpan Perubahan
             </Button>
-            <Button type="button" variant="outline" size="pill" onClick={handleReset} disabled={busy}>
+            <Button type="button" variant="outline" size="pill" onClick={() => setConfirmReset(true)} disabled={busy}>
               <RotateCcw /> Kembalikan Konten Asli
             </Button>
+            {isDirty ? (
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent-foreground">
+                <span className="size-1.5 rounded-full bg-accent" /> Ada perubahan belum disimpan
+              </span>
+            ) : null}
           </div>
         </>
       )}
+
+      <AlertDialog open={confirmReset} onOpenChange={setConfirmReset}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Kembalikan ke konten asli?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Semua perubahan yang pernah disimpan pada halaman <strong>{path}</strong> akan dihapus dan
+              digantikan konten bawaan. Tindakan ini tidak dapat dibatalkan.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Batal</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleReset}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Ya, kembalikan
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={pendingPath !== null} onOpenChange={(open) => !open && setPendingPath(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Buang perubahan yang belum disimpan?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Anda punya perubahan yang belum disimpan pada halaman <strong>{path}</strong>. Berpindah
+              halaman sekarang akan membuang perubahan tersebut.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Tetap di sini</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (pendingPath) setPath(pendingPath);
+                setPendingPath(null);
+              }}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Buang & pindah
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
@@ -498,34 +591,6 @@ function BlockFields({
               onChange({ ...block, items: e.target.value.split("\n").filter((l) => l.trim() !== "") })
             }
           />
-        </div>
-      </div>
-    );
-  }
-
-  if (block.type === "cards") {
-    return (
-      <div className="space-y-4">
-        <TitleField value={block.title ?? ""} onChange={(title) => onChange({ ...block, title })} />
-        <div className="space-y-2">
-          <Label>Kartu — format: Judul | Keterangan | Label opsional</Label>
-          <Textarea
-            rows={6}
-            value={block.items.map((i) => [i.title, i.desc, i.tag ?? ""].join(" | ")).join("\n")}
-            onChange={(e) =>
-              onChange({
-                ...block,
-                items: e.target.value
-                  .split("\n")
-                  .filter((l) => l.trim() !== "")
-                  .map((line) => {
-                    const [title = "", desc = "", tag = ""] = line.split("|").map((s) => s.trim());
-                    return tag ? { title, desc, tag } : { title, desc };
-                  }),
-              })
-            }
-          />
-          <p className="text-xs text-muted-foreground">Contoh: Kurikulum Adaptif | Disusun bersama industri | Unggulan</p>
         </div>
       </div>
     );

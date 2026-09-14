@@ -1,77 +1,33 @@
+import { useQuery } from "@tanstack/react-query";
 import { Reveal } from "./Reveal";
 import { LensFlare } from "./LensFlare";
-import labIot from "@/assets/lab-iot.jpg";
-import labSmart from "@/assets/lab-smart.jpg";
-import labMicroteaching from "@/assets/lab-microteaching.jpg";
-import libCampus from "@/assets/lib-campus.jpg";
-import dosen1 from "@/assets/dosen-1.jpg";
-import dosen2 from "@/assets/dosen-2.jpg";
-import dosen3 from "@/assets/dosen-3.jpg";
-import dosen4 from "@/assets/dosen-4.jpg";
-import dosen5 from "@/assets/dosen-5.jpg";
-import dosen6 from "@/assets/dosen-6.jpg";
+import { fetchPageOverride, staticPage } from "@/lib/cms";
+import type { Block } from "@/content/types";
 
-const DOSEN = [
-  { 
-    name: "R. Irlanto Sudomo, M.Pd.", 
-    role: "Wakil Rektor II Unisvet", 
-    interest: "Pendidikan, Profesi Kependidikan, & Manajemen Tata Kelola Institusi",
-    image: dosen1 
-  },
-  { 
-    name: "Dr. Herry Sulendro Mangiri, S.T., M.Eng.", 
-    role: "Dekan F. Maritim", 
-    interest: "Teknik, Invensi Teknologi Terapan, & Penjaminan Mutu",
-    image: dosen2 
-  },
-  { 
-    name: "Dr. Afis Pratama, S.T., M.Pd.", 
-    role: "Ka. LPPM Unisvet", 
-    interest: "Pendidikan Informatika & Penjaminan Mutu Akademik",
-    image: dosen3 
-  },
-  { 
-    name: "Handini Arga Damar Rani, M.Kom.", 
-    role: "Ka. Lab. TIK F.SAINTEK", 
-    interest: "Data Mining & Ilmu Komputer",
-    image: dosen4 
-  },
-  { 
-    name: "Adi Nova Trisetiyanto, S.Pd., M.Pd.", 
-    role: "Ka. Prodi P. Informatika", 
-    interest: "Media Pembelajaran Digital & Research & Development",
-    image: dosen5 
-  },
-  { 
-    name: "Henny Prasetyani, M.Pd.", 
-    role: "Koord. PMB P. Informatika", 
-    interest: "Teknologi Informasi & Pengabdian Masyarakat",
-    image: dosen6 
-  },
-];
+const DOSEN_PATH = "/profil/dosen-tendik";
+const FASILITAS_PATH = "/profil/fasilitas";
 
-const FASILITAS = [
-  {
-    name: "Laboratorium Komputer Lanjut",
-    image: labIot,
-    desc: "Workstation pemrograman, jaringan, IoT, dan purwarupa sistem cerdas.",
-  },
-  {
-    name: "Microteaching Studio",
-    image: labMicroteaching,
-    desc: "Studio latihan mengajar dengan perekaman video untuk evaluasi pedagogi.",
-  },
-  {
-    name: "Smart Classroom",
-    image: labSmart,
-    desc: "Ruang kelas interaktif dengan papan digital dan konferensi hibrida.",
-  },
-  {
-    name: "Perpustakaan & E-Library",
-    image: libCampus,
-    desc: "Ruang baca modern dengan akses jurnal digital dan repositori kampus.",
-  },
-];
+/** Sumber data sama dengan halaman CMS terkait, supaya edit dosen/fasilitas di dashboard otomatis tampil di beranda juga. */
+function usePageBlocks(path: string) {
+  const query = useQuery({
+    queryKey: ["page-content", path],
+    queryFn: () => fetchPageOverride(path),
+    staleTime: 60_000,
+  });
+  return (query.data ?? staticPage(path))?.blocks ?? [];
+}
+
+function usePeople(path: string) {
+  const blocks = usePageBlocks(path);
+  const block = blocks.find((b): b is Extract<Block, { type: "people" }> => b.type === "people");
+  return block?.items ?? [];
+}
+
+function useGallery(path: string) {
+  const blocks = usePageBlocks(path);
+  const block = blocks.find((b): b is Extract<Block, { type: "gallery" }> => b.type === "gallery");
+  return block?.items ?? [];
+}
 
 /** Heading versi terang-di-atas-gelap — section ini beda dari section terang lain di beranda. */
 function DarkSectionHeading({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
@@ -88,6 +44,9 @@ function DarkSectionHeading({ eyebrow, title, description }: { eyebrow: string; 
 
 /** Section gelap ("team spotlight") — pita gelap kedua di beranda, kontras dengan section terang sekitarnya. */
 export function Faculty() {
+  const dosen = usePeople(DOSEN_PATH);
+  const fasilitas = useGallery(FASILITAS_PATH);
+
   return (
     <section id="dosen" className="relative overflow-hidden bg-hero-gradient py-20 sm:py-28">
       <div className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-40" aria-hidden />
@@ -101,12 +60,17 @@ export function Faculty() {
         />
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {DOSEN.map((d, i) => (
+          {dosen.map((d, i) => (
             <Reveal key={d.name} delay={(i % 3) * 0.08}>
               <article className="card-glass-dark flex h-full flex-col items-center rounded-3xl p-7 text-center">
                 <div className="mb-5 h-36 w-36 shrink-0 overflow-hidden rounded-3xl bg-hero-foreground/10">
-                  {d.image ? (
-                    <img src={d.image} alt={d.name} className="h-full w-full object-cover object-top" />
+                  {d.photo ? (
+                    <img
+                      src={d.photo}
+                      alt={d.name}
+                      className="h-full w-full object-cover"
+                      style={{ objectPosition: `${d.photoPosX ?? 50}% ${d.photoPosY ?? 25}%` }}
+                    />
                   ) : (
                     <span className="flex h-full w-full items-center justify-center text-4xl font-bold text-hero-foreground">
                       {d.name.charAt(0)}
@@ -134,7 +98,7 @@ export function Faculty() {
             description="Fasilitas penunjang praktik yang mendukung pembelajaran berbasis proyek."
           />
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {FASILITAS.map((f, i) => (
+            {fasilitas.map((f, i) => (
               <Reveal key={f.name} delay={i * 0.08}>
                 <article className="card-glass-dark group relative h-72 overflow-hidden rounded-3xl">
                   <img
