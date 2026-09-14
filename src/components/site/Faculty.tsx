@@ -1,8 +1,10 @@
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { motion, AnimatePresence } from "motion/react";
 import { Reveal } from "./Reveal";
 import { LensFlare } from "./LensFlare";
 import { fetchPageOverride, staticPage } from "@/lib/cms";
-import { usePointerGlow, radialGlowBackground } from "@/lib/use-pointer-glow";
+import { usePointerGlow, thinRadialGlowBackground } from "@/lib/use-pointer-glow";
 import type { Block } from "@/content/types";
 
 type DosenItem = Extract<Block, { type: "people" }>["items"][number];
@@ -45,61 +47,114 @@ function DarkSectionHeading({ eyebrow, title, description }: { eyebrow: string; 
   );
 }
 
+/** Spring "kenyal" — sedikit overshoot lalu menetap, seperti riak air, bukan berhenti tiba-tiba. */
+const WATER_SPRING = { type: "spring" as const, stiffness: 190, damping: 14, mass: 0.8 };
+
+const DOSEN_CARD_BODY = (
+  d: DosenItem,
+  photoClass: string,
+  nameClass: string,
+  roleClass: string,
+) => (
+  <>
+    <div className={`shrink-0 overflow-hidden rounded-3xl bg-hero-foreground/10 ${photoClass}`}>
+      {d.photo ? (
+        <img
+          src={d.photo}
+          alt={d.name}
+          className="h-full w-full object-cover"
+          style={{ objectPosition: `${d.photoPosX ?? 50}% ${d.photoPosY ?? 25}%` }}
+        />
+      ) : (
+        <span className="flex h-full w-full items-center justify-center font-bold text-hero-foreground">
+          {d.name.charAt(0)}
+        </span>
+      )}
+    </div>
+
+    <h3 className={`leading-snug text-hero-foreground ${nameClass}`}>{d.name}</h3>
+    <p className={`mt-1 font-semibold text-accent ${roleClass}`}>{d.role}</p>
+
+    <div className="mt-auto flex w-full items-center justify-center border-t border-hero-foreground/15 pt-4">
+      <span className="inline-block rounded-full bg-hero-foreground/10 px-3.5 py-1.5 text-xs font-semibold text-hero-foreground/85">
+        {d.interest}
+      </span>
+    </div>
+  </>
+);
+
 /**
- * Kartu dosen maju ke depan & membesar mengikuti kursor, disertai shading
- * radial yang sama seperti di foto hero — begitu pointer keluar, kartu
- * kembali mulus ke posisi & ukuran semula.
+ * Kartu dosen langsung membesar ke overlay hampir sepenuh layar begitu
+ * pointer mengarah ke situ — kartu asli di grid tetap diam di tempatnya
+ * (cuma disembunyikan sementara lewat visibility, supaya layout grid tidak
+ * ikut goyah) sementara "kembarannya" muncul di atas backdrop gelap dan
+ * meluncur dari posisi asal ke tengah layar lewat layoutId yang sama
+ * (shared-layout transition framer-motion), disertai shading radial tipis
+ * yang mengikuti kursor. Spring dengan damping rendah membuatnya sedikit
+ * "bergoyang" seperti riak air saat menetap. Pointer keluar dari kartu
+ * (atau dari backdrop, atau tombol Esc) mengembalikannya ke ukuran semula.
  */
 function DosenCard({ d, delay }: { d: DosenItem; delay: number }) {
-  const { ref, pointer, onPointerMove, onPointerLeave } = usePointerGlow(10);
+  const [expanded, setExpanded] = useState(false);
+  const { ref, pointer, onPointerMove, onPointerLeave } = usePointerGlow(0);
+  const layoutId = `dosen-card-${d.name}`;
+
+  useEffect(() => {
+    if (!expanded) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setExpanded(false);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [expanded]);
 
   return (
     <Reveal delay={delay}>
-      <div
-        ref={ref}
-        className="perspective-distant"
-        onPointerMove={onPointerMove}
-        onPointerLeave={onPointerLeave}
-      >
-        <article
-          className="card-glass-dark relative flex h-full flex-col items-center overflow-hidden rounded-3xl p-7 text-center transition-transform duration-300 ease-out transform-3d will-change-transform"
-          style={{
-            transform: `translateY(${pointer.active ? -10 : 0}px) rotateX(${pointer.rx}deg) rotateY(${pointer.ry}deg) scale(${pointer.active ? 1.06 : 1})`,
-            zIndex: pointer.active ? 20 : 1,
-            boxShadow: pointer.active ? "var(--shadow-glow-accent)" : undefined,
-          }}
+      <div style={{ visibility: expanded ? "hidden" : "visible" }} className="h-full">
+        <motion.article
+          {...(!expanded ? { layoutId } : {})}
+          onMouseEnter={() => setExpanded(true)}
+          className="card-glass-dark flex h-full flex-col items-center rounded-3xl p-7 text-center"
         >
-          <div className="mb-5 h-36 w-36 shrink-0 overflow-hidden rounded-3xl bg-hero-foreground/10">
-            {d.photo ? (
-              <img
-                src={d.photo}
-                alt={d.name}
-                className="h-full w-full object-cover"
-                style={{ objectPosition: `${d.photoPosX ?? 50}% ${d.photoPosY ?? 25}%` }}
-              />
-            ) : (
-              <span className="flex h-full w-full items-center justify-center text-4xl font-bold text-hero-foreground">
-                {d.name.charAt(0)}
-              </span>
-            )}
-          </div>
-
-          <h3 className="min-h-14 text-lg font-bold leading-snug text-hero-foreground">{d.name}</h3>
-          <p className="mt-1 min-h-8 text-sm font-semibold text-accent">{d.role}</p>
-
-          <div className="mt-auto flex w-full items-center justify-center border-t border-hero-foreground/15 pt-4">
-            <span className="inline-block rounded-full bg-hero-foreground/10 px-3.5 py-1.5 text-xs font-semibold text-hero-foreground/85">
-              {d.interest}
-            </span>
-          </div>
-
-          <div
-            className="pointer-events-none absolute inset-0 rounded-3xl transition-opacity duration-300 mix-blend-overlay"
-            style={{ opacity: pointer.active ? 1 : 0, background: radialGlowBackground(pointer.mx, pointer.my) }}
-            aria-hidden
-          />
-        </article>
+          {DOSEN_CARD_BODY(d, "mb-5 h-36 w-36", "min-h-14 text-lg font-bold", "min-h-8 text-sm")}
+        </motion.article>
       </div>
+
+      <AnimatePresence>
+        {expanded ? (
+          <>
+            <motion.div
+              key="backdrop"
+              className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onClick={() => setExpanded(false)}
+              aria-hidden
+            />
+            <motion.article
+              key="expanded"
+              layoutId={layoutId}
+              ref={ref}
+              onPointerMove={onPointerMove}
+              onPointerLeave={() => {
+                onPointerLeave();
+                setExpanded(false);
+              }}
+              transition={WATER_SPRING}
+              className="card-glass-dark fixed inset-0 z-[101] m-auto flex h-[min(85vh,780px)] w-[min(92vw,640px)] flex-col items-center justify-center overflow-hidden rounded-[2rem] p-10 text-center"
+            >
+              {DOSEN_CARD_BODY(d, "mb-7 h-56 w-56", "text-3xl font-bold", "text-lg")}
+              <div
+                className="pointer-events-none absolute inset-0 rounded-[2rem] transition-opacity duration-300 mix-blend-overlay"
+                style={{ opacity: pointer.active ? 1 : 0, background: thinRadialGlowBackground(pointer.mx, pointer.my) }}
+                aria-hidden
+              />
+            </motion.article>
+          </>
+        ) : null}
+      </AnimatePresence>
     </Reveal>
   );
 }
