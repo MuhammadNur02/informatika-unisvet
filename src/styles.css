@@ -193,6 +193,48 @@
                     radial-gradient(ellipse at 40% 80%, oklch(0.488 0.243 264.376 / 0.1) 0%, transparent 50%);
 }
 
+/*
+ * Palet gelap khusus dashboard admin — sengaja TIDAK memakai warna identitas
+ * situs (maroon/emas). Dipasang lewat class "admin-theme" di <body> (bukan
+ * cuma pembungkus sidebar) supaya ikut menjangkau dialog & toast yang
+ * dirender lewat portal ke <body>. Hanya aktif saat mode gelap; mode terang
+ * dashboard admin tetap memakai warna identitas seperti biasa.
+ */
+.dark .admin-theme {
+  --background: oklch(0.15 0.02 250);
+  --foreground: oklch(0.89 0.01 250);
+  --card: oklch(0.19 0.022 250);
+  --card-foreground: oklch(0.89 0.01 250);
+  --popover: oklch(0.19 0.022 250);
+  --popover-foreground: oklch(0.89 0.01 250);
+  --primary: oklch(0.7 0.15 240);
+  --primary-foreground: oklch(0.13 0.02 250);
+  --secondary: oklch(0.25 0.02 250);
+  --secondary-foreground: oklch(0.89 0.01 250);
+  --muted: oklch(0.22 0.018 250);
+  --muted-foreground: oklch(0.62 0.02 250);
+  --accent: oklch(0.76 0.13 175);
+  --accent-foreground: oklch(0.13 0.03 195);
+  --accent-soft: oklch(0.82 0.1 175);
+  --slate-surface: oklch(0.17 0.02 250);
+  --destructive: oklch(0.66 0.2 25);
+  --destructive-foreground: oklch(0.98 0.005 250);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 12%);
+  --ring: oklch(0.76 0.13 175);
+  --primary-deep: oklch(0.09 0.015 250);
+  --gradient-hero: linear-gradient(
+    135deg,
+    oklch(0.1 0.02 255) 0%,
+    oklch(0.16 0.035 240) 50%,
+    oklch(0.22 0.05 200) 100%
+  );
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.35), 0 12px 32px -12px oklch(0 0 0 / 0.55);
+  --shadow-lift: 0 24px 48px -20px oklch(0 0 0 / 0.65);
+  --shadow-glow: 0 0 0 1px oklch(0.76 0.13 175 / 0.5), 0 12px 32px -10px oklch(0.76 0.13 175 / 0.45);
+  --shadow-glow-accent: 0 0 20px -5px oklch(0.76 0.13 175 / 0.4);
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
@@ -312,10 +354,14 @@
 @keyframes pmb-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 oklch(0.78 0.17 85 / 0.55), 0 10px 26px -12px oklch(0.78 0.17 85 / 0.5);
+    box-shadow:
+      0 0 0 0 oklch(from var(--accent) l c h / 0.55),
+      0 10px 26px -12px oklch(from var(--accent) l c h / 0.5);
   }
   50% {
-    box-shadow: 0 0 0 10px oklch(0.78 0.17 85 / 0), 0 10px 26px -12px oklch(0.78 0.17 85 / 0.5);
+    box-shadow:
+      0 0 0 10px oklch(from var(--accent) l c h / 0),
+      0 10px 26px -12px oklch(from var(--accent) l c h / 0.5);
   }
 }
 

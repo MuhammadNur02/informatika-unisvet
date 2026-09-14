@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ExternalLink,
@@ -63,6 +63,13 @@ export function AdminShell({
   const queryClient = useQueryClient();
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // Ditaruh di <body> (bukan hanya div sidebar) supaya palet gelap admin juga menjangkau
+  // dialog konfirmasi & notifikasi toast, yang di-render lewat portal langsung ke <body>.
+  useEffect(() => {
+    document.body.classList.add("admin-theme");
+    return () => document.body.classList.remove("admin-theme");
+  }, []);
+
   async function handleSignOut() {
     await queryClient.cancelQueries();
     queryClient.clear();
@@ -84,7 +91,7 @@ export function AdminShell({
     <nav className="space-y-5">
       {groups.map((group) => (
         <div key={group.group} className="space-y-1.5">
-          <p className="px-3.5 text-[10px] font-bold uppercase tracking-[0.22em] text-primary-foreground/40">
+          <p className="px-3.5 text-[10px] font-bold uppercase tracking-[0.22em] text-hero-foreground/40">
             {group.group}
           </p>
           {group.items.map((item) => {
@@ -106,8 +113,8 @@ export function AdminShell({
                 className={cn(
                   "group relative flex w-full items-start gap-3 rounded-2xl px-3.5 py-3 text-left transition-all duration-300",
                   isActive
-                    ? "bg-primary-foreground/10 text-primary-foreground shadow-[inset_0_0_0_1px_oklch(0.79_0.15_78/0.35)]"
-                    : "text-primary-foreground/65 hover:bg-primary-foreground/5 hover:text-primary-foreground",
+                    ? "bg-hero-foreground/10 text-hero-foreground shadow-[inset_0_0_0_1px_oklch(0.79_0.15_78/0.35)]"
+                    : "text-hero-foreground/65 hover:bg-hero-foreground/5 hover:text-hero-foreground",
                 )}
               >
                 {isActive ? (
@@ -121,7 +128,7 @@ export function AdminShell({
                     "mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-xl transition-colors duration-300",
                     isActive
                       ? "bg-accent text-accent-foreground"
-                      : "bg-primary-foreground/10 text-primary-foreground/70 group-hover:bg-primary-foreground/15",
+                      : "bg-hero-foreground/10 text-hero-foreground/70 group-hover:bg-hero-foreground/15",
                   )}
                 >
                   <item.icon className="size-4" />
@@ -135,7 +142,7 @@ export function AdminShell({
                       </span>
                     ) : null}
                   </span>
-                  <span className="block text-xs text-primary-foreground/50">{item.description}</span>
+                  <span className="block text-xs text-hero-foreground/50">{item.description}</span>
                 </span>
               </motion.button>
             );
@@ -153,10 +160,10 @@ export function AdminShell({
           <ShieldCheck className="size-5 text-accent-foreground" />
         </span>
         <span className="min-w-0">
-          <span className="block text-sm font-extrabold tracking-tight text-primary-foreground">
+          <span className="block text-sm font-extrabold tracking-tight text-hero-foreground">
             Panel Pengelola
           </span>
-          <span className="block truncate text-xs text-primary-foreground/55">Pend. Informatika UNISVET</span>
+          <span className="block truncate text-xs text-hero-foreground/55">Pend. Informatika UNISVET</span>
         </span>
       </Link>
 
@@ -165,19 +172,19 @@ export function AdminShell({
       <div className="mt-auto space-y-3">
         <Link
           to="/informasi/galeri"
-          className="flex items-center justify-between gap-2 rounded-2xl border border-primary-foreground/15 px-3.5 py-3 text-xs font-semibold text-primary-foreground/75 transition-all duration-300 hover:border-accent/50 hover:text-primary-foreground"
+          className="flex items-center justify-between gap-2 rounded-2xl border border-hero-foreground/15 px-3.5 py-3 text-xs font-semibold text-hero-foreground/75 transition-all duration-300 hover:border-accent/50 hover:text-hero-foreground"
         >
           Lihat halaman publik
           <ExternalLink className="size-3.5" />
         </Link>
-        <div className="rounded-2xl border border-primary-foreground/12 bg-primary-foreground/5 p-3.5">
+        <div className="rounded-2xl border border-hero-foreground/12 bg-hero-foreground/5 p-3.5">
           <div className="flex items-center gap-3">
             <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-bold text-accent-foreground">
               {initials}
             </span>
             <div className="min-w-0">
-              <p className="truncate text-xs font-semibold text-primary-foreground">{email}</p>
-              <p className="text-[11px] text-primary-foreground/55">
+              <p className="truncate text-xs font-semibold text-hero-foreground">{email}</p>
+              <p className="text-[11px] text-hero-foreground/55">
                 {isAdmin ? "Admin Prodi" : "Akses terbatas"}
               </p>
             </div>
@@ -186,7 +193,7 @@ export function AdminShell({
             variant="outline"
             size="sm"
             onClick={handleSignOut}
-            className="mt-3 w-full border-primary-foreground/20 bg-transparent text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+            className="mt-3 w-full border-hero-foreground/20 bg-transparent text-hero-foreground hover:bg-hero-foreground/10 hover:text-hero-foreground"
           >
             <LogOut /> Keluar
           </Button>
@@ -224,7 +231,7 @@ export function AdminShell({
                 type="button"
                 aria-label="Tutup menu"
                 onClick={() => setMobileOpen(false)}
-                className="absolute right-4 top-4 inline-flex size-9 items-center justify-center rounded-full bg-primary-foreground/10 text-primary-foreground"
+                className="absolute right-4 top-4 inline-flex size-9 items-center justify-center rounded-full bg-hero-foreground/10 text-hero-foreground"
               >
                 <X className="size-4" />
               </button>
