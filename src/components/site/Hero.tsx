@@ -67,7 +67,11 @@ export function Hero() {
           <span className="inline-flex items-center gap-2 rounded-full border border-hero-foreground/20 bg-hero-foreground/10 px-4 py-1.5 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-accent backdrop-blur-md">
             <Sparkles className="size-3.5" /> {hero.badge}
           </span>
-          <h1 className="mt-6 text-4xl font-extrabold leading-[1.08] tracking-tight text-hero-foreground sm:text-5xl lg:text-[3.4rem] xl:text-[3.8rem]">
+          {/* min-h dalam satuan em (3 baris x leading-[1.08]) supaya tetap proporsional
+              di semua ukuran teks responsif — mencadangkan ruang untuk judul terpanjang
+              yang bergantian, jadi tinggi judul tidak naik-turun saat animasi ketik/hapus
+              berjalan (itu yang bikin konten di bawahnya "loncat" saat digulir). */}
+          <h1 className="mt-6 min-h-[3.24em] text-4xl font-extrabold leading-[1.08] tracking-tight text-hero-foreground sm:text-5xl lg:text-[3.4rem] xl:text-[3.8rem]">
             {hero.titleFixed} <TypewriterText items={hero.titleRotating} className="text-gradient-gold" />
           </h1>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-hero-foreground/75 sm:text-lg xl:max-w-2xl xl:text-xl">

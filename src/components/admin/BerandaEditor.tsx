@@ -232,7 +232,7 @@ export function BerandaEditor({ userId }: { userId: string }) {
               label="Judul bergantian (animasi ketik & hapus)"
               items={home.hero.titleRotating}
               onChange={(titleRotating) => patchHome({ hero: { ...home.hero, titleRotating } })}
-              hint="Satu judul per baris — akan tampil bergantian dengan animasi mengetik lalu menghapus."
+              hint="Satu judul per baris — akan tampil bergantian dengan animasi mengetik lalu menghapus. Usahakan panjangnya mirip satu sama lain (maks. sekitar 3 baris di layar), supaya tinggi judul tidak berubah-ubah saat animasi berjalan."
             />
             <Area label="Subjudul" rows={3} value={home.hero.subtitle} onChange={(v) => patchHome({ hero: { ...home.hero, subtitle: v } })} />
             <div className="grid gap-4 sm:grid-cols-2">
