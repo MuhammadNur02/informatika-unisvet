@@ -9,15 +9,17 @@ function seededRandom(seed: number) {
 const EMBER_COUNT = 60;
 
 /**
- * Percikan bara api yang naik dari bawah layar, sedikit bergoyang ke kiri-
- * kanan (bukan garis lurus), lalu warnanya meredup dari kuning-oranye
- * menyala jadi merah tua lalu hitam sambil menghilang — dipasang di latar
- * halaman login admin. Tiap percikan memakai animation-delay NEGATIF supaya
- * begitu halaman dimuat, animasinya langsung terlihat "sedang berjalan" di
- * berbagai tahap (bukan mulai serentak dari nol), jadi kesan banyak-dan-acak
- * sudah terasa sejak frame pertama, bukan menumpuk pelan-pelan.
+ * Percikan bara api yang naik dari bawah, sedikit bergoyang ke kiri-kanan
+ * (bukan garis lurus), lalu warnanya meredup dari kuning-oranye menyala
+ * jadi merah tua lalu hitam sambil menghilang & mengecil. Dipakai di latar
+ * halaman & dashboard admin (fixed, menutupi seluruh viewport) maupun di
+ * footer situs publik (absolute, dibatasi ke area footer saja) — atur lewat
+ * prop `className` untuk positioning-nya. Tiap percikan memakai animation-
+ * delay NEGATIF supaya begitu dimuat, animasinya langsung terlihat "sedang
+ * berjalan" di berbagai tahap (bukan mulai serentak dari nol), jadi kesan
+ * banyak-dan-acak sudah terasa sejak frame pertama.
  */
-export function AdminEmbers() {
+export function EmberField({ className = "fixed inset-0 z-0" }: { className?: string }) {
   const embers = useMemo(
     () =>
       Array.from({ length: EMBER_COUNT }, (_, i) => {
@@ -33,7 +35,7 @@ export function AdminEmbers() {
   );
 
   return (
-    <div aria-hidden className="ember-field pointer-events-none fixed inset-0 z-0 overflow-hidden">
+    <div aria-hidden className={`ember-field pointer-events-none overflow-hidden ${className}`}>
       {embers.map((e) => (
         <span
           key={e.id}
