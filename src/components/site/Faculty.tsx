@@ -141,7 +141,19 @@ function DosenCard({ d, delay }: { d: DosenItem; delay: number }) {
               ref={ref}
               onPointerMove={onPointerMove}
               transition={WATER_SPRING}
-              style={{ rotateX: pointer.rx, rotateY: pointer.ry, transformPerspective: 1200 }}
+              style={{
+                rotateX: pointer.rx,
+                rotateY: pointer.ry,
+                transformPerspective: 1200,
+                // card-glass-dark sendiri punya CSS "transition: transform 0.35s"
+                // untuk efek hover kartu lain — di sini transform-nya sudah
+                // dikendalikan penuh oleh framer-motion (layoutId + tilt), jadi
+                // transisi CSS itu harus dimatikan di sini. Kalau tidak, browser
+                // ikut mencoba menghaluskan tiap update transform dari
+                // framer-motion selama 0.35s tambahan, bikin bukaannya terasa
+                // ada jeda & lamban (dua animasi saling berebut properti yang sama).
+                transitionProperty: "none",
+              }}
               className="card-glass-dark fixed inset-0 z-[101] m-auto flex h-[min(85vh,780px)] w-[min(92vw,640px)] flex-col items-center justify-center overflow-hidden rounded-[2rem] p-10 text-center"
             >
               {DOSEN_CARD_BODY(d, "mb-7 h-56 w-56", "text-3xl font-bold", "text-lg")}
