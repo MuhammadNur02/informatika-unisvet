@@ -536,20 +536,6 @@
   background-image: var(--gradient-mesh);
 }
 
-/* Tekstur kertas hitam kusut, statis (tanpa animasi) — dua lipatan diagonal
-   gelap + satu highlight tipis yang "menangkap cahaya", ditumpuk dengan
-   noise butiran halus (SVG feTurbulence) supaya permukaannya tidak terlihat
-   rata/plastik. Dipakai sebagai layer overlay di atas bg-hero-gradient. */
-@utility bg-paper-texture {
-  background-image:
-    linear-gradient(128deg, transparent 22%, oklch(0 0 0 / 0.4) 38%, transparent 54%),
-    linear-gradient(242deg, transparent 30%, oklch(0 0 0 / 0.32) 46%, transparent 64%),
-    linear-gradient(35deg, transparent 60%, oklch(1 0 0 / 0.05) 74%, transparent 88%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-blend-mode: overlay, overlay, screen, overlay;
-  background-size: cover, cover, cover, 200px 200px;
-}
-
 @utility pulse-glow {
   animation: pmb-pulse 2.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
