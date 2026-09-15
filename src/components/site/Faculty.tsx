@@ -4,8 +4,8 @@ import { motion, AnimatePresence } from "motion/react";
 import { Eye } from "lucide-react";
 import { Reveal } from "./Reveal";
 import { LensFlare } from "./LensFlare";
+import { LanyardCard } from "./LanyardCard";
 import { fetchPageOverride, staticPage } from "@/lib/cms";
-import { usePointerGlow, lightGlowBackground } from "@/lib/use-pointer-glow";
 import type { Block } from "@/content/types";
 import codingBg from "@/assets/Coding-bg.jpg";
 
@@ -49,99 +49,17 @@ function DarkSectionHeading({ eyebrow, title, description }: { eyebrow: string; 
   );
 }
 
-/** Spring "kenyal" — sedikit overshoot lalu menetap, seperti riak air, bukan berhenti tiba-tiba. */
-const WATER_SPRING = { type: "spring" as const, stiffness: 190, damping: 14, mass: 0.8 };
-
-const DOSEN_CARD_BODY = (
-  d: DosenItem,
-  photoClass: string,
-  nameClass: string,
-  roleClass: string,
-  showMessage = false,
-  showHint = false,
-) => (
-  <>
-    {/* Foto dibuat "bleed" penuh sampai tepi kartu (bukan kotak kecil
-        mengambang dengan padding di sekelilingnya) supaya lebih menonjol
-        dan tidak terkesan tertutup/kekecilan. */}
-    <div className={`relative w-full shrink-0 overflow-hidden bg-hero-foreground/10 ${photoClass}`}>
-      {d.photo ? (
-        <img
-          src={d.photo}
-          alt={d.name}
-          className="h-full w-full object-cover"
-          style={{ objectPosition: `${d.photoPosX ?? 50}% ${d.photoPosY ?? 25}%` }}
-        />
-      ) : (
-        <span className="flex h-full w-full items-center justify-center text-3xl font-bold text-hero-foreground">
-          {d.name.charAt(0)}
-        </span>
-      )}
-      <div
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,oklch(0.08_0_0/0.92)_0%,oklch(0.08_0_0/0.5)_30%,oklch(0.08_0_0/0)_62%)]"
-        aria-hidden
-      />
-      {showHint ? (
-        <div
-          className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 backdrop-blur-0 transition-all duration-300 group-hover:bg-black/45 group-hover:opacity-100 group-hover:backdrop-blur-[1px]"
-          aria-hidden
-        >
-          <span className="inline-flex translate-y-1.5 items-center gap-1.5 rounded-full bg-black/70 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-hero-foreground opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-            <Eye className="size-3.5" />
-            Klik untuk melihat
-          </span>
-        </div>
-      ) : null}
-    </div>
-
-    <div className="flex w-full flex-1 flex-col items-center px-6 pb-6 pt-5 text-center">
-      <h3 className={`leading-snug text-hero-foreground ${nameClass}`}>{d.name}</h3>
-      <span
-        className={`mt-2.5 inline-flex items-center justify-center rounded-full border border-accent/30 bg-accent/10 px-3 py-1 font-mono font-semibold uppercase tracking-wide text-accent ${roleClass}`}
-      >
-        {d.role}
-      </span>
-
-      {showMessage && d.message ? (
-        <p className="mx-auto mt-6 max-w-sm text-balance text-base italic leading-relaxed text-hero-foreground/80">
-          &ldquo;{d.message}&rdquo;
-        </p>
-      ) : null}
-
-      <div className="mt-6 flex w-full flex-col items-center gap-3.5">
-        <span className="h-px w-10 bg-gradient-to-r from-transparent via-accent/50 to-transparent" aria-hidden />
-        <span className="inline-block max-w-full rounded-xl bg-hero-foreground/10 px-3.5 py-1.5 text-xs leading-snug font-semibold text-hero-foreground/85">
-          {d.interest}
-        </span>
-      </div>
-    </div>
-  </>
-);
-
 /**
- * Kartu dosen membesar ke overlay hampir sepenuh layar saat DIKLIK (bukan
- * sekadar disentuh pointer) — saat pointer hanya lewat/berhenti di atasnya,
- * yang muncul cuma label kecil "Klik untuk melihat" supaya jelas ada aksi
- * yang perlu dilakukan. Kartu asli di grid tetap diam di tempatnya (cuma
- * disembunyikan sementara lewat visibility, supaya layout grid tidak ikut
- * goyah) sementara "kembarannya" muncul di atas backdrop gelap dan meluncur
- * dari posisi asal ke tengah layar lewat layoutId yang sama (shared-layout
- * transition framer-motion), disertai shading radial tipis & tilt 3D ringan
- * yang mengikuti kursor. Spring dengan damping rendah membuatnya sedikit
- * "bergoyang" seperti riak air saat menetap. Kartu tertutup lewat klik di
- * bagian mana saja (kartunya sendiri atau area gelap di sekitarnya) atau
- * tombol Esc.
+ * Kartu dosen di grid — hover menampilkan label "Klik untuk melihat". Klik
+ * membuka LanyardCard: kartu ID bergaya lanyard fisik yang jatuh dari atas
+ * layar, bisa diseret bebas seperti tali elastis, dan bisa di-tap untuk
+ * membalik ke sisi belakang (kata-kata penyemangat + bidang keahlian).
+ * Kartu asli di grid tidak lagi morph ke ukuran modal (tidak pakai layoutId)
+ * karena LanyardCard punya animasi masuknya sendiri (jatuh + spring),
+ * bukan meneruskan posisi/ukuran kartu asal.
  */
 function DosenCard({ d, delay }: { d: DosenItem; delay: number }) {
   const [expanded, setExpanded] = useState(false);
-  // Kartu di kolom kiri/kanan menempuh jarak geser jauh lebih besar daripada
-  // kolom tengah saat membesar (FLIP-nya menggabungkan translate+scale besar).
-  // Kalau tilt ikut aktif SELAMA perjalanan itu, hasilnya numpuk jadi liar,
-  // terutama untuk kartu yang jauh dari tengah. Jadi tilt baru dinyalakan
-  // setelah animasi membesarnya benar-benar selesai (settled).
-  const [settled, setSettled] = useState(false);
-  const { ref, pointer, onPointerMove, onPointerLeave } = usePointerGlow(6);
-  const layoutId = `dosen-card-${d.name}`;
 
   useEffect(() => {
     if (!expanded) return;
@@ -154,74 +72,63 @@ function DosenCard({ d, delay }: { d: DosenItem; delay: number }) {
 
   return (
     <Reveal delay={delay}>
-      <div style={{ visibility: expanded ? "hidden" : "visible" }} className="h-full">
-        <motion.article
-          {...(!expanded ? { layoutId } : {})}
-          onClick={() => {
-            setSettled(false);
+      <motion.article
+        onClick={() => setExpanded(true)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
             setExpanded(true);
-          }}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              setSettled(false);
-              setExpanded(true);
-            }
-          }}
-          className="card-glass-dark group flex h-full cursor-pointer flex-col overflow-hidden rounded-3xl text-center"
-        >
-          {DOSEN_CARD_BODY(d, "aspect-[4/3]", "min-h-14 text-lg font-bold", "min-h-8 max-w-full text-sm", false, true)}
-        </motion.article>
-      </div>
+          }
+        }}
+        className="card-glass-dark group flex h-full cursor-pointer flex-col overflow-hidden rounded-3xl text-center"
+      >
+        <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-hero-foreground/10">
+          {d.photo ? (
+            <img
+              src={d.photo}
+              alt={d.name}
+              className="h-full w-full object-cover"
+              style={{ objectPosition: `${d.photoPosX ?? 50}% ${d.photoPosY ?? 25}%` }}
+            />
+          ) : (
+            <span className="flex h-full w-full items-center justify-center text-3xl font-bold text-hero-foreground">
+              {d.name.charAt(0)}
+            </span>
+          )}
+          <div
+            className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,oklch(0.08_0_0/0.92)_0%,oklch(0.08_0_0/0.5)_30%,oklch(0.08_0_0/0)_62%)]"
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 backdrop-blur-0 transition-all duration-300 group-hover:bg-black/45 group-hover:opacity-100 group-hover:backdrop-blur-[1px]"
+            aria-hidden
+          >
+            <span className="inline-flex translate-y-1.5 items-center gap-1.5 rounded-full bg-black/70 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-hero-foreground opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+              <Eye className="size-3.5" />
+              Klik untuk melihat
+            </span>
+          </div>
+        </div>
+
+        <div className="flex w-full flex-1 flex-col items-center px-6 pb-6 pt-5 text-center">
+          <h3 className="min-h-14 text-lg font-bold leading-snug text-hero-foreground">{d.name}</h3>
+          <span className="mt-2.5 inline-flex min-h-8 max-w-full items-center justify-center rounded-full border border-accent/30 bg-accent/10 px-3 py-1 font-mono text-sm font-semibold uppercase tracking-wide text-accent">
+            {d.role}
+          </span>
+
+          <div className="mt-6 flex w-full flex-col items-center gap-3.5">
+            <span className="h-px w-10 bg-gradient-to-r from-transparent via-accent/50 to-transparent" aria-hidden />
+            <span className="inline-block max-w-full rounded-xl bg-hero-foreground/10 px-3.5 py-1.5 text-xs leading-snug font-semibold text-hero-foreground/85">
+              {d.interest}
+            </span>
+          </div>
+        </div>
+      </motion.article>
 
       <AnimatePresence>
-        {expanded ? (
-          <>
-            <motion.div
-              key="backdrop"
-              className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              onClick={() => setExpanded(false)}
-              aria-hidden
-            />
-            <motion.article
-              key="expanded"
-              layoutId={layoutId}
-              ref={ref}
-              onPointerMove={onPointerMove}
-              onPointerLeave={onPointerLeave}
-              onLayoutAnimationComplete={() => setSettled(true)}
-              onClick={() => setExpanded(false)}
-              transition={WATER_SPRING}
-              style={{
-                rotateX: settled ? pointer.rx : 0,
-                rotateY: settled ? pointer.ry : 0,
-                transformPerspective: 1200,
-                // card-glass-dark sendiri punya CSS "transition: transform 0.35s"
-                // untuk efek hover kartu lain — di sini transform-nya sudah
-                // dikendalikan penuh oleh framer-motion (layoutId + tilt), jadi
-                // transisi CSS itu harus dimatikan di sini. Kalau tidak, browser
-                // ikut mencoba menghaluskan tiap update transform dari
-                // framer-motion selama 0.35s tambahan, bikin bukaannya terasa
-                // ada jeda & lamban (dua animasi saling berebut properti yang sama).
-                transitionProperty: "none",
-              }}
-              className="card-glass-dark fixed inset-0 z-[101] m-auto flex h-[min(85vh,780px)] w-[min(92vw,640px)] cursor-pointer flex-col overflow-hidden rounded-[2rem] text-center"
-            >
-              {DOSEN_CARD_BODY(d, "aspect-[16/9]", "text-3xl font-bold", "text-lg", true)}
-              <div
-                className="pointer-events-none absolute inset-0 rounded-[2rem] transition-opacity duration-300 mix-blend-screen"
-                style={{ opacity: pointer.active ? 1 : 0, background: lightGlowBackground(pointer.mx, pointer.my) }}
-                aria-hidden
-              />
-            </motion.article>
-          </>
-        ) : null}
+        {expanded ? <LanyardCard dosen={d} onClose={() => setExpanded(false)} /> : null}
       </AnimatePresence>
     </Reveal>
   );
