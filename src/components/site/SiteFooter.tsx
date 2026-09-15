@@ -72,18 +72,28 @@ export function SiteFooter() {
       className="relative overflow-hidden bg-[#520000] text-hero-foreground dark:bg-[#070043]"
     >
       {/* Fallback CSS di atas dipakai kalau WebGL gagal init; begitu Canvas Dither
-          hidup, ia menutupinya total (shader-nya selalu opaque). */}
-      <Dither
-        className="absolute inset-0"
-        waveColor={isDark ? WAVE_COLOR_DARK : WAVE_COLOR_LIGHT}
-        backgroundColor={[0, 0, 0]}
-        waveFrequency={6}
-        waveAmplitude={0.11}
-        waveSpeed={0.03}
-        colorNum={2.5}
-        mouseRadius={0.5}
-        enableMouseInteraction
-      />
+          hidup, ia menutupinya total (shader-nya selalu opaque).
+          Dither dibungkus <div> polos di sini, BUKAN diberi className
+          "absolute inset-0" langsung ke komponennya — <Canvas> dari
+          @react-three/fiber menaruh inline style position:"relative" di div
+          pembungkusnya sendiri, dan inline style itu selalu menang atas class
+          Tailwind manapun yang dikirim lewat prop className. Akibatnya kalau
+          dipasang langsung, Dither gagal jadi absolute, jatuh ke normal flow
+          dengan height:auto yang collapse ke ukuran default intrinsik
+          <canvas> (300x150px) — persis gejala "cuma pita kecil di atas,
+          sisanya rata warna solid" yang muncul di layar. */}
+      <div className="absolute inset-0" aria-hidden>
+        <Dither
+          waveColor={isDark ? WAVE_COLOR_DARK : WAVE_COLOR_LIGHT}
+          backgroundColor={[0, 0, 0]}
+          waveFrequency={6}
+          waveAmplitude={0.11}
+          waveSpeed={0.05}
+          colorNum={2.5}
+          mouseRadius={0.7}
+          enableMouseInteraction
+        />
+      </div>
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-1">
