@@ -1,8 +1,9 @@
-import { MapPin, Mail, Phone, MessageCircle, Instagram, Facebook, Youtube, Music2 } from "lucide-react";
+import { Instagram, Facebook, Youtube, Music2 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import logo from "@/assets/logo-unisvet.png";
 import { useFooterContent } from "@/lib/site-content";
 import { EmberField } from "@/components/site/EmberField";
+import { GoogleMapsIcon, PhoneCallIcon, WhatsAppIcon, GmailIcon } from "@/components/site/BrandIcons";
 
 const LINKS = [
   { label: "Beranda", to: "/" },
@@ -112,13 +113,13 @@ export function SiteFooter() {
           <div>
             <h3 className="text-sm font-bold uppercase tracking-widest text-accent">Kontak</h3>
             <ul className="mt-5 space-y-4 text-sm text-hero-foreground/70">
-              <li className="flex gap-3">
-                <MapPin className="mt-0.5 size-4 shrink-0 text-accent" />
+              <li className="flex items-start gap-3">
+                <GoogleMapsIcon className="mt-0.5 size-5 shrink-0" />
                 <span>{footer.address}</span>
               </li>
               {footer.phone ? (
-                <li className="flex gap-3">
-                  <Phone className="size-4 shrink-0 text-accent" />
+                <li className="flex items-center gap-3">
+                  <PhoneCallIcon className="size-5 shrink-0" />
                   <a
                     href={`tel:${footer.phone.replace(/\D/g, "")}`}
                     className="transition-colors hover:text-accent"
@@ -128,24 +129,24 @@ export function SiteFooter() {
                 </li>
               ) : null}
               {footer.waAdmin ? (
-                <li className="flex gap-3">
-                  <MessageCircle className="size-4 shrink-0 text-accent" />
+                <li className="flex items-center gap-3">
+                  <WhatsAppIcon className="size-5 shrink-0" />
                   <a href={`https://wa.me/${footer.waAdmin}`} className="transition-colors hover:text-accent">
                     WhatsApp Admin {formatWa(footer.waAdmin)}
                   </a>
                 </li>
               ) : null}
               {footer.waKaprodi ? (
-                <li className="flex gap-3">
-                  <MessageCircle className="size-4 shrink-0 text-accent" />
+                <li className="flex items-center gap-3">
+                  <WhatsAppIcon className="size-5 shrink-0" />
                   <a href={`https://wa.me/${footer.waKaprodi}`} className="transition-colors hover:text-accent">
                     WhatsApp Kaprodi {formatWa(footer.waKaprodi)}
                   </a>
                 </li>
               ) : null}
               {footer.email ? (
-                <li className="flex gap-3">
-                  <Mail className="size-4 shrink-0 text-accent" />
+                <li className="flex items-center gap-3">
+                  <GmailIcon className="size-5 shrink-0" />
                   <a href={`mailto:${footer.email}`} className="transition-colors hover:text-accent">
                     {footer.email}
                   </a>
