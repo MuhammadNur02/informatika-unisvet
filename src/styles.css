@@ -7,7 +7,10 @@
 @theme {
   --font-sans:
     "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  /* Sebelumnya sama persis dengan --font-sans (tidak dipakai di mana pun) —
+     dipakai di sini untuk nama dosen di Faculty.tsx supaya kesan
+     formal-akademik, beda dari font sans body di seluruh situs. */
+  --font-display: "Fraunces", Georgia, serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   /* Lebar kontainer situs (max-w-7xl) dilebarkan supaya tidak terlalu banyak ruang
      kosong di kanan-kiri pada layar besar/ultra-wide. */
@@ -455,6 +458,41 @@
 @utility stat-figure {
   border-top: 1px solid var(--color-border);
   padding-top: 1.25rem;
+}
+
+/*
+ * Kartu profil dosen (Faculty.tsx) — identitas visual sendiri, TIDAK reuse
+ * card-glass-dark (yang juga dipakai kartu Fasilitas & panel VisiMisi,
+ * jadi tidak boleh ikut berubah). Nilai gradiennya fixed (bukan var()
+ * yang ikut .dark), sama seperti --hero-foreground/--gradient-hero di
+ * section ini — supaya kartu terlihat SAMA di mode terang maupun gelap.
+ */
+@utility bg-dosen-card {
+  background-image:
+    radial-gradient(125% 95% at 10% -15%, var(--primary-soft) 0%, oklch(0.26 0.12 24) 42%, transparent 70%),
+    linear-gradient(155deg, oklch(0.22 0.1 24) 0%, oklch(0.1 0.045 22) 55%, oklch(0.04 0.012 20) 100%);
+}
+
+/* Sapuan kilat metalik diagonal saat kartu di-hover — transisi sekali jalan
+   (bukan animasi looping), pita gradient lembut jadi tidak ada tepi kotak
+   yang tajam. Teknik sama seperti btn-shine, disetel lebih pelan & lebih
+   tipis pitanya supaya cocok untuk permukaan kartu besar, bukan tombol. */
+@utility dosen-card-shine {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 42%, oklch(1 0 0 / 0.4) 50%, transparent 58%);
+    transform: translate(-70%, -70%);
+    transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+
+  &:hover::after {
+    transform: translate(70%, 70%);
+  }
 }
 
 @utility text-gradient-gold {
