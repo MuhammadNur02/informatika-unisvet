@@ -1,9 +1,40 @@
+import { useEffect, useState } from "react";
 import { Instagram, Facebook, Youtube, Music2 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import logo from "@/assets/logo-unisvet.png";
 import { useFooterContent } from "@/lib/site-content";
-import { EmberField } from "@/components/site/EmberField";
-import { GoogleMapsIcon, PhoneCallIcon, WhatsAppIcon, GmailIcon } from "@/components/site/BrandIcons";
+import Dither from "@/components/site/Dither";
+import {
+  GoogleMapsIcon,
+  PhoneCallIcon,
+  WhatsAppIcon,
+  GmailIcon,
+} from "@/components/site/BrandIcons";
+
+// Merah maroon (mode terang) & biru (mode gelap) untuk gelombang Dither, sebagai
+// pecahan RGB 0-1 (bukan hex) karena itu format yang dipakai shader-nya.
+const WAVE_COLOR_LIGHT: [number, number, number] = [0x52 / 255, 0x00 / 255, 0x00 / 255];
+const WAVE_COLOR_DARK: [number, number, number] = [0x07 / 255, 0x00 / 255, 0x43 / 255];
+
+/**
+ * Sinkron ke class "dark" di <html> yang di-toggle ThemeToggle. Tidak ada
+ * event/context bersama untuk perubahan tema di app ini, jadi dipantau
+ * langsung lewat MutationObserver supaya warna Dither ikut berubah seketika
+ * saat tema di-toggle, bukan cuma pas footer di-mount ulang.
+ */
+function useIsDarkMode() {
+  const [dark, setDark] = useState(false);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    setDark(root.classList.contains("dark"));
+    const observer = new MutationObserver(() => setDark(root.classList.contains("dark")));
+    observer.observe(root, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
+
+  return dark;
+}
 
 const LINKS = [
   { label: "Beranda", to: "/" },
@@ -27,6 +58,7 @@ function formatWa(number: string) {
 
 export function SiteFooter() {
   const footer = useFooterContent();
+  const isDark = useIsDarkMode();
   const socials = [
     { label: "Instagram", icon: Instagram, href: footer.socials.instagram },
     { label: "YouTube", icon: Youtube, href: footer.socials.youtube },
@@ -35,8 +67,23 @@ export function SiteFooter() {
   ].filter((s) => !!s.href);
 
   return (
-    <footer id="kontak" className="relative overflow-hidden bg-footer-ember text-hero-foreground">
-      <EmberField className="absolute inset-0" />
+    <footer
+      id="kontak"
+      className="relative overflow-hidden bg-[#520000] text-hero-foreground dark:bg-[#070043]"
+    >
+      {/* Fallback CSS di atas dipakai kalau WebGL gagal init; begitu Canvas Dither
+          hidup, ia menutupinya total (shader-nya selalu opaque). */}
+      <Dither
+        className="absolute inset-0"
+        waveColor={isDark ? WAVE_COLOR_DARK : WAVE_COLOR_LIGHT}
+        backgroundColor={[0, 0, 0]}
+        waveFrequency={6}
+        waveAmplitude={0.11}
+        waveSpeed={0.03}
+        colorNum={2.5}
+        mouseRadius={0.5}
+        enableMouseInteraction
+      />
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-1">
@@ -55,8 +102,8 @@ export function SiteFooter() {
                 <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-hero-foreground/60">
                   Universitas Ivet Semarang
                 </span>
-              <span className="block text-base font-bold">Pendidikan Informatika</span>
-              <span className="block text-[10px] text-hero-foreground/55">UNISVET Semarang</span>
+                <span className="block text-base font-bold">Pendidikan Informatika</span>
+                <span className="block text-[10px] text-hero-foreground/55">UNISVET Semarang</span>
               </span>
             </div>
             <p className="mt-5 text-sm leading-relaxed text-hero-foreground/70">{footer.about}</p>
@@ -77,7 +124,9 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-widest text-accent">Tautan Cepat</h3>
+            <h3 className="text-sm font-bold uppercase tracking-widest text-accent">
+              Tautan Cepat
+            </h3>
             <ul className="mt-5 space-y-3">
               {LINKS.map((l) => (
                 <li key={l.label}>
@@ -93,7 +142,9 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-widest text-accent">Portal Akademik</h3>
+            <h3 className="text-sm font-bold uppercase tracking-widest text-accent">
+              Portal Akademik
+            </h3>
             <ul className="mt-5 space-y-3">
               {footer.portals.map((p) => (
                 <li key={p.label}>
@@ -131,7 +182,10 @@ export function SiteFooter() {
               {footer.waAdmin ? (
                 <li className="flex items-center gap-3">
                   <WhatsAppIcon className="size-5 shrink-0" />
-                  <a href={`https://wa.me/${footer.waAdmin}`} className="transition-colors hover:text-accent">
+                  <a
+                    href={`https://wa.me/${footer.waAdmin}`}
+                    className="transition-colors hover:text-accent"
+                  >
                     WhatsApp Admin {formatWa(footer.waAdmin)}
                   </a>
                 </li>
@@ -139,7 +193,10 @@ export function SiteFooter() {
               {footer.waKaprodi ? (
                 <li className="flex items-center gap-3">
                   <WhatsAppIcon className="size-5 shrink-0" />
-                  <a href={`https://wa.me/${footer.waKaprodi}`} className="transition-colors hover:text-accent">
+                  <a
+                    href={`https://wa.me/${footer.waKaprodi}`}
+                    className="transition-colors hover:text-accent"
+                  >
                     WhatsApp Kaprodi {formatWa(footer.waKaprodi)}
                   </a>
                 </li>
@@ -147,7 +204,10 @@ export function SiteFooter() {
               {footer.email ? (
                 <li className="flex items-center gap-3">
                   <GmailIcon className="size-5 shrink-0" />
-                  <a href={`mailto:${footer.email}`} className="transition-colors hover:text-accent">
+                  <a
+                    href={`mailto:${footer.email}`}
+                    className="transition-colors hover:text-accent"
+                  >
                     {footer.email}
                   </a>
                 </li>
@@ -156,7 +216,9 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-widest text-accent">Lokasi Kampus</h3>
+            <h3 className="text-sm font-bold uppercase tracking-widest text-accent">
+              Lokasi Kampus
+            </h3>
             <div className="mt-5 overflow-hidden rounded-2xl border border-hero-foreground/15">
               <iframe
                 title="Peta lokasi Universitas Ivet Semarang"
@@ -170,7 +232,10 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-hero-foreground/10 pt-6 text-xs text-hero-foreground/55 sm:flex-row">
-          <p>© {new Date().getFullYear()} Program Studi Pendidikan Informatika — Universitas Ivet Semarang.</p>
+          <p>
+            © {new Date().getFullYear()} Program Studi Pendidikan Informatika — Universitas Ivet
+            Semarang.
+          </p>
           <p>{footer.note}</p>
         </div>
       </div>
