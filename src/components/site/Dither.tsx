@@ -319,6 +319,15 @@ interface DitherProps {
   disableAnimation?: boolean;
   enableMouseInteraction?: boolean;
   mouseRadius?: number;
+  /**
+   * Class tambahan untuk <Canvas>. JANGAN taruh `position`/`inset`/`w-`/`h-`
+   * di sini — <Canvas> dari @react-three/fiber selalu memasang inline style
+   * `position: relative; width: 100%; height: 100%` di div pembungkusnya, dan
+   * inline style itu menang mutlak atas class manapun (mis. Tailwind
+   * `absolute inset-0` diam-diam tidak berpengaruh). Untuk memposisikan
+   * Dither sebagai latar penuh, bungkus dari LUAR: `<div className="absolute
+   * inset-0"><Dither /></div>`.
+   */
   className?: string;
 }
 
