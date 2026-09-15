@@ -23,12 +23,15 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { NAV } from "@/lib/site-nav";
 import { SiteSearch } from "@/components/site/SiteSearch";
-import { ThemeToggle } from "@/components/site/ThemeToggle";
 import logo from "@/assets/logo-unisvet.png";
 
 const PORTALS = [
   { label: "SIAKAD", icon: LayoutDashboard, href: "https://unisvet.siakadcloud.com/gate/login" },
-  { label: "E-Learning", icon: MonitorPlay, href: "https://edlink.id/login?r=%2Fclasses&sso_attempt=1" },
+  {
+    label: "E-Learning",
+    icon: MonitorPlay,
+    href: "https://edlink.id/login?r=%2Fclasses&sso_attempt=1",
+  },
   { label: "E-Library", icon: Library, href: "https://eprint.ivet.ac.id" },
   { label: "SPMI Mutu", icon: ShieldCheck, href: "https://spmi.kemdiktisaintek.go.id/auth/login" },
 ];
@@ -53,7 +56,11 @@ export function SiteHeader() {
     (item) => pathname === item.to || (item.children?.some((c) => pathname === c.to) ?? false),
   )?.label;
   const { scrollYProgress } = useScroll();
-  const scrollProgress = useSpring(scrollYProgress, { stiffness: 200, damping: 30, restDelta: 0.001 });
+  const scrollProgress = useSpring(scrollYProgress, {
+    stiffness: 200,
+    damping: 30,
+    restDelta: 0.001,
+  });
 
   useEffect(() => {
     setOpen(false);
@@ -80,307 +87,308 @@ export function SiteHeader() {
           scrolled ? "glass-header py-2" : "bg-transparent py-4",
         )}
       >
-      <AnimatePresence initial={false}>
-        {!scrolled ? (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25 }}
-            className="overflow-hidden"
-          >
-            <div className="mx-auto mb-3 hidden max-w-7xl items-center justify-end gap-2 px-4 sm:px-6 md:flex lg:px-8">
-              {PORTALS.map((p) => (
-                <a
-                  key={p.label}
-                  href={p.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-full border border-hero-foreground/15 bg-hero-foreground/8 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-hero-foreground/75 backdrop-blur-md transition-colors hover:border-accent/50 hover:text-accent"
-                >
-                  <p.icon className="size-3.5" /> {p.label}
-                </a>
-              ))}
-            </div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
-
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <Link to="/" className="flex items-center gap-3">
-          <span className="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-hero-foreground shadow-[var(--shadow-card)]">
-            <img
-              src={logo}
-              alt="Logo Universitas Ivet Semarang"
-              width={56}
-              height={56}
-              className="h-11 w-11 object-contain"
-            />
-          </span>
-          <span className="leading-tight">
-            <span
-              className={cn(
-                "block text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors",
-                scrolled ? "text-muted-foreground" : "text-hero-foreground/70",
-              )}
+        <AnimatePresence initial={false}>
+          {!scrolled ? (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.25 }}
+              className="overflow-hidden"
             >
-              Universitas Ivet Semarang
-            </span>
-            <span
-              className={cn(
-                "block text-base font-bold tracking-tight transition-colors",
-                scrolled ? "text-primary" : "text-hero-foreground",
-              )}
-            >
-              Pendidikan Informatika
-            </span>
-            <span
-              className={cn(
-                "block text-[10px] font-medium tracking-wide transition-colors",
-                scrolled ? "text-muted-foreground" : "text-hero-foreground/60",
-              )}
-            >
-              UNISVET Semarang
-            </span>
-          </span>
-        </Link>
-
-        <nav className="hidden items-center gap-0.5 xl:flex" onMouseLeave={() => setHovered(null)}>
-          {NAV.map((item) => {
-            const active = pathname === item.to || (item.children?.some((c) => pathname === c.to) ?? false);
-            // Garis kuning ikut kursor saat hover; begitu pointer keluar dari
-            // nav, hovered jadi null dan garis kembali ke halaman aktif —
-            // layoutId yang sama membuat framer-motion menganimasikan
-            // perpindahannya secara otomatis.
-            const showIndicator = (hovered ?? activeLabel) === item.label;
-            return (
-            <div key={item.label} className="group relative" onMouseEnter={() => setHovered(item.label)}>
-              <Link
-                to={item.to}
-                className={cn(
-                  "relative flex items-center gap-1 rounded-full px-3 py-2 text-[13px] font-medium transition-colors",
-                  scrolled
-                    ? active
-                      ? "text-primary"
-                      : "text-foreground/75 hover:text-primary"
-                    : active
-                      ? "text-hero-foreground"
-                      : "text-hero-foreground/85 hover:text-hero-foreground",
-                )}
-              >
-                {hovered === item.label ? (
-                  <motion.span
-                    layoutId="nav-hover-pill"
-                    className={cn(
-                      "absolute inset-0 -z-10 rounded-full",
-                      scrolled ? "bg-secondary" : "bg-hero-foreground/10",
-                    )}
-                    transition={{ type: "spring", stiffness: 420, damping: 34 }}
-                  />
-                ) : null}
-                {item.label}
-                {item.children ? (
-                  <ChevronDown className="size-3.5 transition-transform group-hover:rotate-180" />
-                ) : null}
-                {showIndicator ? (
-                  <motion.span
-                    layoutId="nav-active-indicator"
-                    className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-accent"
-                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
-                  />
-                ) : null}
-              </Link>
-              {item.children ? (
-                <div className="invisible absolute left-0 top-full w-64 translate-y-2 pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                  <div className="overflow-hidden rounded-2xl border border-border bg-card p-2 shadow-[var(--shadow-lift)]">
-                    {item.children.map((child) => (
-                      <Link
-                        key={child.label}
-                        to={child.to}
-                        activeProps={{ className: "bg-secondary text-primary" }}
-                        className="block rounded-xl px-3 py-2 text-sm text-foreground/80 transition-colors hover:bg-secondary hover:text-primary"
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-            </div>
-            );
-          })}
-        </nav>
-
-        <div className="flex items-center gap-2">
-          <SiteSearch
-            className={cn(scrolled ? "text-primary hover:bg-secondary" : "text-hero-foreground hover:bg-hero-foreground/10")}
-          />
-          <ThemeToggle
-            className={cn(
-              "hidden sm:inline-flex",
-              scrolled
-                ? "border-border text-primary hover:bg-secondary"
-                : "border-hero-foreground/25 text-hero-foreground hover:bg-hero-foreground/10",
-            )}
-          />
-          <Button asChild variant="pmb" size="pill" className="pulse-glow hidden sm:inline-flex">
-            <Link to="/pmb/daftar">
-              <GraduationCap /> PMB UNISVET
-            </Link>
-          </Button>
-          <button
-            type="button"
-            aria-label="Buka menu"
-            onClick={() => setOpen((v) => !v)}
-            className={cn(
-              "inline-flex size-10 items-center justify-center rounded-full border transition-colors xl:hidden",
-              scrolled
-                ? "border-border text-primary hover:bg-secondary"
-                : "border-hero-foreground/25 text-hero-foreground hover:bg-hero-foreground/10",
-            )}
-          >
-            {open ? <X className="size-5" /> : <Menu className="size-5" />}
-          </button>
-        </div>
-      </div>
-
-      <AnimatePresence>
-        {open ? (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden xl:hidden"
-          >
-            <div className="mx-4 mt-3 max-h-[72vh] space-y-2 overflow-y-auto rounded-3xl border border-border bg-card p-3 shadow-[var(--shadow-lift)]">
-              {NAV.map((item) => {
-                const Icon = NAV_ICONS[item.label] ?? Info;
-                const expanded = openGroup === item.label;
-                const groupActive =
-                  pathname === item.to ||
-                  (item.children?.some((c) => pathname === c.to) ?? false);
-
-                if (!item.children) {
-                  return (
-                    <Link
-                      key={item.label}
-                      to={item.to}
-                      onClick={() => setOpen(false)}
-                      className={cn(
-                        "flex items-center gap-3 rounded-2xl border border-border/70 bg-card px-4 py-3 text-[15px] font-semibold shadow-[var(--shadow-card)] transition-colors",
-                        groupActive ? "text-primary" : "text-foreground/85 hover:text-primary",
-                      )}
-                    >
-                      <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-secondary text-primary">
-                        <Icon className="size-4" />
-                      </span>
-                      <span className="min-w-0 truncate">{item.label}</span>
-                    </Link>
-                  );
-                }
-
-                return (
-                  <div
-                    key={item.label}
-                    className={cn(
-                      "overflow-hidden rounded-2xl border bg-card shadow-[var(--shadow-card)] transition-colors",
-                      expanded || groupActive ? "border-accent/50" : "border-border/70",
-                    )}
-                  >
-                    <button
-                      type="button"
-                      aria-expanded={expanded}
-                      onClick={() => setOpenGroup(expanded ? null : item.label)}
-                      className="flex w-full items-center gap-3 px-4 py-3 text-left text-[15px] font-semibold text-foreground/85 transition-colors hover:text-primary"
-                    >
-                      <span
-                        className={cn(
-                          "inline-flex size-8 shrink-0 items-center justify-center rounded-full transition-colors",
-                          expanded || groupActive
-                            ? "bg-accent/15 text-accent-foreground"
-                            : "bg-secondary text-primary",
-                        )}
-                      >
-                        <Icon className="size-4" />
-                      </span>
-                      <span className="min-w-0 flex-1 truncate">{item.label}</span>
-                      <ChevronDown
-                        className={cn(
-                          "size-4 shrink-0 text-muted-foreground transition-transform duration-300",
-                          expanded && "rotate-180 text-primary",
-                        )}
-                      />
-                    </button>
-
-                    <AnimatePresence initial={false}>
-                      {expanded ? (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                          className="overflow-hidden"
-                        >
-                          <div className="relative mx-3 mb-3 ml-[27px] space-y-0.5 pl-4 before:absolute before:bottom-2 before:left-0 before:top-2 before:w-px before:bg-gradient-to-b before:from-accent/50 before:via-border before:to-transparent before:content-['']">
-                            {item.children.map((child) => {
-                              const active = pathname === child.to;
-                              return (
-                                <Link
-                                  key={child.label}
-                                  to={child.to}
-                                  onClick={() => setOpen(false)}
-                                  className={cn(
-                                    "group relative flex items-center gap-2 rounded-xl px-3 py-2 text-[13.5px] transition-colors duration-200",
-                                    active
-                                      ? "bg-secondary font-semibold text-primary"
-                                      : "text-muted-foreground hover:bg-secondary/60 hover:text-primary",
-                                  )}
-                                >
-                                  <span
-                                    className={cn(
-                                      "absolute -left-4 top-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors",
-                                      active ? "bg-accent" : "bg-border group-hover:bg-accent/70",
-                                    )}
-                                  />
-                                  <ChevronRight className="size-3.5 shrink-0 opacity-0 transition-opacity group-hover:opacity-100 data-[active=true]:opacity-100" />
-                                  <span className="min-w-0 truncate">{child.label}</span>
-                                </Link>
-                              );
-                            })}
-                          </div>
-                        </motion.div>
-                      ) : null}
-                    </AnimatePresence>
-                  </div>
-                );
-              })}
-              <div className="mt-2 grid grid-cols-2 gap-2 border-t border-border pt-3">
+              <div className="mx-auto mb-3 hidden max-w-7xl items-center justify-end gap-2 px-4 sm:px-6 md:flex lg:px-8">
                 {PORTALS.map((p) => (
                   <a
                     key={p.label}
                     href={p.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-xl bg-secondary px-3 py-2 text-xs font-semibold text-primary"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-hero-foreground/15 bg-hero-foreground/8 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-hero-foreground/75 backdrop-blur-md transition-colors hover:border-accent/50 hover:text-accent"
                   >
                     <p.icon className="size-3.5" /> {p.label}
                   </a>
                 ))}
               </div>
-              <div className="flex items-center justify-between gap-2">
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
+
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+          <Link to="/" className="flex items-center gap-3">
+            <span className="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-hero-foreground shadow-[var(--shadow-card)]">
+              <img
+                src={logo}
+                alt="Logo Universitas Ivet Semarang"
+                width={56}
+                height={56}
+                className="h-11 w-11 object-contain"
+              />
+            </span>
+            <span className="leading-tight">
+              <span
+                className={cn(
+                  "block text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors",
+                  scrolled ? "text-muted-foreground" : "text-hero-foreground/70",
+                )}
+              >
+                Universitas Ivet Semarang
+              </span>
+              <span
+                className={cn(
+                  "block text-base font-bold tracking-tight transition-colors",
+                  scrolled ? "text-primary" : "text-hero-foreground",
+                )}
+              >
+                Pendidikan Informatika
+              </span>
+              <span
+                className={cn(
+                  "block text-[10px] font-medium tracking-wide transition-colors",
+                  scrolled ? "text-muted-foreground" : "text-hero-foreground/60",
+                )}
+              >
+                UNISVET Semarang
+              </span>
+            </span>
+          </Link>
+
+          <nav
+            className="hidden items-center gap-0.5 xl:flex"
+            onMouseLeave={() => setHovered(null)}
+          >
+            {NAV.map((item) => {
+              const active =
+                pathname === item.to || (item.children?.some((c) => pathname === c.to) ?? false);
+              // Garis kuning ikut kursor saat hover; begitu pointer keluar dari
+              // nav, hovered jadi null dan garis kembali ke halaman aktif —
+              // layoutId yang sama membuat framer-motion menganimasikan
+              // perpindahannya secara otomatis.
+              const showIndicator = (hovered ?? activeLabel) === item.label;
+              return (
+                <div
+                  key={item.label}
+                  className="group relative"
+                  onMouseEnter={() => setHovered(item.label)}
+                >
+                  <Link
+                    to={item.to}
+                    className={cn(
+                      "relative flex items-center gap-1 rounded-full px-3 py-2 text-[13px] font-medium transition-colors",
+                      scrolled
+                        ? active
+                          ? "text-primary"
+                          : "text-foreground/75 hover:text-primary"
+                        : active
+                          ? "text-hero-foreground"
+                          : "text-hero-foreground/85 hover:text-hero-foreground",
+                    )}
+                  >
+                    {hovered === item.label ? (
+                      <motion.span
+                        layoutId="nav-hover-pill"
+                        className={cn(
+                          "absolute inset-0 -z-10 rounded-full",
+                          scrolled ? "bg-secondary" : "bg-hero-foreground/10",
+                        )}
+                        transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                      />
+                    ) : null}
+                    {item.label}
+                    {item.children ? (
+                      <ChevronDown className="size-3.5 transition-transform group-hover:rotate-180" />
+                    ) : null}
+                    {showIndicator ? (
+                      <motion.span
+                        layoutId="nav-active-indicator"
+                        className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-accent"
+                        transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                      />
+                    ) : null}
+                  </Link>
+                  {item.children ? (
+                    <div className="invisible absolute left-0 top-full w-64 translate-y-2 pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                      <div className="overflow-hidden rounded-2xl border border-border bg-card p-2 shadow-[var(--shadow-lift)]">
+                        {item.children.map((child) => (
+                          <Link
+                            key={child.label}
+                            to={child.to}
+                            activeProps={{ className: "bg-secondary text-primary" }}
+                            className="block rounded-xl px-3 py-2 text-sm text-foreground/80 transition-colors hover:bg-secondary hover:text-primary"
+                          >
+                            {child.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })}
+          </nav>
+
+          <div className="flex items-center gap-2">
+            <SiteSearch
+              className={cn(
+                scrolled
+                  ? "text-primary hover:bg-secondary"
+                  : "text-hero-foreground hover:bg-hero-foreground/10",
+              )}
+            />
+            <Button asChild variant="pmb" size="pill" className="pulse-glow hidden sm:inline-flex">
+              <Link to="/pmb/daftar">
+                <GraduationCap /> PMB UNISVET
+              </Link>
+            </Button>
+            <button
+              type="button"
+              aria-label="Buka menu"
+              onClick={() => setOpen((v) => !v)}
+              className={cn(
+                "inline-flex size-10 items-center justify-center rounded-full border transition-colors xl:hidden",
+                scrolled
+                  ? "border-border text-primary hover:bg-secondary"
+                  : "border-hero-foreground/25 text-hero-foreground hover:bg-hero-foreground/10",
+              )}
+            >
+              {open ? <X className="size-5" /> : <Menu className="size-5" />}
+            </button>
+          </div>
+        </div>
+
+        <AnimatePresence>
+          {open ? (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              className="overflow-hidden xl:hidden"
+            >
+              <div className="mx-4 mt-3 max-h-[72vh] space-y-2 overflow-y-auto rounded-3xl border border-border bg-card p-3 shadow-[var(--shadow-lift)]">
+                {NAV.map((item) => {
+                  const Icon = NAV_ICONS[item.label] ?? Info;
+                  const expanded = openGroup === item.label;
+                  const groupActive =
+                    pathname === item.to ||
+                    (item.children?.some((c) => pathname === c.to) ?? false);
+
+                  if (!item.children) {
+                    return (
+                      <Link
+                        key={item.label}
+                        to={item.to}
+                        onClick={() => setOpen(false)}
+                        className={cn(
+                          "flex items-center gap-3 rounded-2xl border border-border/70 bg-card px-4 py-3 text-[15px] font-semibold shadow-[var(--shadow-card)] transition-colors",
+                          groupActive ? "text-primary" : "text-foreground/85 hover:text-primary",
+                        )}
+                      >
+                        <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-secondary text-primary">
+                          <Icon className="size-4" />
+                        </span>
+                        <span className="min-w-0 truncate">{item.label}</span>
+                      </Link>
+                    );
+                  }
+
+                  return (
+                    <div
+                      key={item.label}
+                      className={cn(
+                        "overflow-hidden rounded-2xl border bg-card shadow-[var(--shadow-card)] transition-colors",
+                        expanded || groupActive ? "border-accent/50" : "border-border/70",
+                      )}
+                    >
+                      <button
+                        type="button"
+                        aria-expanded={expanded}
+                        onClick={() => setOpenGroup(expanded ? null : item.label)}
+                        className="flex w-full items-center gap-3 px-4 py-3 text-left text-[15px] font-semibold text-foreground/85 transition-colors hover:text-primary"
+                      >
+                        <span
+                          className={cn(
+                            "inline-flex size-8 shrink-0 items-center justify-center rounded-full transition-colors",
+                            expanded || groupActive
+                              ? "bg-accent/15 text-accent-foreground"
+                              : "bg-secondary text-primary",
+                          )}
+                        >
+                          <Icon className="size-4" />
+                        </span>
+                        <span className="min-w-0 flex-1 truncate">{item.label}</span>
+                        <ChevronDown
+                          className={cn(
+                            "size-4 shrink-0 text-muted-foreground transition-transform duration-300",
+                            expanded && "rotate-180 text-primary",
+                          )}
+                        />
+                      </button>
+
+                      <AnimatePresence initial={false}>
+                        {expanded ? (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                            className="overflow-hidden"
+                          >
+                            <div className="relative mx-3 mb-3 ml-[27px] space-y-0.5 pl-4 before:absolute before:bottom-2 before:left-0 before:top-2 before:w-px before:bg-gradient-to-b before:from-accent/50 before:via-border before:to-transparent before:content-['']">
+                              {item.children.map((child) => {
+                                const active = pathname === child.to;
+                                return (
+                                  <Link
+                                    key={child.label}
+                                    to={child.to}
+                                    onClick={() => setOpen(false)}
+                                    className={cn(
+                                      "group relative flex items-center gap-2 rounded-xl px-3 py-2 text-[13.5px] transition-colors duration-200",
+                                      active
+                                        ? "bg-secondary font-semibold text-primary"
+                                        : "text-muted-foreground hover:bg-secondary/60 hover:text-primary",
+                                    )}
+                                  >
+                                    <span
+                                      className={cn(
+                                        "absolute -left-4 top-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors",
+                                        active ? "bg-accent" : "bg-border group-hover:bg-accent/70",
+                                      )}
+                                    />
+                                    <ChevronRight className="size-3.5 shrink-0 opacity-0 transition-opacity group-hover:opacity-100 data-[active=true]:opacity-100" />
+                                    <span className="min-w-0 truncate">{child.label}</span>
+                                  </Link>
+                                );
+                              })}
+                            </div>
+                          </motion.div>
+                        ) : null}
+                      </AnimatePresence>
+                    </div>
+                  );
+                })}
+                <div className="mt-2 grid grid-cols-2 gap-2 border-t border-border pt-3">
+                  {PORTALS.map((p) => (
+                    <a
+                      key={p.label}
+                      href={p.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 rounded-xl bg-secondary px-3 py-2 text-xs font-semibold text-primary"
+                    >
+                      <p.icon className="size-3.5" /> {p.label}
+                    </a>
+                  ))}
+                </div>
                 <SiteSearch compact />
-                <ThemeToggle className="border-border text-primary hover:bg-secondary" />
+                <Button asChild variant="pmb" size="pill" className="mt-3 w-full">
+                  <Link to="/pmb/daftar" onClick={() => setOpen(false)}>
+                    <GraduationCap /> PMB UNISVET
+                  </Link>
+                </Button>
               </div>
-              <Button asChild variant="pmb" size="pill" className="mt-3 w-full">
-                <Link to="/pmb/daftar" onClick={() => setOpen(false)}>
-                  <GraduationCap /> PMB UNISVET
-                </Link>
-              </Button>
-            </div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
       </header>
     </>
   );

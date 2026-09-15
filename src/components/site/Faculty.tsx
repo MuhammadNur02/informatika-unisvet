@@ -173,53 +173,59 @@ function DosenCard({ d, delay }: { d: DosenItem; delay: number }) {
               setExpanded(true);
             }
           }}
-          className="card-glass-dark group flex h-full cursor-pointer flex-col overflow-hidden rounded-3xl text-center"
+          className="dosen-card-shine group flex h-full cursor-pointer flex-col overflow-hidden rounded-3xl border border-white/8 bg-dosen-card text-center shadow-[0_10px_28px_-16px_oklch(0.04_0.01_20/0.65)] transition-all duration-300 hover:-translate-y-1.5 hover:border-accent/30 hover:shadow-[0_30px_54px_-18px_oklch(0.03_0.01_20/0.8),0_10px_22px_-8px_oklch(0_0_0/0.55)]"
         >
-          <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-hero-foreground/10">
-            {d.photo ? (
-              <img
-                src={d.photo}
-                alt={d.name}
-                className="h-full w-full object-cover"
-                style={{ objectPosition: `${d.photoPosX ?? 50}% ${d.photoPosY ?? 25}%` }}
+          {/* Padding ±14px dari tepi kartu & sudut lebih kecil dari sudut
+              kartu (rounded-2xl di dalam rounded-3xl) — foto terlihat
+              "dipigura", bukan menempel penuh ke tepi seperti sebelumnya. */}
+          <div className="p-3.5">
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-black/30">
+              {d.photo ? (
+                <img
+                  src={d.photo}
+                  alt={d.name}
+                  className="h-full w-full object-cover"
+                  style={{ objectPosition: `${d.photoPosX ?? 50}% ${d.photoPosY ?? 25}%` }}
+                />
+              ) : (
+                <span className="flex h-full w-full items-center justify-center text-3xl font-bold text-hero-foreground">
+                  {d.name.charAt(0)}
+                </span>
+              )}
+              <div
+                className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,oklch(0.08_0_0/0.92)_0%,oklch(0.08_0_0/0.5)_30%,oklch(0.08_0_0/0)_62%)]"
+                aria-hidden
               />
-            ) : (
-              <span className="flex h-full w-full items-center justify-center text-3xl font-bold text-hero-foreground">
-                {d.name.charAt(0)}
-              </span>
-            )}
-            <div
-              className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,oklch(0.08_0_0/0.92)_0%,oklch(0.08_0_0/0.5)_30%,oklch(0.08_0_0/0)_62%)]"
-              aria-hidden
-            />
-            <div
-              className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 backdrop-blur-0 transition-all duration-300 group-hover:bg-black/45 group-hover:opacity-100 group-hover:backdrop-blur-[1px]"
-              aria-hidden
-            >
-              <span className="inline-flex translate-y-1.5 items-center gap-1.5 rounded-full bg-black/70 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-hero-foreground opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                <Eye className="size-3.5" />
-                Klik untuk melihat
-              </span>
+              <div
+                className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 backdrop-blur-0 transition-all duration-300 group-hover:bg-black/45 group-hover:opacity-100 group-hover:backdrop-blur-[1px]"
+                aria-hidden
+              >
+                <span className="inline-flex translate-y-1.5 items-center gap-1.5 rounded-full bg-black/70 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-hero-foreground opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                  <Eye className="size-3.5" />
+                  Klik untuk melihat
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className="flex w-full flex-1 flex-col items-center px-6 pb-6 pt-5 text-center">
-            <h3 className="min-h-14 text-lg font-bold leading-snug text-hero-foreground">
+          {/* Panel kaca buram — backdrop-blur cuma mengaburkan gradien maroon
+              DI BALIK panel ini (transparan), foto & teks di dalamnya tetap
+              tajam (backdrop-filter tidak pernah mengaburkan isi elemennya
+              sendiri, cuma apa yang ada di belakangnya). */}
+          <div className="relative flex w-full flex-1 flex-col items-center border-t border-white/8 bg-white/[0.035] px-6 pb-6 pt-4 text-center backdrop-blur-md">
+            <h3 className="font-display min-h-[3.25rem] text-xl font-semibold leading-snug text-hero-foreground">
               {d.name}
             </h3>
-            <span className="mt-2.5 inline-flex min-h-8 max-w-full items-center justify-center rounded-full border border-accent/30 bg-accent/10 px-3 py-1 font-mono text-sm font-semibold uppercase tracking-wide text-accent">
+            <span
+              className="mt-3 h-px w-12 bg-gradient-to-r from-transparent via-hero-foreground/35 to-transparent"
+              aria-hidden
+            />
+            <span className="mt-3 min-h-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">
               {d.role}
             </span>
-
-            <div className="mt-6 flex w-full flex-col items-center gap-3.5">
-              <span
-                className="h-px w-10 bg-gradient-to-r from-transparent via-accent/50 to-transparent"
-                aria-hidden
-              />
-              <span className="inline-block max-w-full rounded-xl bg-hero-foreground/10 px-3.5 py-1.5 text-xs leading-snug font-semibold text-hero-foreground/85">
-                {d.interest}
-              </span>
-            </div>
+            <p className="mt-2 max-w-[85%] text-xs leading-relaxed text-hero-foreground/60">
+              {d.interest}
+            </p>
           </div>
         </motion.article>
       </Reveal>
