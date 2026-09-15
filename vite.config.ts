@@ -12,4 +12,9 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Perlu supaya Vite mengenali card.glb (model 3D komponen Lanyard) sebagai aset,
+  // bukan dicoba di-parse sebagai kode.
+  vite: {
+    assetsInclude: ["**/*.glb"],
+  },
 });
