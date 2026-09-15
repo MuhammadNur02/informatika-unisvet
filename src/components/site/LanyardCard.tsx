@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion, useMotionValue, useTransform, type MotionValue } from "motion/react";
+import { animate, motion, useMotionValue, useTransform, type MotionValue } from "motion/react";
 import { X } from "lucide-react";
 import type { Block } from "@/content/types";
 
@@ -9,27 +9,14 @@ type DosenItem = Extract<Block, { type: "people" }>["items"][number];
 const ROPE_ANCHOR = { x: 150, y: 22 };
 const CARD_ATTACH = { x: 150, y: 204 };
 
-/** Bentuk tali saat kartu diam di posisi netral (x=0, y=0) — dipakai sebagai
-    jalur tetap untuk teks bordir supaya tidak ikut dihitung ulang tiap frame
-    drag (lihat catatan di LanyardRope). */
-const RESTING_ROPE_PATH = `M${ROPE_ANCHOR.x} ${ROPE_ANCHOR.y} Q${ROPE_ANCHOR.x} ${
-  ROPE_ANCHOR.y + (CARD_ATTACH.y - ROPE_ANCHOR.y) * 0.42
-} ${CARD_ATTACH.x} ${CARD_ATTACH.y}`;
+/** Spring buat kartu balik ke titik semula (x=0, y=0) begitu dilepas — dipakai untuk sumbu x maupun y. */
+const RETURN_SPRING = { type: "spring" as const, stiffness: 300, damping: 22 };
 
 /**
  * Tali digambar sebagai satu <path> yang lengkungnya dihitung ulang tiap
  * frame dari posisi kartu (x, y) — bukan garis statis. Titik kontrol kurva
  * quadratic ikut condong ke arah kartu ditarik, jadi tali terlihat benar-benar
  * menahan beban & melengkung, bukan kaku seperti tongkat.
- *
- * Teks "UNIVERSITAS IVET" SENGAJA tidak ikut ditempel ke path dinamis itu —
- * <textPath> memaksa browser menata ulang glyph sepanjang kurva di main
- * thread tiap kali path berubah, jauh lebih berat daripada sekadar
- * menggeser sebuah <path> lewat GPU, dan ini yang bikin drag terasa patah-
- * patah (terutama di HP). Karena bagian atas tali (dekat jangkar, tempat
- * teksnya berada) nyaris tidak melengkung meski kartu ditarik jauh, teksnya
- * cukup ditempel ke jalur statis RESTING_ROPE_PATH — hasilnya nyaris identik
- * secara visual tapi tidak lagi menghitung ulang tata letak teks tiap frame.
  */
 function LanyardRope({ x, y }: { x: MotionValue<number>; y: MotionValue<number> }) {
   const pathD = useTransform([x, y], (latest) => {
@@ -50,28 +37,18 @@ function LanyardRope({ x, y }: { x: MotionValue<number>; y: MotionValue<number> 
       aria-hidden
     >
       <motion.path d={pathD} fill="none" stroke="#131210" strokeWidth={22} strokeLinecap="round" />
-      <path id="lanyard-rope-label-path" d={RESTING_ROPE_PATH} fill="none" stroke="none" />
-      <text fontSize={7.5} fill="#e7e3d8" textAnchor="middle" fontFamily="sans-serif" letterSpacing={0.8}>
-        <textPath href="#lanyard-rope-label-path" startOffset="12%">
-          UNIVERSITAS IVET
-        </textPath>
-      </text>
-      <text fontSize={7.5} fill="#e7e3d8" textAnchor="middle" fontFamily="sans-serif" letterSpacing={0.8}>
-        <textPath href="#lanyard-rope-label-path" startOffset="60%">
-          UNIVERSITAS IVET
-        </textPath>
-      </text>
     </svg>
   );
 }
 
 /**
  * Kartu dosen bergaya lanyard fisik: menggantung dari klip di atas layar,
- * jatuh dengan spring saat pertama muncul, bisa diseret bebas ke segala arah
- * (elastis, memantul kembali via framer-motion drag) tanpa perlu fisika
- * manual, dan bisa di-tap untuk membalik ke sisi belakang. Tap dibedakan
- * dari drag oleh framer-motion sendiri lewat prop onTap, jadi tidak perlu
- * threshold jarak manual.
+ * jatuh dengan spring saat pertama muncul, bisa diseret bebas ke segala arah,
+ * dan bisa di-tap untuk membalik ke sisi belakang. Tap dibedakan dari drag
+ * oleh framer-motion sendiri lewat prop onTap, jadi tidak perlu threshold
+ * jarak manual. Ke mana pun kartu ditarik, begitu dilepas ia selalu meluncur
+ * (spring) kembali ke titik koordinat semula (x=0, y=0) — bukan cuma
+ * dipantulkan balik saat melewati batas seperti drag elastis biasa.
  */
 export function LanyardCard({ dosen, onClose }: { dosen: DosenItem; onClose: () => void }) {
   const [flipped, setFlipped] = useState(false);
@@ -99,9 +76,15 @@ export function LanyardCard({ dosen, onClose }: { dosen: DosenItem; onClose: () 
 
         <motion.div
           drag
-          dragElastic={0.55}
+          dragElastic={0.2}
+          dragMomentum={false}
           dragConstraints={{ top: -150, bottom: 150, left: -170, right: 170 }}
-          dragTransition={{ bounceStiffness: 280, bounceDamping: 16 }}
+          // Ke mana pun kartu dilepas, luncurkan x & y kembali ke 0 (titik
+          // gantung semula) alih-alih membiarkannya diam di posisi terakhir.
+          onDragEnd={() => {
+            animate(x, 0, RETURN_SPRING);
+            animate(y, 0, RETURN_SPRING);
+          }}
           // touchAction "none": tanpa ini, browser mobile mencoba menafsirkan
           // gestur yang sama sebagai scroll/pan halaman SEKALIGUS framer-motion
           // menanganinya sebagai drag kartu — keduanya "rebutan" input tiap
