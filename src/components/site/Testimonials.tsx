@@ -1,6 +1,5 @@
 import { Quote } from "lucide-react";
 import { Reveal, SectionHeading } from "./Reveal";
-import { LensFlare } from "./LensFlare";
 import { useHomeContent } from "@/lib/site-content";
 
 function initials(name: string) {
@@ -17,13 +16,22 @@ export function Testimonials() {
   const [featured, ...rest] = alumni.items;
 
   return (
-    <section id="alumni" className="relative overflow-hidden bg-gradient-testimonials py-20 sm:py-28">
-      {/* Gradient mesh statis + sapuan cahaya lensa yang mengikuti scroll */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-50" aria-hidden />
-      <LensFlare seed="alumni" />
+    <section
+      id="alumni"
+      className="relative overflow-hidden bg-gradient-testimonials py-20 sm:py-28"
+    >
+      {/* Gradient mesh statis */}
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-50"
+        aria-hidden
+      />
 
       <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading eyebrow={alumni.eyebrow} title={alumni.title} description={alumni.description} />
+        <SectionHeading
+          eyebrow={alumni.eyebrow}
+          title={alumni.title}
+          description={alumni.description}
+        />
 
         {featured ? (
           <Reveal className="mt-14" delay={0.05}>

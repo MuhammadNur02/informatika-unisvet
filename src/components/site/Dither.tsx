@@ -1,5 +1,5 @@
-import { forwardRef, useEffect, useRef, type ComponentType, type Ref } from "react";
-import { Canvas, useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
+import { forwardRef, useEffect, useRef, useState, type ComponentType, type Ref } from "react";
+import { Canvas, invalidate, useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
 import { EffectComposer, wrapEffect } from "@react-three/postprocessing";
 import { Effect } from "postprocessing";
 import * as THREE from "three";
@@ -344,8 +344,40 @@ export default function Dither({
   mouseRadius = 1,
   className,
 }: DitherProps) {
+  const canvasElRef = useRef<HTMLCanvasElement>(null);
+  // Shader ini terus digambar ulang tiap frame (frameloop bawaan Canvas =
+  // "always") walau lagi di luar layar — footer bisa saja di-scroll lewat
+  // dan tidak pernah dilihat, tapi GPU tetap kerja penuh terus-menerus.
+  // IntersectionObserver menghentikan render sepenuhnya ("never") begitu
+  // canvas keluar viewport, dan menyalakannya lagi begitu masuk — state
+  // shader (uniform, waktu) tidak hilang, cuma berhenti "diceritakan" ke GPU
+  // sementara, jadi begitu nyala lagi tampilannya tetap mulus.
+  const [inView, setInView] = useState(true);
+
+  useEffect(() => {
+    const el = canvasElRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setInView(entry!.isIntersecting);
+        // r3f berbagi SATU render loop global antar semua Canvas di halaman;
+        // kalau Dither ini satu-satunya root yang aktif, men-set frameloop
+        // "never" mematikan loop itu SEPENUHNYA (bukan cuma untuk root ini).
+        // Mengembalikan frameloop ke "always" TIDAK otomatis
+        // menyalakannya lagi — perlu invalidate() manual di sini, kalau
+        // tidak canvasnya diam permanen begitu sempat keluar viewport sekali.
+        if (entry!.isIntersecting) invalidate();
+      },
+      { rootMargin: "200px 0px" },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <Canvas
+      ref={canvasElRef}
+      frameloop={inView ? "always" : "never"}
       className={cn("h-full w-full", className)}
       camera={{ position: [0, 0, 6] }}
       dpr={1}

@@ -19,7 +19,10 @@ export function Stats() {
     <section id="statistik" className="relative z-10 -mt-14 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl rounded-[2rem] border-2 border-black bg-stats-panel p-5 shadow-[var(--shadow-lift)] dark:border-accent/40 dark:bg-white sm:p-7">
         {/* Subtle gradient accent at top */}
-        <div className="absolute -top-1 left-1/2 h-1 w-24 -translate-x-1/2 rounded-full bg-gradient-to-r from-transparent via-accent to-transparent" aria-hidden />
+        <div
+          className="absolute -top-1 left-1/2 h-1 w-24 -translate-x-1/2 rounded-full bg-gradient-to-r from-transparent via-accent to-transparent"
+          aria-hidden
+        />
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:divide-x-2 lg:divide-black/20">
           {stats.map((stat, i) => {
@@ -36,7 +39,7 @@ export function Stats() {
                     )}
                   </span>
                   <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground dark:text-neutral-600">
-                    <Icon className="size-3 text-accent" /> {stat.label}
+                    <Icon className="size-3 text-accent dark:text-neutral-600" /> {stat.label}
                   </span>
                 </div>
               </Reveal>

@@ -94,7 +94,11 @@ export function SiteFooter() {
           enableMouseInteraction
         />
       </div>
-      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      {/* pointer-events-none di sini supaya area kosong (padding, gap grid,
+          baris antar teks) tetap diteruskan ke Dither di belakangnya untuk
+          efek ripple mouse — tiap elemen yang BENAR-BENAR interaktif di bawah
+          diberi pointer-events-auto sendiri untuk mengembalikan klik/hover-nya. */}
+      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 pointer-events-none">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3">
@@ -125,7 +129,7 @@ export function SiteFooter() {
                   target="_blank"
                   rel="noreferrer"
                   aria-label={s.label}
-                  className="inline-flex size-10 items-center justify-center rounded-full border border-hero-foreground/15 bg-hero-foreground/5 text-hero-foreground/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/60 hover:text-accent"
+                  className="pointer-events-auto inline-flex size-10 items-center justify-center rounded-full border border-hero-foreground/15 bg-hero-foreground/5 text-hero-foreground/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/60 hover:text-accent"
                 >
                   <s.icon className="size-4" />
                 </a>
@@ -142,7 +146,7 @@ export function SiteFooter() {
                 <li key={l.label}>
                   <Link
                     to={l.to}
-                    className="text-sm text-hero-foreground/70 transition-colors hover:text-accent"
+                    className="pointer-events-auto text-sm text-hero-foreground/70 transition-colors hover:text-accent"
                   >
                     {l.label}
                   </Link>
@@ -162,7 +166,7 @@ export function SiteFooter() {
                     href={p.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-sm text-hero-foreground/70 transition-colors hover:text-accent"
+                    className="pointer-events-auto text-sm text-hero-foreground/70 transition-colors hover:text-accent"
                   >
                     {p.label}
                   </a>
@@ -183,7 +187,7 @@ export function SiteFooter() {
                   <PhoneCallIcon className="size-5 shrink-0" />
                   <a
                     href={`tel:${footer.phone.replace(/\D/g, "")}`}
-                    className="transition-colors hover:text-accent"
+                    className="pointer-events-auto transition-colors hover:text-accent"
                   >
                     {footer.phone}
                   </a>
@@ -194,7 +198,7 @@ export function SiteFooter() {
                   <WhatsAppIcon className="size-5 shrink-0" />
                   <a
                     href={`https://wa.me/${footer.waAdmin}`}
-                    className="transition-colors hover:text-accent"
+                    className="pointer-events-auto transition-colors hover:text-accent"
                   >
                     WhatsApp Admin {formatWa(footer.waAdmin)}
                   </a>
@@ -205,7 +209,7 @@ export function SiteFooter() {
                   <WhatsAppIcon className="size-5 shrink-0" />
                   <a
                     href={`https://wa.me/${footer.waKaprodi}`}
-                    className="transition-colors hover:text-accent"
+                    className="pointer-events-auto transition-colors hover:text-accent"
                   >
                     WhatsApp Kaprodi {formatWa(footer.waKaprodi)}
                   </a>
@@ -216,7 +220,7 @@ export function SiteFooter() {
                   <GmailIcon className="size-5 shrink-0" />
                   <a
                     href={`mailto:${footer.email}`}
-                    className="transition-colors hover:text-accent"
+                    className="pointer-events-auto transition-colors hover:text-accent"
                   >
                     {footer.email}
                   </a>
@@ -235,7 +239,7 @@ export function SiteFooter() {
                 src={`https://www.google.com/maps?q=${encodeURIComponent(footer.mapQuery)}&output=embed`}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="h-56 w-full border-0"
+                className="pointer-events-auto h-56 w-full border-0"
               />
             </div>
           </div>

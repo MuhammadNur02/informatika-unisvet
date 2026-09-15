@@ -2,7 +2,6 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { GraduationCap, Code2, Palette, CheckCircle2 } from "lucide-react";
 import { Reveal, SectionHeading } from "./Reveal";
-import { LensFlare } from "./LensFlare";
 import { useHomeContent } from "@/lib/site-content";
 import { cn } from "@/lib/utils";
 
@@ -12,7 +11,10 @@ export function Tracks() {
   const { tracks } = useHomeContent();
   const [active, setActive] = useState(tracks.items[0]?.id ?? "");
   const [hovered, setHovered] = useState<string | null>(null);
-  const activeIndex = Math.max(0, tracks.items.findIndex((t) => t.id === active));
+  const activeIndex = Math.max(
+    0,
+    tracks.items.findIndex((t) => t.id === active),
+  );
   const current = tracks.items[activeIndex];
 
   if (!current) return null;
@@ -20,12 +22,18 @@ export function Tracks() {
 
   return (
     <section id="kurikulum" className="relative overflow-hidden bg-gradient-tracks py-20 sm:py-28">
-      {/* Gradient mesh statis + sapuan cahaya lensa yang mengikuti scroll */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-50" aria-hidden />
-      <LensFlare seed="kurikulum" />
+      {/* Gradient mesh statis */}
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-50"
+        aria-hidden
+      />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading eyebrow={tracks.eyebrow} title={tracks.title} description={tracks.description} />
+        <SectionHeading
+          eyebrow={tracks.eyebrow}
+          title={tracks.title}
+          description={tracks.description}
+        />
 
         <Reveal className="mt-12">
           <div
@@ -48,15 +56,28 @@ export function Tracks() {
                   className={cn(
                     "relative inline-flex items-center gap-2 overflow-hidden rounded-full border px-4 py-2.5 text-sm font-semibold transition-colors duration-300",
                     indicated
-                      ? "border-transparent bg-primary text-hero-foreground"
+                      ? "border-transparent text-hero-foreground"
                       : "border-border bg-card text-foreground/70 hover:border-accent/50 hover:text-primary hover:shadow-[var(--shadow-glow-accent)]",
                   )}
                 >
                   {indicated ? (
+                    // Sengaja TANPA -z-10: pada elemen tanpa stacking context
+                    // sendiri (tombolnya cuma "relative", tidak punya z-index),
+                    // z-index negatif dievaluasi di stacking context ANCESTOR
+                    // terdekat yang sesungguhnya (bisa jauh lebih tinggi dari
+                    // tombol ini) — bukan "di belakang background tombol ini
+                    // saja" seperti yang terlihat. Urutan DOM biasa (span ini
+                    // duluan, ikon & label sesudahnya) sudah cukup untuk
+                    // menaruhnya di atas background tombol tapi di bawah
+                    // ikon/label, tanpa risiko itu. bg-primary juga dihapus
+                    // dari tombolnya sendiri (fallback yang salah warna di
+                    // mode gelap — jadi putih, padahal teksnya juga putih)
+                    // karena warna asli pill ini sudah pasti datang dari span
+                    // bg-hero-gradient ini, keduanya selalu tampil bersamaan.
                     <motion.span
                       layoutId="tracks-tab-pill"
                       className={cn(
-                        "absolute inset-0 -z-10 rounded-full bg-hero-gradient shadow-(--shadow-card)",
+                        "absolute inset-0 rounded-full bg-hero-gradient shadow-(--shadow-card)",
                         trulyActive && "pulse-glow",
                       )}
                       transition={{ type: "spring", stiffness: 380, damping: 32 }}
@@ -84,7 +105,9 @@ export function Tracks() {
                 <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-[image:var(--gradient-hero)] text-hero-foreground icon-glow">
                   <CurrentIcon className="size-5" />
                 </span>
-                <h3 className="mt-5 text-2xl font-bold tracking-tight text-foreground">{current.headline}</h3>
+                <h3 className="mt-5 text-2xl font-bold tracking-tight text-foreground">
+                  {current.headline}
+                </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{current.desc}</p>
                 <ul className="mt-6 space-y-3">
                   {current.points.map((p) => (
@@ -96,7 +119,9 @@ export function Tracks() {
                 </ul>
               </div>
               <div className="rounded-2xl bg-slate-surface p-6 border border-accent/20">
-                <h4 className="text-sm font-bold uppercase tracking-widest text-accent-gradient">Prospek Karier</h4>
+                <h4 className="text-sm font-bold uppercase tracking-widest text-accent-foreground">
+                  Prospek Karier
+                </h4>
                 <ul className="mt-4 space-y-3">
                   {current.careers.map((c) => (
                     <li

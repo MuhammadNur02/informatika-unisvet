@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "motion/react";
 import { Eye, X } from "lucide-react";
 import { Reveal } from "./Reveal";
-import { LensFlare } from "./LensFlare";
 import Lanyard from "./Lanyard";
 import { fetchPageOverride, staticPage } from "@/lib/cms";
 import type { Block } from "@/content/types";
@@ -308,7 +307,6 @@ export function Faculty() {
         </div>
 
         <div id="fasilitas" className="relative mt-20 overflow-hidden">
-          <LensFlare seed="fasilitas" />
           <DarkSectionHeading
             eyebrow="Fasilitas"
             title="Ruang Belajar & Laboratorium"

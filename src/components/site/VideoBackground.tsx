@@ -37,7 +37,11 @@ export function VideoBackground({ className = "" }: { className?: string }) {
   }, [active]);
 
   return (
-    <div ref={containerRef} className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`} aria-hidden>
+    <div
+      ref={containerRef}
+      className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
+      aria-hidden
+    >
       {active ? (
         <video
           ref={videoRef}
@@ -53,8 +57,13 @@ export function VideoBackground({ className = "" }: { className?: string }) {
           <source src="/tech-bg.mp4" type="video/mp4" />
         </video>
       ) : null}
-      <div className="absolute inset-0 bg-primary-deep/80 mix-blend-multiply dark:bg-primary-deep/40" />
-      <div className="absolute inset-0 bg-hero-gradient opacity-50 dark:opacity-25" />
+      {/* Sama kuat di kedua mode — sempat lebih tipis di mode gelap (dark:/40,
+          dark:opacity-25), padahal tidak ada alasan video mentahnya (yang bisa
+          saja punya frame terang) butuh perlindungan LEBIH SEDIKIT di mode
+          gelap. Teks di atasnya (text-hero-foreground) sama-sama butuh
+          kontras cukup di kedua mode. */}
+      <div className="absolute inset-0 bg-primary-deep/80 mix-blend-multiply" />
+      <div className="absolute inset-0 bg-hero-gradient opacity-50" />
     </div>
   );
 }
