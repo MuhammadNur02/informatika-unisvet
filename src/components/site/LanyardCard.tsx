@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { animate, motion, useMotionValue, useTransform, type MotionValue } from "motion/react";
 import { X } from "lucide-react";
 import type { Block } from "@/content/types";
@@ -9,8 +9,10 @@ type DosenItem = Extract<Block, { type: "people" }>["items"][number];
 const ROPE_ANCHOR = { x: 150, y: 22 };
 const CARD_ATTACH = { x: 150, y: 204 };
 
-/** Spring buat kartu balik ke titik semula (x=0, y=0) begitu dilepas — dipakai untuk sumbu x maupun y. */
-const RETURN_SPRING = { type: "spring" as const, stiffness: 300, damping: 22 };
+/** Spring lembut buat kartu meluncur balik ke tengah saat DITUTUP — sengaja
+    dibuat tidak terlalu kaku/cepat (stiffness rendah, damping secukupnya)
+    supaya kelihatan mengayun pelan, bukan "nyentak" balik ke tengah. */
+const CLOSE_RETURN_SPRING = { type: "spring" as const, stiffness: 70, damping: 16 };
 
 /**
  * Tali digambar sebagai satu <path> yang lengkungnya dihitung ulang tiap
@@ -43,12 +45,15 @@ function LanyardRope({ x, y }: { x: MotionValue<number>; y: MotionValue<number> 
 
 /**
  * Kartu dosen bergaya lanyard fisik: menggantung dari klip di atas layar,
- * jatuh dengan spring saat pertama muncul, bisa diseret bebas ke segala arah,
- * dan bisa di-tap untuk membalik ke sisi belakang. Tap dibedakan dari drag
- * oleh framer-motion sendiri lewat prop onTap, jadi tidak perlu threshold
- * jarak manual. Ke mana pun kartu ditarik, begitu dilepas ia selalu meluncur
- * (spring) kembali ke titik koordinat semula (x=0, y=0) — bukan cuma
- * dipantulkan balik saat melewati batas seperti drag elastis biasa.
+ * jatuh dengan spring saat pertama muncul, dan bisa diseret BEBAS ke segala
+ * arah tanpa terkunci ke titik tertentu — posisi setelah dilepas dibiarkan
+ * apa adanya (tidak otomatis melompat balik ke tengah), supaya benar-benar
+ * leluasa dimainkan. Tap (bukan drag) membalik kartu ke sisi belakang; tap
+ * vs drag dibedakan oleh framer-motion sendiri lewat prop onTap, jadi tidak
+ * perlu threshold jarak manual. Satu-satunya cara kartu kembali ke tengah
+ * adalah lewat tombol close (atau Esc/klik area gelap) — saat itu terjadi,
+ * kartu meluncur pelan (bukan nyentak) balik ke tengah dulu, baru tampilan
+ * benar-benar ditutup.
  */
 export function LanyardCard({ dosen, onClose }: { dosen: DosenItem; onClose: () => void }) {
   const [flipped, setFlipped] = useState(false);
@@ -59,6 +64,22 @@ export function LanyardCard({ dosen, onClose }: { dosen: DosenItem; onClose: () 
   // tali — bukan cuma bergeser lurus.
   const lean = useTransform(x, [-170, 170], [10, -10]);
 
+  /** Luncurkan kartu balik ke tengah dengan lembut, baru panggil onClose
+      setelah ayunannya benar-benar menetap — bukan ditutup mendadak dari
+      posisi terakhir ia ditarik. */
+  function handleClose() {
+    Promise.all([animate(x, 0, CLOSE_RETURN_SPRING), animate(y, 0, CLOSE_RETURN_SPRING)]).then(onClose);
+  }
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") handleClose();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <motion.div
       className="fixed inset-0 z-[101] flex items-start justify-center bg-black/70 pt-6 backdrop-blur-sm"
@@ -66,7 +87,7 @@ export function LanyardCard({ dosen, onClose }: { dosen: DosenItem; onClose: () 
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      onClick={onClose}
+      onClick={handleClose}
     >
       <div className="relative" style={{ width: 300, height: 480 }} onClick={(e) => e.stopPropagation()}>
         {/* Klip plastik di langit-langit — titik jangkar tetap, tidak ikut bergerak. */}
@@ -76,15 +97,8 @@ export function LanyardCard({ dosen, onClose }: { dosen: DosenItem; onClose: () 
 
         <motion.div
           drag
-          dragElastic={0.2}
-          dragMomentum={false}
+          dragElastic={0.5}
           dragConstraints={{ top: -150, bottom: 150, left: -170, right: 170 }}
-          // Ke mana pun kartu dilepas, luncurkan x & y kembali ke 0 (titik
-          // gantung semula) alih-alih membiarkannya diam di posisi terakhir.
-          onDragEnd={() => {
-            animate(x, 0, RETURN_SPRING);
-            animate(y, 0, RETURN_SPRING);
-          }}
           // touchAction "none": tanpa ini, browser mobile mencoba menafsirkan
           // gestur yang sama sebagai scroll/pan halaman SEKALIGUS framer-motion
           // menanganinya sebagai drag kartu — keduanya "rebutan" input tiap
@@ -155,7 +169,7 @@ export function LanyardCard({ dosen, onClose }: { dosen: DosenItem; onClose: () 
       <button
         onClick={(e) => {
           e.stopPropagation();
-          onClose();
+          handleClose();
         }}
         aria-label="Tutup"
         className="absolute right-6 top-6 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-hero-foreground/10 text-hero-foreground transition-colors hover:bg-hero-foreground/20"

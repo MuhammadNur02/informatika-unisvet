@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "motion/react";
 import { Eye } from "lucide-react";
@@ -60,15 +60,6 @@ function DarkSectionHeading({ eyebrow, title, description }: { eyebrow: string; 
  */
 function DosenCard({ d, delay }: { d: DosenItem; delay: number }) {
   const [expanded, setExpanded] = useState(false);
-
-  useEffect(() => {
-    if (!expanded) return;
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setExpanded(false);
-    }
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [expanded]);
 
   return (
     <Reveal delay={delay}>
