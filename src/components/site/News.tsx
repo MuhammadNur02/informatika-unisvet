@@ -1,10 +1,17 @@
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ArrowUpRight, CalendarDays, Newspaper, Users, Megaphone, PartyPopper, CalendarClock } from "lucide-react";
+import {
+  ArrowUpRight,
+  CalendarDays,
+  Newspaper,
+  Users,
+  Megaphone,
+  PartyPopper,
+  CalendarClock,
+} from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Reveal, SectionHeading } from "./Reveal";
-import { LensFlare } from "./LensFlare";
 import { cn } from "@/lib/utils";
 import { fetchBeritaPublik, formatTanggalId, KATEGORI_BERITA, type BeritaItem } from "@/lib/berita";
 import { useHomeContent } from "@/lib/site-content";
@@ -49,54 +56,60 @@ export function News() {
 
   return (
     <section id="berita" className="relative overflow-hidden bg-gradient-news py-20 sm:py-28">
-      {/* Gradient mesh statis + sapuan cahaya lensa yang mengikuti scroll */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-40" aria-hidden />
-      <LensFlare seed="berita" />
+      {/* Gradient mesh statis */}
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-40"
+        aria-hidden
+      />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading eyebrow={news.eyebrow} title={news.title} description={news.description} />
 
         <Reveal className="mt-10 flex justify-center">
           <div className="max-w-full overflow-x-auto px-4 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:px-0 [&::-webkit-scrollbar]:hidden">
-          <div
-            className="inline-flex rounded-full border border-border bg-card p-1 shadow-[var(--shadow-card)]"
-            onMouseLeave={() => setHovered(null)}
-          >
-            {KATEGORI_BERITA.map((tab) => {
-              const Icon = KATEGORI_ICON[tab] ?? Newspaper;
-              // Pill emas ikut kursor saat hover (tanpa klik); kembali ke tab
-              // yang benar-benar aktif begitu pointer keluar dari grup tab.
-              const indicated = (hovered ?? active) === tab;
-              return (
-                <button
-                  key={tab}
-                  type="button"
-                  onClick={() => setActive(tab)}
-                  onMouseEnter={() => setHovered(tab)}
-                  className={cn(
-                    "relative flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-semibold transition-colors",
-                    indicated ? "text-hero-foreground" : "text-muted-foreground hover:text-primary",
-                  )}
-                >
-                  {indicated ? (
-                    <motion.span
-                      layoutId="news-tab"
-                      className="absolute inset-0 rounded-full bg-[image:var(--gradient-gold)]"
-                      transition={{ type: "spring", stiffness: 320, damping: 30 }}
-                    />
-                  ) : null}
-                  <motion.span
-                    className="relative inline-flex"
-                    animate={active === tab ? { rotate: [0, -12, 12, 0] } : { rotate: 0 }}
-                    transition={{ duration: 0.4, ease: "easeInOut" }}
+            <div
+              className="inline-flex rounded-full border border-border bg-card p-1 shadow-[var(--shadow-card)]"
+              onMouseLeave={() => setHovered(null)}
+            >
+              {KATEGORI_BERITA.map((tab) => {
+                const Icon = KATEGORI_ICON[tab] ?? Newspaper;
+                // Pill emas ikut kursor saat hover (tanpa klik); kembali ke tab
+                // yang benar-benar aktif begitu pointer keluar dari grup tab.
+                const indicated = (hovered ?? active) === tab;
+                return (
+                  <button
+                    key={tab}
+                    type="button"
+                    onClick={() => setActive(tab)}
+                    onMouseEnter={() => setHovered(tab)}
+                    className={cn(
+                      "relative flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-semibold transition-colors",
+                      // text-primary-deep, bukan text-accent-foreground: latar pill di
+                      // bawah ini (--gradient-gold) selalu cerah di kedua mode, tapi
+                      // accent-foreground dibalik jadi putih di mode gelap — lihat
+                      // catatan yang sama di button.tsx variant "hero".
+                      indicated ? "text-primary-deep" : "text-muted-foreground hover:text-primary",
+                    )}
                   >
-                    <Icon className="size-3.5" />
-                  </motion.span>
-                  <span className="relative">{tab}</span>
-                </button>
-              );
-            })}
-          </div>
+                    {indicated ? (
+                      <motion.span
+                        layoutId="news-tab"
+                        className="absolute inset-0 rounded-full bg-[image:var(--gradient-gold)]"
+                        transition={{ type: "spring", stiffness: 320, damping: 30 }}
+                      />
+                    ) : null}
+                    <motion.span
+                      className="relative inline-flex"
+                      animate={active === tab ? { rotate: [0, -12, 12, 0] } : { rotate: 0 }}
+                      transition={{ duration: 0.4, ease: "easeInOut" }}
+                    >
+                      <Icon className="size-3.5" />
+                    </motion.span>
+                    <span className="relative">{tab}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </Reveal>
 
@@ -163,14 +176,16 @@ export function News() {
                         </div>
                         <div className="min-w-0 flex-1">
                           {item.tag ? (
-                            <span className="text-[11px] font-bold uppercase tracking-widest text-accent-gradient">
+                            <span className="inline-flex rounded-full bg-accent/15 px-2 py-0.5 text-[11px] font-bold uppercase tracking-widest text-accent-foreground">
                               {item.tag}
                             </span>
                           ) : null}
                           <h3 className="mt-1 line-clamp-2 text-sm font-bold leading-snug text-foreground">
                             {item.judul}
                           </h3>
-                          <p className="mt-1 text-xs text-muted-foreground">{formatTanggalId(item.tanggal)}</p>
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            {formatTanggalId(item.tanggal)}
+                          </p>
                         </div>
                       </article>
                     ))}

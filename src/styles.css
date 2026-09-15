@@ -259,21 +259,7 @@
   visibility: visible;
 }
 
-/*
- * Bintang berkedip kecil yang menyatu dengan efek sapuan cahaya lensa
- * (LensFlare) di tiap section beranda — bukan layer terpisah, jadi
- * lokasinya otomatis mengikuti section tempat LensFlare dipasang. Hanya
- * tampak saat mode gelap aktif.
- */
-.lens-flare-stars {
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-.dark .lens-flare-stars {
-  opacity: 1;
-}
-
+/* Dipakai AdminStarfield.tsx untuk bintang berkedip di latar admin. */
 @keyframes star-twinkle {
   0%,
   100% {
@@ -329,7 +315,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .admin-starfield span,
-  .lens-flare-stars span,
   .ember-field span {
     animation: none !important;
   }

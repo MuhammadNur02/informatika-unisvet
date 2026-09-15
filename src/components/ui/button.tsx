@@ -18,7 +18,13 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         pmb: "bg-accent text-accent-foreground font-semibold shadow-[var(--shadow-card)] transition-all duration-300 hover:shadow-[var(--shadow-glow)] hover:-translate-y-0.5 hover:brightness-105",
-        hero: "bg-[image:var(--gradient-gold)] text-accent-foreground font-semibold shadow-[var(--shadow-card)] transition-all duration-300 hover:shadow-[var(--shadow-glow)] hover:-translate-y-0.5",
+        // text-primary-deep (bukan text-accent-foreground) sengaja: --gradient-gold
+        // TIDAK pernah berubah kecerahan antara mode terang/gelap (selalu emas
+        // cerah), tapi --accent-foreground JUSTRU dibalik jadi putih di mode
+        // gelap (dirancang untuk dipasangkan dengan --accent yang ikut
+        // berubah, bukan gradient ini) — akibatnya teks tombol nyaris tak
+        // terlihat di mode gelap. --primary-deep selalu gelap di kedua mode.
+        hero: "bg-[image:var(--gradient-gold)] text-primary-deep font-semibold shadow-[var(--shadow-card)] transition-all duration-300 hover:shadow-[var(--shadow-glow)] hover:-translate-y-0.5",
         heroGhost:
           "border border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground backdrop-blur-md transition-all duration-300 hover:border-accent/70 hover:bg-primary-foreground/20 hover:-translate-y-0.5",
         outlineNavy:

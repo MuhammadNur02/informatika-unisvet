@@ -1,7 +1,6 @@
 import { motion } from "motion/react";
 import { Layers, CalendarClock, MonitorSmartphone, Network } from "lucide-react";
 import { Reveal, SectionHeading } from "./Reveal";
-import { LensFlare } from "./LensFlare";
 import { useHomeContent } from "@/lib/site-content";
 import kegiatanPraktikum from "@/assets/hero-lab.jpg";
 
@@ -13,10 +12,15 @@ export function Advantages() {
   const FeaturedIcon = ICONS[0]!;
 
   return (
-    <section id="akademik" className="relative overflow-hidden bg-gradient-advantages py-20 sm:py-28">
-      {/* Gradient mesh statis + sapuan cahaya lensa yang mengikuti scroll */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-60" aria-hidden />
-      <LensFlare seed="akademik" />
+    <section
+      id="akademik"
+      className="relative overflow-hidden bg-gradient-advantages py-20 sm:py-28"
+    >
+      {/* Gradient mesh statis */}
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-60"
+        aria-hidden
+      />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
@@ -52,8 +56,12 @@ export function Advantages() {
                   <span className="inline-flex size-14 items-center justify-center rounded-2xl bg-hero-foreground/15 text-hero-foreground icon-glow transition-transform duration-300 group-hover:scale-110">
                     <FeaturedIcon className="size-6" />
                   </span>
-                  <h3 className="mt-6 text-2xl font-bold tracking-tight text-hero-foreground">{featured.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-hero-foreground/75">{featured.desc}</p>
+                  <h3 className="mt-6 text-2xl font-bold tracking-tight text-hero-foreground">
+                    {featured.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-hero-foreground/75">
+                    {featured.desc}
+                  </p>
                 </div>
               </article>
             </Reveal>
@@ -68,8 +76,12 @@ export function Advantages() {
                       <Icon className="size-4.5" />
                     </span>
                     <div>
-                      <h3 className="text-base font-bold tracking-tight text-foreground">{item.title}</h3>
-                      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{item.desc}</p>
+                      <h3 className="text-base font-bold tracking-tight text-foreground">
+                        {item.title}
+                      </h3>
+                      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                        {item.desc}
+                      </p>
                     </div>
                   </article>
                 </Reveal>
