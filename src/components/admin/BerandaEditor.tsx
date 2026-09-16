@@ -35,6 +35,13 @@ import {
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
+// Setiap field dibungkus kotak biru muda tipis (bukan cuma label+input
+// mengambang di atas latar Card) supaya batas tiap kotak terlihat jelas dan
+// mudah dibedakan satu sama lain — sesuai keluhan form yang tadinya nyaris
+// tak terbaca karena teks & garis kotak sama-sama redup di atas Card gelap.
+const FIELD_BOX = "space-y-2 rounded-2xl border border-sky-400/30 bg-sky-400/5 p-4";
+const FIELD_INPUT = "border-sky-400/40 bg-background/50 text-foreground focus-visible:border-sky-400";
+
 function Field({
   label,
   value,
@@ -47,10 +54,10 @@ function Field({
   hint?: string;
 }) {
   return (
-    <div className="space-y-2">
-      <Label>{label}</Label>
-      <Input value={value} onChange={(e) => onChange(e.target.value)} />
-      {hint ? <p className="text-xs text-muted-foreground">{hint}</p> : null}
+    <div className={FIELD_BOX}>
+      <Label className="text-sm font-semibold text-foreground">{label}</Label>
+      <Input className={FIELD_INPUT} value={value} onChange={(e) => onChange(e.target.value)} />
+      {hint ? <p className="text-xs text-foreground/65">{hint}</p> : null}
     </div>
   );
 }
@@ -67,9 +74,9 @@ function Area({
   rows?: number;
 }) {
   return (
-    <div className="space-y-2">
-      <Label>{label}</Label>
-      <Textarea rows={rows} value={value} onChange={(e) => onChange(e.target.value)} />
+    <div className={FIELD_BOX}>
+      <Label className="text-sm font-semibold text-foreground">{label}</Label>
+      <Textarea className={FIELD_INPUT} rows={rows} value={value} onChange={(e) => onChange(e.target.value)} />
     </div>
   );
 }
@@ -86,22 +93,23 @@ function Lines({
   hint?: string;
 }) {
   return (
-    <div className="space-y-2">
-      <Label>{label}</Label>
+    <div className={FIELD_BOX}>
+      <Label className="text-sm font-semibold text-foreground">{label}</Label>
       <Textarea
+        className={FIELD_INPUT}
         rows={4}
         value={items.join("\n")}
         onChange={(e) => onChange(e.target.value.split("\n").filter((l) => l.trim() !== ""))}
       />
-      <p className="text-xs text-muted-foreground">{hint ?? "Satu item per baris."}</p>
+      <p className="text-xs text-foreground/65">{hint ?? "Satu item per baris."}</p>
     </div>
   );
 }
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="card-elevated rounded-3xl bg-card p-6">
-      <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-muted-foreground">{title}</h3>
+    <section className="card-elevated rounded-3xl border-2 border-accent/40 bg-card p-6">
+      <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-accent">{title}</h3>
       <div className="mt-5 space-y-4">{children}</div>
     </section>
   );
@@ -245,7 +253,7 @@ export function BerandaEditor({ userId }: { userId: string }) {
             <select
               value=""
               onChange={(e) => e.target.value && patchHome({ hero: { ...home.hero, image: e.target.value } })}
-              className="h-11 w-full rounded-xl border border-input bg-background px-3.5 text-sm outline-none focus-visible:border-accent"
+              className="h-11 w-full rounded-xl border border-sky-400/40 bg-sky-400/5 px-3.5 text-sm text-foreground outline-none focus-visible:border-accent"
             >
               <option value="">{images.length ? "Pilih foto dari pustaka media…" : "Pustaka media masih kosong"}</option>
               {images.map((m) => (
@@ -273,7 +281,7 @@ export function BerandaEditor({ userId }: { userId: string }) {
         <TabsContent value="statistik" className="mt-5">
           <Card title="Statistik Prodi">
             {home.stats.map((s, i) => (
-              <div key={i} className="grid gap-3 rounded-2xl border border-border p-4 sm:grid-cols-[1fr_2fr_auto]">
+              <div key={i} className="grid gap-3 rounded-2xl border border-emerald-400/30 bg-emerald-400/5 p-4 sm:grid-cols-[1fr_2fr_auto]">
                 <Input
                   value={s.value}
                   placeholder="500+"
@@ -315,7 +323,7 @@ export function BerandaEditor({ userId }: { userId: string }) {
             <Field label="Judul" value={home.advantages.title} onChange={(v) => patchHome({ advantages: { ...home.advantages, title: v } })} />
             <Area label="Deskripsi" value={home.advantages.description} onChange={(v) => patchHome({ advantages: { ...home.advantages, description: v } })} />
             {home.advantages.items.map((it, i) => (
-              <div key={i} className="space-y-3 rounded-2xl border border-border p-4">
+              <div key={i} className="space-y-3 rounded-2xl border border-emerald-400/30 bg-emerald-400/5 p-4">
                 <div className="flex items-center gap-3">
                   <Input
                     value={it.title}
@@ -476,7 +484,7 @@ export function BerandaEditor({ userId }: { userId: string }) {
             <Field label="Judul" value={home.alumni.title} onChange={(v) => patchHome({ alumni: { ...home.alumni, title: v } })} />
             <Area label="Deskripsi" value={home.alumni.description} onChange={(v) => patchHome({ alumni: { ...home.alumni, description: v } })} />
             {home.alumni.items.map((a, i) => (
-              <div key={i} className="space-y-3 rounded-2xl border border-border p-4">
+              <div key={i} className="space-y-3 rounded-2xl border border-emerald-400/30 bg-emerald-400/5 p-4">
                 <div className="grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
                   <Input
                     value={a.name}
@@ -582,7 +590,7 @@ export function BerandaEditor({ userId }: { userId: string }) {
           </Card>
           <Card title="Portal Akademik">
             {footer.portals.map((p, i) => (
-              <div key={i} className="grid gap-3 rounded-2xl border border-border p-4 sm:grid-cols-[1fr_2fr_auto]">
+              <div key={i} className="grid gap-3 rounded-2xl border border-emerald-400/30 bg-emerald-400/5 p-4 sm:grid-cols-[1fr_2fr_auto]">
                 <Input
                   value={p.label}
                   placeholder="Nama portal"
@@ -632,7 +640,7 @@ export function BerandaEditor({ userId }: { userId: string }) {
           <RotateCcw /> Kembalikan Konten Asli
         </Button>
         {isDirty ? (
-          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent-foreground">
+          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent">
             <span className="size-1.5 rounded-full bg-accent" /> Ada perubahan belum disimpan
           </span>
         ) : null}

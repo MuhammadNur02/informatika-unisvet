@@ -353,7 +353,7 @@ export function BeritaEditor({ userId }: { userId: string }) {
                       <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-1 font-semibold text-orange-400">
                         <CalendarDays className="size-3" /> {formatTanggalId(item.tanggal)}
                       </span>
-                      <span className="rounded-full bg-accent/15 px-2.5 py-1 font-semibold text-accent-foreground">
+                      <span className="rounded-full bg-accent/15 px-2.5 py-1 font-semibold text-accent">
                         {item.kategori}
                       </span>
                       <span
