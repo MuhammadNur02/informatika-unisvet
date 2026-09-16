@@ -17,6 +17,14 @@ import { cn } from "@/lib/utils";
 //   sama seperti sumber aslinya) — false memberi tekstur abu-abu/perak lembut (warna
 //   dikali pola, tanpa pencampuran ke putih), true memberi efek "kain terlipat" dengan
 //   highlight memutih di area terang. Dipilih dari sisi pemanggil sesuai kebutuhan.
+// - Setup WebGL (renderer/canvas/geometry) HANYA dibuat SEKALI saat mount (efek dengan
+//   deps kosong) — sama seperti sumber aslinya (uniforms dibuat sekali lewat useMemo,
+//   <Canvas> tidak pernah di-remount). Perubahan prop (mis. warna ikut tema terang/gelap)
+//   diterapkan lewat effect KEDUA yang cuma meng-update NILAI uniform yang sudah ada,
+//   BUKAN membongkar-pasang ulang renderer — sebelumnya semua prop (termasuk color) ada
+//   di dependency array effect setup, jadi setiap toggle tema membongkar & bikin ulang
+//   seluruh WebGL context, yang ternyata rawan gagal (context baru kadang tidak
+//   ke-append) di lingkungan yang GPU-nya terbatas.
 
 const vert = `
 varying vec2 vUv;
@@ -98,6 +106,17 @@ interface SilkProps {
   lightMode?: boolean;
 }
 
+interface SilkUniforms {
+  [key: string]: THREE.IUniform;
+  uTime: { value: number };
+  uColor: { value: THREE.Color };
+  uSpeed: { value: number };
+  uScale: { value: number };
+  uRotation: { value: number };
+  uNoiseIntensity: { value: number };
+  uLightMode: { value: number };
+}
+
 export default function Silk({
   className,
   speed = 2.2,
@@ -108,7 +127,9 @@ export default function Silk({
   lightMode = false,
 }: SilkProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const uniformsRef = useRef<SilkUniforms | null>(null);
 
+  // Setup WebGL sekali di mount — lihat catatan di atas.
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -119,7 +140,7 @@ export default function Silk({
     renderer.setClearColor(0x000000, 0);
     container.appendChild(renderer.domElement);
 
-    const uniforms = {
+    const uniforms: SilkUniforms = {
       uTime: { value: 0 },
       uColor: { value: new THREE.Color(color) },
       uSpeed: { value: speed },
@@ -128,6 +149,7 @@ export default function Silk({
       uNoiseIntensity: { value: noiseIntensity },
       uLightMode: { value: lightMode ? 1 : 0 },
     };
+    uniformsRef.current = uniforms;
 
     const material = new THREE.ShaderMaterial({
       uniforms,
@@ -148,6 +170,15 @@ export default function Silk({
     const resizeObserver = new ResizeObserver(onResize);
     resizeObserver.observe(container);
 
+    // Sumber aslinya (dan AdminStarfield/EmberField yang digantikan komponen
+    // ini di halaman admin) tidak pernah beranimasi terus-menerus untuk
+    // pengguna yang minta gerakan dikurangi — dihormati di sini juga: render
+    // satu frame statis (teksturnya tetap tampil, cuma diam) alih-alih
+    // menjalankan loop requestAnimationFrame tanpa henti.
+    const reduceMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
     let rafId = 0;
     let last = performance.now();
     const tick = () => {
@@ -158,7 +189,11 @@ export default function Silk({
       renderer.render(scene, camera);
       rafId = requestAnimationFrame(tick);
     };
-    rafId = requestAnimationFrame(tick);
+    if (reduceMotion) {
+      renderer.render(scene, camera);
+    } else {
+      rafId = requestAnimationFrame(tick);
+    }
 
     return () => {
       cancelAnimationFrame(rafId);
@@ -168,8 +203,23 @@ export default function Silk({
       renderer.dispose();
       renderer.forceContextLoss();
       container.removeChild(renderer.domElement);
+      uniformsRef.current = null;
     };
-  }, [speed, scale, color, noiseIntensity, rotation, lightMode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Update NILAI uniform yang sudah ada saat prop berubah (mis. warna ikut toggle
+  // tema) — tidak menyentuh renderer/canvas sama sekali.
+  useEffect(() => {
+    const u = uniformsRef.current;
+    if (!u) return;
+    u.uColor.value.set(color);
+    u.uSpeed.value = speed;
+    u.uScale.value = scale;
+    u.uRotation.value = rotation;
+    u.uNoiseIntensity.value = noiseIntensity;
+    u.uLightMode.value = lightMode ? 1 : 0;
+  }, [color, speed, scale, rotation, noiseIntensity, lightMode]);
 
   return <div ref={containerRef} className={cn("h-full w-full", className)} />;
 }

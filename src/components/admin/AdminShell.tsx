@@ -20,8 +20,8 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { AdminStarfield } from "@/components/admin/AdminStarfield";
-import { EmberField } from "@/components/site/EmberField";
+import Silk from "@/components/site/Silk";
+import { ADMIN_SILK_PROPS } from "@/components/admin/admin-silk-config";
 import { AdminMarquee } from "@/components/admin/AdminMarquee";
 import { cn } from "@/lib/utils";
 
@@ -34,17 +34,70 @@ type NavItem = {
 };
 
 const NAV: NavItem[] = [
-  { id: "ringkasan", label: "Ringkasan", description: "Statistik singkat", icon: LayoutDashboard, group: "Utama" },
-  { id: "beranda", label: "Beranda & Footer", description: "Hero, statistik & kontak", icon: Home, group: "Halaman" },
-  { id: "konten", label: "Editor Konten", description: "Teks, foto & video halaman", icon: FileText, group: "Halaman" },
-  { id: "berita", label: "Berita & Agenda", description: "Tulis & unggah berita", icon: Newspaper, group: "Publikasi" },
-  { id: "galeri", label: "Galeri Kegiatan", description: "Unggah & kelola foto", icon: Images, group: "Publikasi" },
-  { id: "media", label: "Pustaka Media", description: "Unggah foto & video", icon: FolderOpen, group: "Publikasi" },
-  { id: "dokumen", label: "Dokumen Unduhan", description: "Unggah PDF & formulir", icon: FileDown, group: "Publikasi" },
-  { id: "pesan", label: "Pesan Masuk", description: "Pesan dari formulir kontak", icon: Inbox, group: "Layanan" },
-  { id: "akun", label: "Akun Saya", description: "Ubah kata sandi sendiri", icon: KeyRound, group: "Layanan" },
+  {
+    id: "ringkasan",
+    label: "Ringkasan",
+    description: "Statistik singkat",
+    icon: LayoutDashboard,
+    group: "Utama",
+  },
+  {
+    id: "beranda",
+    label: "Beranda & Footer",
+    description: "Hero, statistik & kontak",
+    icon: Home,
+    group: "Halaman",
+  },
+  {
+    id: "konten",
+    label: "Editor Konten",
+    description: "Teks, foto & video halaman",
+    icon: FileText,
+    group: "Halaman",
+  },
+  {
+    id: "berita",
+    label: "Berita & Agenda",
+    description: "Tulis & unggah berita",
+    icon: Newspaper,
+    group: "Publikasi",
+  },
+  {
+    id: "galeri",
+    label: "Galeri Kegiatan",
+    description: "Unggah & kelola foto",
+    icon: Images,
+    group: "Publikasi",
+  },
+  {
+    id: "media",
+    label: "Pustaka Media",
+    description: "Unggah foto & video",
+    icon: FolderOpen,
+    group: "Publikasi",
+  },
+  {
+    id: "dokumen",
+    label: "Dokumen Unduhan",
+    description: "Unggah PDF & formulir",
+    icon: FileDown,
+    group: "Publikasi",
+  },
+  {
+    id: "pesan",
+    label: "Pesan Masuk",
+    description: "Pesan dari formulir kontak",
+    icon: Inbox,
+    group: "Layanan",
+  },
+  {
+    id: "akun",
+    label: "Akun Saya",
+    description: "Ubah kata sandi sendiri",
+    icon: KeyRound,
+    group: "Layanan",
+  },
 ];
-
 
 export function AdminShell({
   email,
@@ -163,18 +216,26 @@ export function AdminShell({
     </nav>
   );
 
-
   const sidebarInner = (
     <div className="flex h-full flex-col gap-6 p-5">
-      <Link to="/" className="flex items-center gap-3 rounded-2xl p-1 transition-opacity hover:opacity-85">
+      <Link
+        to="/"
+        className="flex items-center gap-3 rounded-2xl p-1 transition-opacity hover:opacity-85"
+      >
         <span className="inline-flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-accent p-1.5">
-          <img src="/favicon.png" alt="Logo Universitas Ivet Semarang" className="h-full w-full object-contain" />
+          <img
+            src="/favicon.png"
+            alt="Logo Universitas Ivet Semarang"
+            className="h-full w-full object-contain"
+          />
         </span>
         <span className="min-w-0">
           <span className="block text-sm font-extrabold tracking-tight text-hero-foreground">
             Panel Pengelola
           </span>
-          <span className="block truncate text-xs text-hero-foreground/55">Pend. Informatika UNISVET</span>
+          <span className="block truncate text-xs text-hero-foreground/55">
+            Pend. Informatika UNISVET
+          </span>
         </span>
       </Link>
 
@@ -215,8 +276,16 @@ export function AdminShell({
 
   return (
     <div className="min-h-screen bg-slate-surface">
-      <AdminStarfield />
-      <EmberField />
+      {/* Satu latar Silk (React Bits) yang tenang, senada dengan admin.login.tsx
+          — ganti kombinasi starfield + ember sebelumnya yang ramai & kurang
+          rapi untuk latar persisten di belakang sidebar/tabel/form kerja.
+          Opacity diturunkan (beda dari login) — ini area kerja padat berisi
+          tabel & form yang butuh fokus, jadi teksturnya cuma nuansa halus di
+          celah antar kartu, bukan pola yang mencolok. */}
+      <div className="pointer-events-none fixed inset-0 z-0 opacity-60" aria-hidden>
+        <Silk {...ADMIN_SILK_PROPS} />
+      </div>
+      <div className="pointer-events-none fixed inset-0 z-0 bg-slate-surface/40" aria-hidden />
 
       {/* Desktop sidebar — bisa disembunyikan lewat tombol menu di header */}
       <motion.aside
@@ -260,7 +329,19 @@ export function AdminShell({
         ) : null}
       </AnimatePresence>
 
-      <div className={cn("transition-[padding-left] duration-300 ease-out", desktopSidebarOpen ? "lg:pl-72" : "lg:pl-0")}>
+      {/* "relative z-10" krusial di sini — tanpa ini, div ini (dan <main> di
+          dalamnya) tetap "position: static" alias TIDAK punya stacking context
+          sendiri, jadi tergambar di layer paling belakang (di BAWAH latar Silk
+          "fixed z-0" di atas walau z-0 kelihatannya "netral") — persis
+          penyebab semua kartu/form dashboard sempat terlihat pudar tertimpa
+          tekstur latar. header di dalamnya sudah z-30 sendiri, tapi <main>
+          butuh ini juga karena tidak punya z-index eksplisit. */}
+      <div
+        className={cn(
+          "relative z-10 transition-[padding-left] duration-300 ease-out",
+          desktopSidebarOpen ? "lg:pl-72" : "lg:pl-0",
+        )}
+      >
         <header className="admin-glass-header sticky top-0 z-30">
           <div className="mx-auto flex max-w-[1600px] items-center gap-2 px-4 py-3.5 sm:px-6">
             <Button
@@ -307,7 +388,9 @@ export function AdminShell({
               )}
             >
               <ShieldCheck className="size-3.5" />
-              <span className="hidden sm:inline">{isAdmin ? "Terverifikasi Admin" : "Tanpa hak admin"}</span>
+              <span className="hidden sm:inline">
+                {isAdmin ? "Terverifikasi Admin" : "Tanpa hak admin"}
+              </span>
             </span>
           </div>
 

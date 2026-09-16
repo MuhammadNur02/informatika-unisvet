@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
 import { Instagram, Facebook, Youtube, Music2 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import logo from "@/assets/logo-unisvet.png";
 import { useFooterContent } from "@/lib/site-content";
 import Dither from "@/components/site/Dither";
+import { useIsDarkMode } from "@/hooks/use-dark-mode";
 import {
   GoogleMapsIcon,
   PhoneCallIcon,
@@ -15,26 +15,6 @@ import {
 // pecahan RGB 0-1 (bukan hex) karena itu format yang dipakai shader-nya.
 const WAVE_COLOR_LIGHT: [number, number, number] = [0x52 / 255, 0x00 / 255, 0x00 / 255];
 const WAVE_COLOR_DARK: [number, number, number] = [0x07 / 255, 0x00 / 255, 0x43 / 255];
-
-/**
- * Sinkron ke class "dark" di <html> yang di-toggle ThemeToggle. Tidak ada
- * event/context bersama untuk perubahan tema di app ini, jadi dipantau
- * langsung lewat MutationObserver supaya warna Dither ikut berubah seketika
- * saat tema di-toggle, bukan cuma pas footer di-mount ulang.
- */
-function useIsDarkMode() {
-  const [dark, setDark] = useState(false);
-
-  useEffect(() => {
-    const root = document.documentElement;
-    setDark(root.classList.contains("dark"));
-    const observer = new MutationObserver(() => setDark(root.classList.contains("dark")));
-    observer.observe(root, { attributes: true, attributeFilter: ["class"] });
-    return () => observer.disconnect();
-  }, []);
-
-  return dark;
-}
 
 const LINKS = [
   { label: "Beranda", to: "/" },

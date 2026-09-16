@@ -6,8 +6,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { EmberField } from "@/components/site/EmberField";
-import { AdminStarfield } from "@/components/admin/AdminStarfield";
+import Silk from "@/components/site/Silk";
+import { ADMIN_SILK_PROPS } from "@/components/admin/admin-silk-config";
 
 export const Route = createFileRoute("/admin/login")({
   ssr: false,
@@ -40,10 +40,11 @@ function AdminLogin() {
     });
   }, [navigate]);
 
-  // Pakai identitas warna dashboard admin (biru-teal, bukan maroon situs
-  // publik) sejak gerbang login — konsisten dengan tampilan setelah masuk.
-  // Ditaruh di <body> supaya ikut menjangkau dialog/toast yang dirender ke
-  // <body> lewat portal (lihat komentar sama di AdminShell.tsx).
+  // Pakai identitas warna dashboard admin (maroon gelap & hitam dengan
+  // aksen emas, beda dari situs publik) sejak gerbang login — konsisten
+  // dengan tampilan setelah masuk. Ditaruh di <body> supaya ikut menjangkau
+  // dialog/toast yang dirender ke <body> lewat portal (lihat komentar sama
+  // di AdminShell.tsx).
   useEffect(() => {
     document.body.classList.add("admin-theme");
     return () => document.body.classList.remove("admin-theme");
@@ -64,20 +65,19 @@ function AdminLogin() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-hero-gradient px-4 py-16">
-      <div className="pointer-events-none absolute inset-0" />
-      <AdminStarfield />
-      <EmberField />
-      <motion.div
+      {/* Satu latar Silk (React Bits) yang tenang — ganti kombinasi starfield +
+          ember + dua blob melayang sebelumnya yang ramai & kurang rapi.
+          Warna maroon gelap senada dengan palet .admin-theme, gerak & noise
+          dikecilkan (bukan versi Stats.tsx yang lebih hidup) supaya nyaman
+          jadi latar persisten di belakang form, bukan elemen yang menyita
+          perhatian. fixed (bukan absolute) supaya tetap diam kalau halaman
+          sempat digulir di layar pendek. */}
+      <div className="fixed inset-0 z-0" aria-hidden>
+        <Silk {...ADMIN_SILK_PROPS} />
+      </div>
+      <div
+        className="pointer-events-none fixed inset-0 z-0 bg-gradient-to-b from-black/10 via-transparent to-black/40"
         aria-hidden
-        animate={{ scale: [1, 1.15, 1], opacity: [0.35, 0.55, 0.35] }}
-        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-        className="pointer-events-none absolute -left-24 top-1/4 size-72 rounded-full bg-accent/25 blur-3xl"
-      />
-      <motion.div
-        aria-hidden
-        animate={{ scale: [1, 1.2, 1], opacity: [0.25, 0.45, 0.25] }}
-        transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-        className="pointer-events-none absolute -right-20 bottom-10 size-80 rounded-full bg-primary-soft/40 blur-3xl"
       />
 
       <motion.div
@@ -96,22 +96,39 @@ function AdminLogin() {
         <div className="hud-border rounded-3xl bg-card/95 p-8 shadow-[0_30px_80px_-40px_oklch(0.21_0.075_265/0.8)] backdrop-blur sm:p-9">
           <div className="hud-scanline" />
           {/* Aksen sudut ala panel HUD */}
-          <span className="pointer-events-none absolute -left-px -top-px size-5 rounded-tl-3xl border-l-2 border-t-2 border-accent/80" aria-hidden />
-          <span className="pointer-events-none absolute -right-px -top-px size-5 rounded-tr-3xl border-r-2 border-t-2 border-accent/80" aria-hidden />
-          <span className="pointer-events-none absolute -bottom-px -left-px size-5 rounded-bl-3xl border-b-2 border-l-2 border-accent/80" aria-hidden />
-          <span className="pointer-events-none absolute -bottom-px -right-px size-5 rounded-br-3xl border-b-2 border-r-2 border-accent/80" aria-hidden />
+          <span
+            className="pointer-events-none absolute -left-px -top-px size-5 rounded-tl-3xl border-l-2 border-t-2 border-accent/80"
+            aria-hidden
+          />
+          <span
+            className="pointer-events-none absolute -right-px -top-px size-5 rounded-tr-3xl border-r-2 border-t-2 border-accent/80"
+            aria-hidden
+          />
+          <span
+            className="pointer-events-none absolute -bottom-px -left-px size-5 rounded-bl-3xl border-b-2 border-l-2 border-accent/80"
+            aria-hidden
+          />
+          <span
+            className="pointer-events-none absolute -bottom-px -right-px size-5 rounded-br-3xl border-b-2 border-r-2 border-accent/80"
+            aria-hidden
+          />
 
           <div className="icon-glow pulse-glow inline-flex size-14 items-center justify-center rounded-2xl bg-hero-gradient">
             <Lock className="size-6 text-hero-foreground" />
           </div>
-          <h1 className="mt-6 text-2xl font-extrabold tracking-tight text-foreground">Panel Pengelola Prodi</h1>
+          <h1 className="mt-6 text-2xl font-extrabold tracking-tight text-foreground">
+            Panel Pengelola Prodi
+          </h1>
           <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
             Masuk dengan akun pengelola untuk mengelola galeri dan konten kegiatan prodi.
           </p>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email" className="font-mono text-[11px] font-semibold uppercase tracking-wider text-accent">
+              <Label
+                htmlFor="email"
+                className="font-mono text-[11px] font-semibold uppercase tracking-wider text-accent"
+              >
                 Email
               </Label>
               <div className="relative">
@@ -129,7 +146,10 @@ function AdminLogin() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password" className="font-mono text-[11px] font-semibold uppercase tracking-wider text-accent">
+              <Label
+                htmlFor="password"
+                className="font-mono text-[11px] font-semibold uppercase tracking-wider text-accent"
+              >
                 Kata Sandi
               </Label>
               <div className="relative">
