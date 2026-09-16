@@ -273,15 +273,19 @@
   --secondary: oklch(0.17 0.03 20);
   --secondary-foreground: oklch(0.93 0.012 40);
   --muted: oklch(0.15 0.025 20);
-  --muted-foreground: oklch(0.64 0.025 30);
+  --muted-foreground: oklch(0.78 0.03 35);
   --accent: oklch(0.78 0.15 85);
   --accent-foreground: oklch(0.16 0.03 85);
   --accent-soft: oklch(0.85 0.1 85);
   --slate-surface: oklch(0.14 0.028 20);
   --destructive: oklch(0.62 0.21 22);
   --destructive-foreground: oklch(0.98 0.005 40);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 12%);
+  /* Border & input dinaikkan jauh dari transparansi 10-12% bawaan (nyaris tak
+     terlihat di atas --card gelap) — form admin butuh garis kotak yang jelas
+     supaya tiap field/section kelihatan batasnya, bukan cuma menyatu jadi satu
+     blok gelap. */
+  --border: oklch(1 0 0 / 18%);
+  --input: oklch(1 0 0 / 30%);
   --ring: oklch(0.78 0.15 85);
   --primary-deep: oklch(0.045 0.015 20);
   --gradient-hero: linear-gradient(
@@ -609,7 +613,10 @@
 /*
  * "Border beam" HUD futuristik — cincin cahaya yang berputar mengelilingi
  * tepi kartu, dibuat dari conic-gradient yang di-mask supaya cuma tepinya
- * yang terlihat (isi kartu tetap solid). Dipakai di kartu login admin.
+ * yang terlihat (isi kartu tetap solid). Dipakai di kartu statistik beranda
+ * (Stats.tsx). Kartu login admin sekarang punya versinya sendiri —
+ * login-border-glow, warna maroon+putih+perak, bukan --accent/emas — lihat
+ * di bawah, sama-sama reuse --hud-angle & keyframe hud-rotate ini.
  */
 @property --hud-angle {
   syntax: "<angle>";
@@ -652,6 +659,46 @@
 @keyframes hud-rotate {
   to {
     --hud-angle: 360deg;
+  }
+}
+
+/*
+ * Border glow kartu login admin — palet sendiri (maroon + putih + perak),
+ * beda dari hud-border (--accent/emas) supaya senada dengan desain ulang
+ * halaman login (latar GradientWaves maroon-hitam). Teknik mask sama persis
+ * dengan hud-border, cuma warnanya beda.
+ */
+@utility login-border-glow {
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -1.5px;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: conic-gradient(
+      from var(--hud-angle),
+      transparent 0%,
+      oklch(0.42 0.16 22 / 0.9) 6%,
+      oklch(0.98 0.005 90 / 0.95) 13%,
+      oklch(0.52 0.17 22 / 0.9) 20%,
+      transparent 32%,
+      transparent 50%,
+      transparent 56%,
+      oklch(0.72 0.01 260 / 0.6) 63%,
+      oklch(0.88 0.006 260 / 0.85) 70%,
+      oklch(0.72 0.01 260 / 0.6) 77%,
+      transparent 88%
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: hud-rotate 8s linear infinite;
+    z-index: -1;
   }
 }
 
@@ -707,6 +754,33 @@
   }
 }
 
+/* Sapuan kilau yang berulang OTOMATIS terus-menerus (bukan cuma saat hover)
+   — dipakai tombol submit kartu login admin, beda dari btn-shine biasa. */
+@utility btn-shine-loop {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(112deg, transparent 42%, oklch(1 0 0 / 0.4) 50%, transparent 58%);
+    transform: translateX(-140%);
+    animation: btn-shine-sweep 3.4s ease-in-out infinite;
+  }
+}
+
+@keyframes btn-shine-sweep {
+  0%,
+  18% {
+    transform: translateX(-140%);
+  }
+  55%,
+  100% {
+    transform: translateX(140%);
+  }
+}
+
 /* Permukaan metalik "silver besi" — beberapa pita abu-abu terang/gelap bergantian ala logam disikat. */
 @utility btn-silver {
   background: linear-gradient(
@@ -727,7 +801,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .hud-border::before,
-  .hud-scanline::after {
+  .hud-scanline::after,
+  .login-border-glow::before,
+  .btn-shine-loop::after {
     animation: none !important;
   }
 }

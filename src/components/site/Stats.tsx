@@ -20,7 +20,7 @@ export function Stats() {
 
   return (
     <section id="statistik" className="relative z-10 -mt-14 px-4 sm:px-6 lg:px-8">
-      <div className="relative mx-auto max-w-6xl rounded-[2rem] border-2 border-black bg-stats-panel p-5 shadow-[var(--shadow-lift)] dark:border-accent/40 dark:bg-[#241010] sm:p-7">
+      <div className="relative mx-auto max-w-6xl rounded-[2rem] border border-primary/15 bg-stats-panel p-5 shadow-(--shadow-lift) dark:border-accent/40 dark:bg-[#241010] sm:p-7">
         {/* Subtle gradient accent at top */}
         <div
           className="absolute -top-1 left-1/2 h-1 w-24 -translate-x-1/2 rounded-full bg-gradient-to-r from-transparent via-accent to-transparent"
@@ -29,19 +29,23 @@ export function Stats() {
 
         {/* Satu instance Silk (React Bits) di belakang SELURUH kartu — bukan per item —
             supaya animasinya terasa menyatu sebagai satu latar hidup, bukan potongan
-            terpisah. Warnanya ikut tema: krem lembut di mode terang, maroon gelap
-            berkilau di mode gelap — bukan abu-abu metalik statis yang sama di kedua
-            mode seperti sebelumnya. */}
+            terpisah. `lightMode` ikut tema: false (jalur abu-abu/perak di atas warna
+            gelap) untuk mode gelap, true (jalur "kain terlipat" berhighlight putih —
+            memang dirancang untuk warna cerah) untuk mode terang. Sebelumnya lightMode
+            selalu false walau warnanya krem terang, jadi di mode terang teksturnya
+            malah jadi bintik kasar mirip logam bukan kain lembut — makanya sekarang
+            dipisah per mode. */}
         <div
           className="pointer-events-none absolute inset-0 overflow-hidden rounded-[2rem]"
           aria-hidden
         >
           <Silk
-            color={isDark ? "#3a1512" : "#f5ece0"}
+            color={isDark ? "#3a1512" : "#fdf6ec"}
             speed={2.5}
-            scale={0.7}
-            noiseIntensity={isDark ? 1.8 : 2.8}
+            scale={3.2}
+            noiseIntensity={isDark ? 1.8 : 1.1}
             rotation={0.43}
+            lightMode={!isDark}
           />
         </div>
 

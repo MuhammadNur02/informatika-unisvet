@@ -195,7 +195,7 @@ export function DokumenManager({ userId }: { userId: string }) {
                   className="card-elevated flex flex-wrap items-start justify-between gap-4 rounded-3xl bg-card p-6"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent-foreground">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">
                       {item.kategori} • {formatUkuran(item.ukuran)}
                     </p>
                     <h3 className="mt-1.5 text-base font-bold text-foreground">{item.judul}</h3>

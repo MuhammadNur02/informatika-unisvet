@@ -465,7 +465,7 @@ export function PageEditor({ userId }: { userId: string }) {
               <RotateCcw /> Kembalikan Konten Asli
             </Button>
             {isDirty ? (
-              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent-foreground">
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent">
                 <span className="size-1.5 rounded-full bg-accent" /> Ada perubahan belum disimpan
               </span>
             ) : null}
