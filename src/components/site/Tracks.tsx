@@ -4,6 +4,7 @@ import { GraduationCap, Code2, Palette, CheckCircle2 } from "lucide-react";
 import { Reveal, SectionHeading } from "./Reveal";
 import { useHomeContent } from "@/lib/site-content";
 import { cn } from "@/lib/utils";
+import kayuBg from "@/assets/Kayu-bg.jpg";
 
 const ICONS = [GraduationCap, Code2, Palette];
 
@@ -22,7 +23,20 @@ export function Tracks() {
 
   return (
     <section id="kurikulum" className="relative overflow-hidden bg-gradient-tracks py-20 sm:py-28">
-      {/* Gradient mesh statis */}
+      {/* Tekstur kayu sebagai latar — opacity rendah (bukan foto penuh seperti di
+          Faculty.tsx) karena section ini teksnya membalik warna ikut tema (gelap di
+          mode terang, terang di mode gelap), beda dari Faculty yang SELALU gelap.
+          bg-gradient-tracks di section (sudah tepat warnanya per tema) tetap jadi
+          lapisan dasar; kayu cuma nge-tint tipis di atasnya supaya teks & kartu putih
+          tetap kontras tinggi di kedua mode, tidak "nabrak". */}
+      <img
+        src={kayuBg}
+        alt=""
+        aria-hidden
+        loading="lazy"
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.16] dark:opacity-[0.22]"
+      />
+      {/* Gradient mesh statis — aksen warna maroon/emas brand di atas tekstur kayu */}
       <div
         className="pointer-events-none absolute inset-0 bg-gradient-mesh opacity-50"
         aria-hidden
