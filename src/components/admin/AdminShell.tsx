@@ -120,11 +120,24 @@ export function AdminShell({
   const [desktopSidebarOpen, setDesktopSidebarOpen] = useState(true);
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
 
-  // Ditaruh di <body> (bukan hanya div sidebar) supaya palet gelap admin juga menjangkau
-  // dialog konfirmasi & notifikasi toast, yang di-render lewat portal langsung ke <body>.
+  // KRUSIAL: dipasang di <html> (documentElement), BUKAN <body> — sebelumnya di body,
+  // dan itu bug besar penyebab teks/tombol dashboard sering kelihatan gelap/tak rapi.
+  // Sebabnya: token Tailwind semantik (bg-card, text-foreground, bg-background, dst.)
+  // dijembatani lewat "@theme inline" jadi var(--color-foreground): var(--foreground)
+  // yang dideklarasikan SEKALI di :root (= <html>). Custom property yang di-inherit
+  // turun ke anak itu MEMBAWA NILAI YANG SUDAH DIHITUNG di leluhur tempat ia
+  // dideklarasikan, bukan dihitung ulang di tiap elemen turunan — jadi kalau
+  // ".admin-theme" cuma override "--foreground" di <body> (satu level DI BAWAH
+  // <html> tempat "--color-foreground" dihitung), utility seperti text-foreground/
+  // bg-card di seluruh dashboard diam-diam tetap pakai warna tema TERANG/GELAP situs
+  // publik (apa pun toggle terang/gelap terakhir pengguna), bukan palet admin — baru
+  // kelihatan kalau .dark JUGA kebetulan aktif di <html>. Dipasang di <html> supaya
+  // override-nya kejadian di elemen yang SAMA dengan tempat "--color-*" dihitung.
+  // Dialog/toast yang di-render lewat portal ke <body> tetap kena juga (body tetap
+  // anak <html>, jadi cascade custom property tetap turun ke situ seperti biasa).
   useEffect(() => {
-    document.body.classList.add("admin-theme");
-    return () => document.body.classList.remove("admin-theme");
+    document.documentElement.classList.add("admin-theme");
+    return () => document.documentElement.classList.remove("admin-theme");
   }, []);
 
   async function handleSignOut() {
