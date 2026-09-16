@@ -27,7 +27,13 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background cursor-pointer transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow",
+      // data-[state=active] sebelumnya "bg-background text-foreground": di halaman
+      // dengan token --background yang lebih GELAP dari --muted (mis. dashboard
+      // admin), tab aktif malah terlihat "tenggelam" lebih gelap dari trek
+      // TabsList (bg-muted) di baliknya alih-alih menonjol jadi tab terpilih.
+      // Diganti bg-accent/text-accent-foreground — pil emas yang jelas menonjol
+      // di kedua tema, senada dengan penanda "aktif" di sidebar admin (AdminShell).
+      "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background cursor-pointer transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed data-[state=active]:bg-accent data-[state=active]:text-accent-foreground data-[state=active]:shadow",
       className,
     )}
     {...props}

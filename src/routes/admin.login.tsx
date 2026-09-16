@@ -43,14 +43,16 @@ function AdminLogin() {
     });
   }, [navigate]);
 
-  // Pakai identitas warna dashboard admin (maroon gelap & hitam dengan
-  // aksen emas, beda dari situs publik) sejak gerbang login — konsisten
-  // dengan tampilan setelah masuk. Ditaruh di <body> supaya ikut menjangkau
-  // dialog/toast yang dirender ke <body> lewat portal (lihat komentar sama
-  // di AdminShell.tsx).
+  // Pakai identitas warna dashboard admin (maroon gelap & hitam dengan aksen
+  // emas, beda dari situs publik) sejak gerbang login — konsisten dengan
+  // tampilan setelah masuk. Dipasang di <html> (BUKAN <body>) — lihat
+  // catatan lengkap soal kenapa di AdminShell.tsx: token Tailwind semantik
+  // (text-foreground, border-input, dst.) dijembatani "@theme inline" yang
+  // dihitung sekali di :root/<html>, jadi override di <body> saja tidak
+  // ikut kebawa ke utility tersebut.
   useEffect(() => {
-    document.body.classList.add("admin-theme");
-    return () => document.body.classList.remove("admin-theme");
+    document.documentElement.classList.add("admin-theme");
+    return () => document.documentElement.classList.remove("admin-theme");
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -119,39 +121,42 @@ function AdminLogin() {
         {/* Kartu: border conic-gradient berputar (maroon + putih + perak,
             login-border-glow) + spotlight radial yang mengikuti kursor. */}
         <div
-          className="login-border-glow relative overflow-hidden rounded-[30px] px-8 pb-9 pt-10 backdrop-blur-xl sm:px-10 sm:pt-11"
+          className="login-border-glow relative overflow-hidden rounded-[30px] px-8 pb-9 pt-10 backdrop-blur-2xl sm:px-10 sm:pt-11"
           style={{
+            // Latar sedikit lebih tembus pandang dari sebelumnya (0.94-0.98)
+            // supaya backdrop-blur kelihatan hasilnya — efek kaca buram tipis
+            // di atas GradientWaves, bukan kartu yang nyaris solid. Dicoba
+            // sempat diturunkan jauh lebih rendah (0.62-0.82) tapi gelombang
+            // di belakang jadi terlalu dominan menembus & menabrak teks label
+            // — jadi cuma diturunkan SEDIKIT sesuai yang diminta.
             background:
-              "radial-gradient(140% 100% at 20% 0%, rgba(140,29,41,0.14), transparent 55%)," +
-              "linear-gradient(168deg, rgba(28,7,10,0.94) 0%, rgba(10,3,4,0.97) 65%, rgba(6,2,3,0.98) 100%)",
-            boxShadow: "0 50px 100px -34px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.04)",
+              "radial-gradient(140% 100% at 20% 0%, rgba(140,29,41,0.18), transparent 55%)," +
+              "linear-gradient(168deg, rgba(28,7,10,0.86) 0%, rgba(10,3,4,0.91) 65%, rgba(6,2,3,0.94) 100%)",
+            boxShadow: "0 50px 100px -34px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.06)",
           }}
           onPointerMove={handleCardPointerMove}
           onPointerLeave={() => setSpot((s) => ({ ...s, active: false }))}
         >
+          {/* Spotlight mengikuti kursor — diperbesar & dinaikkan opacity-nya
+              (sebelumnya 280px/0.09) supaya jelas terlihat bergerak, dengan
+              rona maroon-keemasan tipis di tepinya alih-alih putih polos. */}
           <div
             className="pointer-events-none absolute inset-0 rounded-[inherit] transition-opacity duration-300"
             aria-hidden
             style={{
-              background: `radial-gradient(280px circle at ${spot.x}px ${spot.y}px, rgba(255,255,255,0.09), transparent 62%)`,
+              background: `radial-gradient(360px circle at ${spot.x}px ${spot.y}px, rgba(255,255,255,0.14), rgba(224,122,92,0.06) 45%, transparent 68%)`,
               opacity: spot.active ? 1 : 0,
             }}
           />
 
-          <div
-            className="icon-glow pulse-glow relative inline-flex size-14 items-center justify-center rounded-2xl"
-            style={{ background: "linear-gradient(150deg, #641420, #230608 70%)" }}
-          >
-            <Lock className="size-6 text-white" />
-          </div>
-          <h1 className="font-display relative mt-6 text-[28px] font-semibold tracking-tight text-balance text-white sm:text-[30px]">
+          <h1 className="font-display relative text-[28px] font-semibold tracking-tight text-balance text-white sm:text-[30px]">
             Masuk ke Panel
           </h1>
           <p className="relative mt-2.5 max-w-[34ch] text-sm leading-relaxed text-[#c8b3b4]">
             Kelola beranda, berita, galeri, dan konten Program Studi Pendidikan Informatika UNISVET.
           </p>
 
-          <form onSubmit={handleSubmit} className="relative mt-8 space-y-[18px]">
+          <form onSubmit={handleSubmit} className="relative mt-8 space-y-4">
             <div className="space-y-2">
               <Label
                 htmlFor="email"
@@ -159,8 +164,8 @@ function AdminLogin() {
               >
                 Email
               </Label>
-              <div className="flex items-center rounded-[14px] border border-white/[0.09] bg-white/[0.035] transition-colors focus-within:border-white/40 focus-within:bg-white/[0.055]">
-                <Mail className="mx-3.5 size-[17px] shrink-0 text-white/40" />
+              <div className="flex items-center rounded-xl border border-white/[0.09] bg-white/[0.035] transition-colors focus-within:border-white/40 focus-within:bg-white/[0.055]">
+                <Mail className="mx-3 size-[15px] shrink-0 text-white/40" />
                 <Input
                   id="email"
                   type="email"
@@ -169,7 +174,7 @@ function AdminLogin() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@unisvet.ac.id"
-                  className="h-[50px] border-0 bg-transparent px-0 pr-3.5 text-[14.5px] text-white placeholder:text-white/35 focus-visible:ring-0"
+                  className="h-[42px] border-0 bg-transparent px-0 pr-3 text-[13.5px] leading-none text-white placeholder:text-white/35 focus-visible:ring-0"
                 />
               </div>
             </div>
@@ -180,8 +185,8 @@ function AdminLogin() {
               >
                 Kata Sandi
               </Label>
-              <div className="flex items-center rounded-[14px] border border-white/[0.09] bg-white/[0.035] transition-colors focus-within:border-white/40 focus-within:bg-white/[0.055]">
-                <Lock className="mx-3.5 size-[17px] shrink-0 text-white/40" />
+              <div className="flex items-center rounded-xl border border-white/[0.09] bg-white/[0.035] transition-colors focus-within:border-white/40 focus-within:bg-white/[0.055]">
+                <Lock className="mx-3 size-[15px] shrink-0 text-white/40" />
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
@@ -190,15 +195,19 @@ function AdminLogin() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="h-[50px] border-0 bg-transparent px-0 text-[14.5px] text-white placeholder:text-white/35 focus-visible:ring-0"
+                  className="h-[42px] border-0 bg-transparent px-0 text-[13.5px] leading-none text-white placeholder:text-white/35 focus-visible:ring-0"
                 />
                 <button
                   type="button"
                   aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
                   onClick={() => setShowPassword((v) => !v)}
-                  className="mr-1.5 flex size-[38px] shrink-0 items-center justify-center rounded-[10px] text-white/40 transition-colors hover:bg-white/10 hover:text-[#d7dae0]"
+                  className="mr-1 flex size-[32px] shrink-0 items-center justify-center rounded-[9px] text-white/40 transition-colors hover:bg-white/10 hover:text-[#d7dae0]"
                 >
-                  {showPassword ? <EyeOff className="size-[17px]" /> : <Eye className="size-[17px]" />}
+                  {showPassword ? (
+                    <EyeOff className="size-[15px]" />
+                  ) : (
+                    <Eye className="size-[15px]" />
+                  )}
                 </button>
               </div>
             </div>
@@ -218,7 +227,9 @@ function AdminLogin() {
               size="pill"
               disabled={loading}
               className="btn-shine-loop mt-1 w-full border border-white/10 text-white shadow-[0_20px_40px_-18px_rgba(140,29,41,0.75)] transition-transform duration-300 hover:-translate-y-0.5"
-              style={{ background: "linear-gradient(135deg, #8c1d29 0%, #55101a 55%, #170406 100%)" }}
+              style={{
+                background: "linear-gradient(135deg, #8c1d29 0%, #55101a 55%, #170406 100%)",
+              }}
             >
               {loading ? <Loader2 className="animate-spin" /> : <ShieldCheck />}
               {loading ? "Memverifikasi…" : "Masuk ke Dashboard"}

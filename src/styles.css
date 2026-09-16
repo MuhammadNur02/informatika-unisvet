@@ -257,12 +257,28 @@
  * gelap & hitam dengan aksen emas, SELALU gelap (tidak ada mode terang di
  * admin sama sekali — makanya blok ini tidak lagi digandakan/di-gate lewat
  * ".dark", cukup satu class "admin-theme" saja, apa pun preferensi
- * terang/gelap situs publik). Dipasang lewat class "admin-theme" di <body>
- * (bukan cuma pembungkus sidebar) supaya ikut menjangkau dialog & toast
- * yang dirender lewat portal ke <body>.
+ * terang/gelap situs publik). Dipasang lewat class "admin-theme" di <html>
+ * (documentElement) oleh AdminShell.tsx & admin.login.tsx — WAJIB di <html>,
+ * bukan <body>: utility Tailwind semantik (bg-card, text-foreground, dst.)
+ * dijembatani lewat "@theme inline" (mis. --color-foreground: var(--foreground))
+ * yang dideklarasikan sekali di :root/<html>, dan custom property yang
+ * di-inherit turun itu membawa nilai yang SUDAH DIHITUNG di leluhur tempat ia
+ * dideklarasikan — override di elemen yang lebih rendah (<body>) tidak ikut
+ * terhitung ulang. <body> (termasuk dialog/toast yang di-portal ke situ) tetap
+ * kena juga karena tetap keturunan <html>.
  */
 .admin-theme {
-  --background: oklch(0.07 0.018 22);
+  /* Sebelumnya 0.07 — LEBIH GELAP dari --card (0.12) & --muted (0.15), padahal
+     --background dipakai juga sebagai warna dasar tombol "outline" (Button
+     variant=outline) & modal konfirmasi (AlertDialogContent/Cancel). Akibatnya
+     puluhan tombol outline & tombol "Batal" di dialog konfirmasi di seluruh
+     dashboard nyaris tak kelihatan — tenggelam jadi kotak nyaris hitam di atas
+     header/kartu yang juga gelap, cuma garis tepi tipis yang kelihatan. Dinaikkan
+     supaya jelas lebih terang dari admin-glass-header (0.08) & --card (0.12), jadi
+     tombol outline & dialog benar-benar kebaca sebagai permukaan tersendiri.
+     Bukan latar HALAMAN yang benar-benar terlihat (itu bg-slate-surface, dicat
+     AdminShell di atas <body>) jadi aman dinaikkan tanpa bikin latar situs "pudar". */
+  --background: oklch(0.17 0.03 20);
   --foreground: oklch(0.93 0.012 40);
   --card: oklch(0.12 0.028 20);
   --card-foreground: oklch(0.93 0.012 40);
@@ -314,6 +330,27 @@
 
   html {
     scroll-behavior: smooth;
+  }
+
+  /* Chrome/Edge mengecat input yang di-autofill (mis. email/kata sandi
+     tersimpan) pakai warna latar KUNING/BIRU pudar bawaan browser, mengabaikan
+     bg-transparent yang kita set — ini penyebab kotak email/kata sandi di
+     form login admin mendadak terlihat terang/putih menabrak kartu gelapnya
+     begitu browser mengisi otomatis. Dua lapis perbaikan sekaligus: (1) trik
+     transisi ditunda "selamanya" (andalan utama, tetap menjaga input terlihat
+     TEMBUS PANDANG seperti aslinya kalau berhasil di browser itu), (2)
+     cadangan box-shadow inset var(--color-card) (warna kartu tema AKTIF saat
+     itu — putih di situs publik, gelap di admin) buat versi/skenario Chrome
+     yang tetap memaksa cat warna instan tanpa transisi sama sekali. */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-text-fill-color: currentColor;
+    box-shadow: 0 0 0 1000px var(--color-card) inset;
+    transition:
+      background-color 600000s 0s,
+      color 600000s 0s;
   }
 }
 
@@ -672,24 +709,26 @@
   position: relative;
   isolation: isolate;
 
+  /* Cincin tepi tajam — dinaikkan ketebalan & opacity warnanya (sebelumnya
+     1.5px/maks 0.95 alpha) supaya jelas kelihatan, bukan cuma garis samar. */
   &::before {
     content: "";
     position: absolute;
-    inset: -1.5px;
+    inset: -2px;
     border-radius: inherit;
-    padding: 1.5px;
+    padding: 2px;
     background: conic-gradient(
       from var(--hud-angle),
       transparent 0%,
-      oklch(0.42 0.16 22 / 0.9) 6%,
-      oklch(0.98 0.005 90 / 0.95) 13%,
-      oklch(0.52 0.17 22 / 0.9) 20%,
+      oklch(0.5 0.19 22 / 1) 6%,
+      oklch(0.99 0.004 90 / 1) 13%,
+      oklch(0.58 0.19 22 / 1) 20%,
       transparent 32%,
       transparent 50%,
       transparent 56%,
-      oklch(0.72 0.01 260 / 0.6) 63%,
-      oklch(0.88 0.006 260 / 0.85) 70%,
-      oklch(0.72 0.01 260 / 0.6) 77%,
+      oklch(0.78 0.012 260 / 0.9) 63%,
+      oklch(0.94 0.006 260 / 1) 70%,
+      oklch(0.78 0.012 260 / 0.9) 77%,
       transparent 88%
     );
     -webkit-mask:
@@ -697,8 +736,34 @@
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
-    animation: hud-rotate 8s linear infinite;
+    animation: hud-rotate 7s linear infinite;
     z-index: -1;
+  }
+
+  /* Bloom lembut di luar cincin — versi sama tapi diburamkan & TIDAK di-mask
+     (mengisi seluruh kotak, bukan cuma tepinya), jadi ada pijar menyebar di
+     sekeliling kartu, bukan cuma garis tipis. Berputar bareng ::before
+     (durasi sama) supaya pijarnya ikut "mengikuti" posisi cincinnya. */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -22px;
+    border-radius: inherit;
+    background: conic-gradient(
+      from var(--hud-angle),
+      transparent 0%,
+      oklch(0.5 0.19 22 / 0.65) 6%,
+      oklch(0.9 0.03 90 / 0.7) 13%,
+      oklch(0.58 0.19 22 / 0.65) 20%,
+      transparent 34%,
+      transparent 66%,
+      oklch(0.82 0.02 260 / 0.5) 70%,
+      transparent 88%
+    );
+    filter: blur(20px);
+    animation: hud-rotate 7s linear infinite;
+    z-index: -2;
+    pointer-events: none;
   }
 }
 
@@ -803,6 +868,7 @@
   .hud-border::before,
   .hud-scanline::after,
   .login-border-glow::before,
+  .login-border-glow::after,
   .btn-shine-loop::after {
     animation: none !important;
   }
