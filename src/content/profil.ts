@@ -9,6 +9,7 @@ import dosen3 from "@/assets/dosen-3.jpg";
 import dosen4 from "@/assets/dosen-4.jpg";
 import dosen5 from "@/assets/dosen-5.jpg";
 import dosen6 from "@/assets/dosen-6.jpg";
+import dosen7 from "@/assets/dosen-7.jpg";
 
 export const PROFIL_PAGES: Record<string, PageContent> = {
   "/profil/tentang": {
@@ -120,7 +121,7 @@ export const PROFIL_PAGES: Record<string, PageContent> = {
           { role: "Ka. LPPM Unisvet", name: "Dr. Afis Pratama, S.T., M.Pd." },
           { role: "Ka. Lab. TIK F.SAINTEK", name: "Handini Arga Damar Rani, M.Kom." },
           { role: "Koord. PMB P. Informatika", name: "Henny Prasetyani, M.Pd." },
-          { role: "Admin Akademik", name: "Dwi Lestari, S.Kom." },
+          { role: "Admin Prodi P. Informatika", name: "Fitriana Nur Megawati, S.E." },
           { role: "Teknisi Laboratorium", name: "Rian Setiawan, A.Md.Kom." },
         ],
       },
@@ -148,7 +149,7 @@ export const PROFIL_PAGES: Record<string, PageContent> = {
     blocks: [
       {
         type: "people",
-        title: "Dosen Tetap & Pejabat Struktural",
+        title: "Dosen, Pejabat Struktural & Staf Prodi",
         items: [
           {
             name: "R. Irlanto Sudomo",
@@ -210,6 +211,15 @@ export const PROFIL_PAGES: Record<string, PageContent> = {
             photoPosY: 25,
             message: "Setiap langkah menuju kampus ini adalah awal dari perjalanan besar. Selamat datang, dan jangan pernah berhenti bermimpi.",
           },
+          {
+            name: "Fitriana Nur Megawati",
+            degree: "S.E.",
+            role: "Admin Prodi P. Informatika",
+            interest: "Administrasi Akademik & Layanan Mahasiswa",
+            photo: dosen7,
+            photoPosX: 50,
+            photoPosY: 50,
+          },
         ],
       },
       {
@@ -217,7 +227,7 @@ export const PROFIL_PAGES: Record<string, PageContent> = {
         title: "Tenaga Kependidikan",
         head: ["Nama", "Jabatan", "Layanan"],
         rows: [
-          ["Dwi Lestari, S.Kom.", "Administrasi Akademik", "KRS, transkrip, legalisir, surat keterangan"],
+          ["Fitriana Nur Megawati, S.E.", "Admin Prodi", "KRS, transkrip, legalisir, surat keterangan"],
           ["Rian Setiawan, A.Md.Kom.", "Teknisi Laboratorium", "Peminjaman perangkat & dukungan praktikum"],
           ["Ayu Kartika, S.I.Pust.", "Pustakawan Prodi", "Referensi skripsi, akses jurnal digital"],
         ],

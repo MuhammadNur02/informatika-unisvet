@@ -32,6 +32,39 @@ export function staticPage(path: string): PageContent | undefined {
   return PAGES[path];
 }
 
+/**
+ * Gambar di src/assets dipakai lewat URL hasil build yang ber-hash, mis.
+ * "/assets/dosen-1-C3a4AmSP.jpg". Begitu halaman disimpan dari dashboard, URL
+ * itu ikut tersimpan di database — padahal hash-nya berubah tiap kali file
+ * fotonya diganti, sehingga halaman tetap menunjuk ke foto versi lama.
+ * Peta ini mencocokkan nama dasar file ("dosen-1") ke URL build saat ini.
+ */
+const BUNDLED_ASSETS: Record<string, string> = Object.fromEntries(
+  Object.entries(
+    import.meta.glob<string>("/src/assets/*.{jpg,jpeg,png,webp,avif,gif,svg}", {
+      eager: true,
+      query: "?url",
+      import: "default",
+    }),
+  ).map(([file, url]) => [file.slice(file.lastIndexOf("/") + 1).replace(/\.[^.]+$/, ""), url]),
+);
+
+function resolveAssetUrl(value: string): string {
+  const match = /^\/(?:src\/)?assets\/([^/?#]+)\.(?:jpe?g|png|webp|avif|gif|svg)$/i.exec(value);
+  if (!match?.[1]) return value;
+  const name = match[1];
+  return BUNDLED_ASSETS[name] ?? BUNDLED_ASSETS[name.replace(/-[\w-]{8}$/, "")] ?? value;
+}
+
+function resolveAssetUrls<T>(value: T): T {
+  if (typeof value === "string") return resolveAssetUrl(value) as T;
+  if (Array.isArray(value)) return value.map(resolveAssetUrls) as T;
+  if (value && typeof value === "object") {
+    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, resolveAssetUrls(v)])) as T;
+  }
+  return value;
+}
+
 /** Ambil override konten dari database untuk satu halaman. */
 export async function fetchPageOverride(path: string): Promise<PageContent | null> {
   const { data, error } = await supabase
@@ -53,8 +86,10 @@ export async function fetchPageOverride(path: string): Promise<PageContent | nul
     metaDescription: data.meta_description || "",
     ogTitle: data.og_title || "",
     ogDescription: data.og_description || "",
-    ogImage: data.og_image || "",
-    blocks: Array.isArray(data.blocks) ? (data.blocks as unknown as Block[]) : (fallback?.blocks ?? []),
+    ogImage: resolveAssetUrl(data.og_image || ""),
+    blocks: Array.isArray(data.blocks)
+      ? resolveAssetUrls(data.blocks as unknown as Block[])
+      : (fallback?.blocks ?? []),
   };
 }
 
