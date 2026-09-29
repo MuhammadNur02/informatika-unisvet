@@ -20,6 +20,9 @@ dist-ssr
 .wrangler/
 .dev.vars
 
+# Output build Vercel (dibuat ulang oleh Vercel di setiap deploy)
+.vercel
+
 # Environment variables / secrets
 .env
 .env.*
