@@ -10,6 +10,7 @@ import {
   MonitorPlay,
   Library,
   ShieldCheck,
+  Database,
   LayoutDashboard,
   Home,
   User,
@@ -35,6 +36,9 @@ const PORTALS = [
   { label: "E-Library", icon: Library, href: "https://eprint.ivet.ac.id" },
   { label: "SPMI Mutu", icon: ShieldCheck, href: "https://spmi.kemdiktisaintek.go.id/auth/login" },
 ];
+
+/** Tautan milik prodi sendiri — ditonjolkan (warna emas) & dipisah dari portal universitas. */
+const PUSAT_DATA = { label: "Pusat Data Prodi", href: "https://s.id/informatika-unisvet" };
 
 const NAV_ICONS: Record<string, LucideIcon> = {
   Beranda: Home,
@@ -97,6 +101,15 @@ export function SiteHeader() {
               className="overflow-hidden"
             >
               <div className="mx-auto mb-3 hidden max-w-7xl items-center justify-end gap-2 px-4 sm:px-6 md:flex lg:px-8">
+                <a
+                  href={PUSAT_DATA.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-accent/45 bg-accent/15 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-accent backdrop-blur-md transition-colors hover:border-accent hover:bg-accent/25"
+                >
+                  <Database className="size-3.5" /> {PUSAT_DATA.label}
+                </a>
+                <span className="mx-1 h-4 w-px bg-hero-foreground/20" aria-hidden />
                 {PORTALS.map((p) => (
                   <a
                     key={p.label}
@@ -367,6 +380,14 @@ export function SiteHeader() {
                   );
                 })}
                 <div className="mt-2 grid grid-cols-2 gap-2 border-t border-border pt-3">
+                  <a
+                    href={PUSAT_DATA.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="col-span-2 inline-flex items-center justify-center gap-2 rounded-xl border border-accent/50 bg-accent/15 px-3 py-2.5 text-xs font-semibold text-accent-foreground"
+                  >
+                    <Database className="size-3.5" /> {PUSAT_DATA.label}
+                  </a>
                   {PORTALS.map((p) => (
                     <a
                       key={p.label}
