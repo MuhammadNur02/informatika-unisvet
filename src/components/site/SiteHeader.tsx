@@ -27,12 +27,8 @@ import { SiteSearch } from "@/components/site/SiteSearch";
 import logo from "@/assets/logo-unisvet.png";
 
 const PORTALS = [
-  { label: "SIAKAD", icon: LayoutDashboard, href: "https://unisvet.siakadcloud.com/gate/login" },
-  {
-    label: "E-Learning",
-    icon: MonitorPlay,
-    href: "https://edlink.id/login?r=%2Fclasses&sso_attempt=1",
-  },
+  { label: "SIveta", icon: LayoutDashboard, href: "https://siveta.unisvet.ac.id/" },
+  { label: "Lentera", icon: MonitorPlay, href: "https://siveta.unisvet.ac.id/lentera" },
   { label: "E-Library", icon: Library, href: "https://eprint.ivet.ac.id" },
   { label: "SPMI Mutu", icon: ShieldCheck, href: "https://spmi.kemdiktisaintek.go.id/auth/login" },
 ];

@@ -245,8 +245,8 @@ export const DEFAULT_FOOTER: FooterContent = {
     tiktok: "https://www.tiktok.com/@informatika.unisvet?_r=1&_t=ZS-99J4eAdzfLJ",
   },
   portals: [
-    { label: "SIAKAD", href: "https://siakad.ivet.ac.id" },
-    { label: "E-Learning LMS", href: "https://elearning.ivet.ac.id" },
+    { label: "SIveta", href: "https://siveta.unisvet.ac.id/" },
+    { label: "Lentera", href: "https://siveta.unisvet.ac.id/lentera" },
     { label: "E-Library", href: "https://library.ivet.ac.id" },
     { label: "SPMI Mutu", href: "https://spmi.ivet.ac.id" },
     { label: "Portal PMB UNISVET", href: "https://pmb.unisvet.ac.id/" },
