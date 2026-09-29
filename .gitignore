@@ -25,6 +25,10 @@ dist-ssr
 .env.*
 !.env.example
 
+# Dokumen bisnis/administrasi (RAB, dst.) — bukan bagian dari kode situs,
+# tidak perlu ikut di repo kode publik.
+/dokumen-rab/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
