@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { useInView } from "motion/react";
 
+/**
+ * Angka yang menghitung naik (pola CountUp React Bits), tanpa framer-motion.
+ * SSR & render awal SELALU menampilkan nilai akhir — jadi di HP lambat yang
+ * JS-nya belum jalan, pengunjung tidak melihat "0+". Hitungan hanya dijalankan
+ * kalau angkanya masih di bawah layar saat hydrate (belum pernah dilihat).
+ */
 export function Counter({
   value,
   suffix = "",
@@ -13,25 +18,39 @@ export function Counter({
   duration?: number;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-  const [display, setDisplay] = useState(0);
+  const [display, setDisplay] = useState(value);
 
   useEffect(() => {
-    if (!inView) return;
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (el.getBoundingClientRect().top < window.innerHeight) return;
+
+    setDisplay(0);
     let frame = 0;
-    const start = performance.now();
-    const tick = (now: number) => {
-      const p = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setDisplay(Math.round(value * eased));
-      if (p < 1) frame = requestAnimationFrame(tick);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        observer.disconnect();
+        const start = performance.now();
+        const tick = (now: number) => {
+          const p = Math.min((now - start) / duration, 1);
+          setDisplay(Math.round(value * (1 - Math.pow(1 - p, 3))));
+          if (p < 1) frame = requestAnimationFrame(tick);
+        };
+        frame = requestAnimationFrame(tick);
+      },
+      { rootMargin: "0px 0px -60px 0px" },
+    );
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
     };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [inView, value, duration]);
+  }, [value, duration]);
 
   return (
-    <span ref={ref}>
+    <span ref={ref} className="tabular-nums">
       {prefix}
       {display.toLocaleString("id-ID")}
       {suffix}

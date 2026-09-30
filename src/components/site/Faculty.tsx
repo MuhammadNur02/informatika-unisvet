@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useCallback, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { motion, AnimatePresence } from "motion/react";
-import { Eye, X } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { ArrowRight, Eye } from "lucide-react";
 import { Reveal } from "./Reveal";
-import Lanyard from "./Lanyard";
 import { fetchPageOverride, staticPage } from "@/lib/cms";
+import { isSmallOrTouchScreen, prefersLightweight } from "@/lib/device";
 import type { Block } from "@/content/types";
 import kayuBg from "@/assets/Kayu-bg.jpg";
 
@@ -12,6 +12,12 @@ type DosenItem = Extract<Block, { type: "people" }>["items"][number];
 
 const DOSEN_PATH = "/profil/dosen-tendik";
 const FASILITAS_PATH = "/profil/fasilitas";
+
+// Dua versi kartu ID, dua-duanya lazy — beranda tidak lagi mengunduh
+// three.js + Rapier (physics WASM) + drei hanya untuk ditampilkan saat klik.
+const loadLanyard3D = () => import("./DosenLanyard3D");
+const DosenLanyard3D = lazy(loadLanyard3D);
+const LanyardCard2D = lazy(() => import("./LanyardCard").then((m) => ({ default: m.LanyardCard })));
 
 /** Sumber data sama dengan halaman CMS terkait, supaya edit dosen/fasilitas di dashboard otomatis tampil di beranda juga. */
 function usePageBlocks(path: string) {
@@ -50,233 +56,72 @@ function DarkSectionHeading({
       <span className="inline-flex items-center gap-2 rounded-full border border-hero-foreground/20 bg-hero-foreground/10 px-3 py-1 font-mono text-xs font-semibold uppercase tracking-widest text-accent">
         {eyebrow}
       </span>
-      <h2 className="mt-4 text-3xl font-bold tracking-tight text-hero-foreground sm:text-4xl">
+      <h2 className="mt-4 text-3xl font-bold tracking-tight text-balance text-hero-foreground sm:text-4xl">
         {title}
       </h2>
-      <p className="mt-3 text-base leading-relaxed text-hero-foreground/70">{description}</p>
+      <p className="mt-3 text-base leading-relaxed text-pretty text-hero-foreground/70">{description}</p>
     </Reveal>
   );
 }
 
-function wrapCanvasText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
-  const words = text.split(" ");
-  const lines: string[] = [];
-  let current = "";
-  for (const word of words) {
-    const attempt = current ? `${current} ${word}` : word;
-    if (current && ctx.measureText(attempt).width > maxWidth) {
-      lines.push(current);
-      current = word;
-    } else {
-      current = attempt;
-    }
-  }
-  if (current) lines.push(current);
-  return lines;
-}
+// Lebar kartu mengikuti jumlah kolom dengan gap 1.5rem (gap-6): di HP jadi
+// carousel geser (78% layar per kartu), di layar besar grid yang baris
+// terakhirnya selalu di tengah (flex-wrap + justify-center) — bukan satu
+// kartu yatim di kiri seperti grid 3 kolom sebelumnya.
+const CARD_WIDTH =
+  "w-[78%] sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] xl:w-[calc(25%-18px)]";
+const CAROUSEL =
+  "snap-carousel -mx-4 px-4 pb-2 sm:mx-0 sm:flex-wrap sm:justify-center sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0";
 
-/**
- * Komponen Lanyard 3D (React Bits) cuma menerima gambar statis untuk sisi
- * depan & belakang kartu — bukan HTML/teks langsung. Sisi belakang aslinya
- * berisi kutipan penyemangat & bidang keahlian, jadi digambar dulu ke
- * <canvas> lalu diekspor sebagai data URL supaya bisa dipakai sebagai
- * backImage.
- */
-function generateDosenBackImage(d: DosenItem): string {
-  const W = 800;
-  const H = 1120;
-  const canvas = document.createElement("canvas");
-  canvas.width = W;
-  canvas.height = H;
-  const ctx = canvas.getContext("2d")!;
-
-  const gradient = ctx.createLinearGradient(0, 0, 0, H);
-  gradient.addColorStop(0, "#0d0906");
-  gradient.addColorStop(1, "#4a0e17");
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, W, H);
-
-  ctx.textAlign = "center";
-  let cursorY = H / 2 - 60;
-
-  if (d.message) {
-    ctx.font = "italic 36px Georgia, serif";
-    ctx.fillStyle = "#f5f1ea";
-    const lines = wrapCanvasText(ctx, `“${d.message}”`, W - 180);
-    cursorY -= ((lines.length - 1) * 48) / 2;
-    for (const line of lines) {
-      ctx.fillText(line, W / 2, cursorY);
-      cursorY += 48;
-    }
-    cursorY += 70;
-  }
-
-  if (d.interest) {
-    ctx.font = "600 28px system-ui, sans-serif";
-    ctx.fillStyle = "#e8b84b";
-    ctx.fillText(d.interest, W / 2, cursorY);
-  }
-
-  return canvas.toDataURL("image/png");
-}
-
-/**
- * Kartu dosen di grid — hover menampilkan label "Klik untuk melihat". Klik
- * membuka kartu ID 3D (komponen Lanyard dari React Bits): kartu fisik
- * bertali yang jatuh & disimulasikan lewat physics engine (Rapier), bisa
- * diseret bebas dengan mouse/jari mengikuti fisika tali sungguhan. Foto
- * dosen dipasang sebagai sisi depan; kutipan & bidang keahlian digambar ke
- * kanvas lalu dipasang sebagai sisi belakang (lihat generateDosenBackImage).
- */
-function DosenCard({ d, delay }: { d: DosenItem; delay: number }) {
-  const [expanded, setExpanded] = useState(false);
-  // Canvas 3D (model GLTF + physics engine Rapier) baru dipasang SATU TICK
-  // setelah modal tampil, bukan bersamaan. Tanpa ini, animasi buka modal +
-  // loading model + inisialisasi physics semuanya berebut main thread di
-  // frame yang sama — pada mesin yang lebih lambat ini bisa memblokir main
-  // thread sampai ~1-2 detik penuh, dan Chrome meresponsnya dengan
-  // mematikan konteks WebGL (dianggap tab tidak responsif), jadi kartunya
-  // tidak pernah tampil ("Context Lost" di console). Menunda pemasangan
-  // Canvas menyebar beban itu ke frame terpisah.
-  const [readyFor3D, setReadyFor3D] = useState(false);
-
-  const backImage = useMemo(() => (expanded ? generateDosenBackImage(d) : null), [expanded, d]);
-
-  useEffect(() => {
-    if (!expanded) {
-      setReadyFor3D(false);
-      return;
-    }
-    const id = requestAnimationFrame(() => requestAnimationFrame(() => setReadyFor3D(true)));
-    return () => cancelAnimationFrame(id);
-  }, [expanded]);
-
-  useEffect(() => {
-    if (!expanded) return;
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setExpanded(false);
-    }
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [expanded]);
-
+function DosenCard({ d, onOpen }: { d: DosenItem; onOpen: () => void }) {
   return (
-    <>
-      <Reveal delay={delay}>
-        <motion.article
-          onClick={() => setExpanded(true)}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              setExpanded(true);
-            }
-          }}
-          className="dosen-card-shine group flex h-full cursor-pointer flex-col overflow-hidden rounded-3xl border border-white/8 bg-dosen-card text-center shadow-[0_10px_28px_-16px_oklch(0.04_0.01_20/0.65)] transition-all duration-300 hover:-translate-y-1.5 hover:border-accent/30 hover:shadow-[0_30px_54px_-18px_oklch(0.03_0.01_20/0.8),0_10px_22px_-8px_oklch(0_0_0/0.55)]"
-        >
-          {/* Padding ±14px dari tepi kartu & sudut lebih kecil dari sudut
-              kartu (rounded-2xl di dalam rounded-3xl) — foto terlihat
-              "dipigura", bukan menempel penuh ke tepi seperti sebelumnya. */}
-          <div className="p-3.5">
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-black/30">
-              {d.photo ? (
-                <img
-                  src={d.photo}
-                  alt={d.name}
-                  className="h-full w-full object-cover"
-                  style={{ objectPosition: `${d.photoPosX ?? 50}% ${d.photoPosY ?? 25}%` }}
-                />
-              ) : (
-                <span className="flex h-full w-full items-center justify-center text-3xl font-bold text-hero-foreground">
-                  {d.name.charAt(0)}
-                </span>
-              )}
-              <div
-                className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,oklch(0.08_0_0/0.92)_0%,oklch(0.08_0_0/0.5)_30%,oklch(0.08_0_0/0)_62%)]"
-                aria-hidden
-              />
-              <div
-                className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 backdrop-blur-0 transition-all duration-300 group-hover:bg-black/45 group-hover:opacity-100 group-hover:backdrop-blur-[1px]"
-                aria-hidden
-              >
-                <span className="inline-flex translate-y-1.5 items-center gap-1.5 rounded-full bg-black/70 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-hero-foreground opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                  <Eye className="size-3.5" />
-                  Klik untuk melihat
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Panel kaca buram — backdrop-blur cuma mengaburkan gradien maroon
-              DI BALIK panel ini (transparan), foto & teks di dalamnya tetap
-              tajam (backdrop-filter tidak pernah mengaburkan isi elemennya
-              sendiri, cuma apa yang ada di belakangnya). */}
-          <div className="relative flex w-full flex-1 flex-col items-center border-t border-white/8 bg-white/[0.035] px-6 pb-6 pt-4 text-center backdrop-blur-md">
-            <h3 className="font-display min-h-[3.25rem] text-xl font-semibold leading-snug text-hero-foreground">
-              {d.name}
-            </h3>
-            <span
-              className="mt-3 h-px w-12 bg-gradient-to-r from-transparent via-hero-foreground/35 to-transparent"
-              aria-hidden
-            />
-            <span className="mt-3 min-h-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">
-              {d.role}
-            </span>
-            <p className="mt-2 max-w-[85%] text-xs leading-relaxed text-hero-foreground/60">
-              {d.interest}
-            </p>
-          </div>
-        </motion.article>
-      </Reveal>
-
-      {/* Sengaja DI LUAR <Reveal> — Reveal membungkus konten dengan
-          motion.div ber-transform (translateY) untuk animasi scroll-in-view.
-          "position: fixed" pada modal ini butuh benar-benar lepas ke
-          viewport; kalau nempel di dalam ancestor yang punya transform
-          (termasuk transform identitas translateY(0)), spesifikasi CSS
-          menjadikan ancestor itu containing block untuk fixed descendant-nya
-          — modal jadi ketiban terkurung ke kotak kartu asal, bukan
-          menutupi seluruh layar (sudah kejadian & dikonfirmasi lewat
-          pengukuran getBoundingClientRect sebelum dipindah ke sini). */}
-      <AnimatePresence>
-        {expanded ? (
-          <motion.div
-            className="fixed inset-0 z-[101] bg-black/80 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            onClick={() => setExpanded(false)}
-          >
-            <div className="h-full w-full" onClick={(e) => e.stopPropagation()}>
-              {readyFor3D ? (
-                <Lanyard
-                  position={[0, 0, 20]}
-                  gravity={[0, -40, 0]}
-                  frontImage={d.photo}
-                  backImage={backImage}
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center">
-                  <div className="size-10 animate-spin rounded-full border-2 border-hero-foreground/20 border-t-hero-foreground/70" />
-                </div>
-              )}
-            </div>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setExpanded(false);
-              }}
-              aria-label="Tutup"
-              className="absolute right-6 top-6 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-hero-foreground/10 text-hero-foreground transition-colors hover:bg-hero-foreground/20"
-            >
-              <X className="size-4" />
-            </button>
-          </motion.div>
+    <button
+      type="button"
+      onClick={onOpen}
+      // Hangatkan chunk 3D saat mouse mendekat, supaya klik terasa instan.
+      onPointerEnter={(e) => e.pointerType === "mouse" && void loadLanyard3D()}
+      aria-label={`Lihat kartu ${d.name}`}
+      className="dosen-card-shine group relative block aspect-[4/5] w-full overflow-hidden rounded-3xl border border-white/10 bg-dosen-card text-left shadow-[0_10px_28px_-16px_oklch(0.04_0.01_20/0.65)] transition-[translate,border-color,box-shadow] duration-300 hover:-translate-y-1.5 hover:border-accent/40 hover:shadow-[0_30px_54px_-18px_oklch(0.03_0.01_20/0.8)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+    >
+      {d.photo ? (
+        <img
+          src={d.photo}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          width={720}
+          height={900}
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+          style={{ objectPosition: `${d.photoPosX ?? 50}% ${d.photoPosY ?? 25}%` }}
+        />
+      ) : (
+        <span className="absolute inset-0 flex items-center justify-center text-5xl font-bold text-hero-foreground/80">
+          {d.name.charAt(0)}
+        </span>
+      )}
+      <div
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,oklch(0.08_0.02_22/0.96)_0%,oklch(0.08_0.02_22/0.7)_28%,oklch(0.08_0.02_22/0)_58%)]"
+        aria-hidden
+      />
+      <span className="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-black/60 px-3 py-1.5 text-xs font-semibold text-hero-foreground opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+        <Eye className="size-3.5" /> Lihat kartu
+      </span>
+      <div className="absolute inset-x-0 bottom-0 p-5">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent">{d.role}</span>
+        <h3 className="mt-1.5 text-lg font-bold leading-snug text-hero-foreground">{d.name}</h3>
+        {d.interest ? (
+          <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-hero-foreground/65">{d.interest}</p>
         ) : null}
-      </AnimatePresence>
-    </>
+      </div>
+    </button>
+  );
+}
+
+function ModalFallback() {
+  return (
+    <div className="fixed inset-0 z-[101] flex items-center justify-center bg-black/80">
+      <div className="size-10 animate-spin rounded-full border-2 border-hero-foreground/20 border-t-hero-foreground/70" />
+    </div>
   );
 }
 
@@ -284,63 +129,95 @@ function DosenCard({ d, delay }: { d: DosenItem; delay: number }) {
 export function Faculty() {
   const dosen = usePeople(DOSEN_PATH);
   const fasilitas = useGallery(FASILITAS_PATH);
+  const [opened, setOpened] = useState<{ dosen: DosenItem; mode: "3d" | "2d" } | null>(null);
+  const close = useCallback(() => setOpened(null), []);
+
+  function open(d: DosenItem) {
+    // Kartu 3D + physics hanya untuk desktop yang mampu; HP & perangkat
+    // low-end memakai kartu lanyard 2D (tetap bisa diseret & dibalik).
+    const mode = prefersLightweight() || isSmallOrTouchScreen() ? "2d" : "3d";
+    setOpened({ dosen: d, mode });
+  }
 
   return (
     <section id="dosen" className="relative overflow-hidden bg-hero-gradient py-20 sm:py-28">
-      {/* Latar tekstur kayu — tampil apa adanya, tidak diblur atau ditutup
-          gradien tebal, supaya teksturnya jelas terlihat. */}
       <img
         src={kayuBg}
         alt=""
         aria-hidden
         loading="lazy"
+        decoding="async"
         className="absolute inset-0 h-full w-full object-cover"
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="relative">
-          <DarkSectionHeading
-            eyebrow="Profil Pengajar"
-            title="Dosen & Tenaga Pendidik"
-            description="Didampingi dosen berkualifikasi magister dan doktor dengan fokus riset pendidikan dan informatika."
-          />
+        <DarkSectionHeading
+          eyebrow="Profil Pengajar"
+          title="Dosen & Tenaga Pendidik"
+          description="Didampingi dosen berkualifikasi magister dan doktor dengan fokus riset pendidikan dan informatika."
+        />
 
-          <div className="relative mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {dosen.map((d, i) => (
-              <DosenCard key={d.name} d={d} delay={(i % 3) * 0.08} />
-            ))}
-          </div>
+        <ul className={`mt-12 sm:mt-14 ${CAROUSEL}`}>
+          {dosen.map((d, i) => (
+            <li key={d.name} className={CARD_WIDTH}>
+              <Reveal delay={(i % 4) * 0.06} className="h-full">
+                <DosenCard d={d} onOpen={() => open(d)} />
+              </Reveal>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-8 flex justify-center">
+          <Link
+            to={DOSEN_PATH}
+            className="inline-flex items-center gap-2 rounded-full border border-hero-foreground/20 bg-hero-foreground/10 px-5 py-2.5 text-sm font-semibold text-hero-foreground transition-colors hover:border-accent/60 hover:text-accent"
+          >
+            Profil lengkap dosen & tendik <ArrowRight className="size-4" />
+          </Link>
         </div>
 
-        <div id="fasilitas" className="relative mt-20 overflow-hidden">
+        <div id="fasilitas" className="mt-20">
           <DarkSectionHeading
             eyebrow="Fasilitas"
             title="Ruang Belajar & Laboratorium"
             description="Fasilitas penunjang praktik yang mendukung pembelajaran berbasis proyek."
           />
-          <div className="relative mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className={`mt-12 ${CAROUSEL}`}>
             {fasilitas.map((f, i) => (
-              <Reveal key={f.name} delay={i * 0.08}>
-                <article className="card-glass-dark group relative h-72 overflow-hidden rounded-3xl">
-                  <img
-                    src={f.image}
-                    alt={f.name}
-                    loading="lazy"
-                    width={900}
-                    height={700}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-[linear-gradient(to_top,oklch(0.1_0.04_25/0.95),transparent_60%)]" />
-                  <div className="absolute inset-x-0 bottom-0 p-6">
-                    <h3 className="text-lg font-bold text-hero-foreground">{f.name}</h3>
-                    <p className="mt-1 text-sm text-hero-foreground/75">{f.desc}</p>
-                  </div>
-                </article>
-              </Reveal>
+              <li key={f.name} className={CARD_WIDTH}>
+                <Reveal delay={(i % 4) * 0.06} className="h-full">
+                  <article className="group relative h-72 overflow-hidden rounded-3xl border border-white/10">
+                    <img
+                      src={f.image}
+                      alt={f.name}
+                      loading="lazy"
+                      decoding="async"
+                      width={900}
+                      height={700}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-[linear-gradient(to_top,oklch(0.1_0.04_25/0.95),transparent_60%)]" />
+                    <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
+                      <h3 className="text-lg font-bold text-hero-foreground">{f.name}</h3>
+                      <p className="mt-1 line-clamp-2 text-sm text-hero-foreground/75">{f.desc}</p>
+                    </div>
+                  </article>
+                </Reveal>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </div>
+
+      {opened ? (
+        <Suspense fallback={<ModalFallback />}>
+          {opened.mode === "3d" ? (
+            <DosenLanyard3D dosen={opened.dosen} onClose={close} />
+          ) : (
+            <LanyardCard2D dosen={opened.dosen} onClose={close} />
+          )}
+        </Suspense>
+      ) : null}
     </section>
   );
 }

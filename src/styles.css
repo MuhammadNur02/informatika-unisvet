@@ -6,10 +6,9 @@
 
 @theme {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  /* Sebelumnya sama persis dengan --font-sans (tidak dipakai di mana pun) —
-     dipakai di sini untuk nama dosen di Faculty.tsx supaya kesan
-     formal-akademik, beda dari font sans body di seluruh situs. */
-  --font-display: "Fraunces", Georgia, serif;
+  /* Sengaja disamakan dengan --font-sans: font serif (Fraunces) terpisah
+     menambah unduhan font & membuat tipografi situs tidak konsisten. */
+  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   /* Lebar kontainer situs (max-w-7xl) dilebarkan supaya tidak terlalu banyak ruang
      kosong di kanan-kiri pada layar besar/ultra-wide. */
@@ -354,15 +353,25 @@
   }
 }
 
+/* Header saat di-scroll. backdrop-filter dihitung ulang setiap frame selama
+   scroll — di HP dipakai latar hampir solid tanpa blur, blur hanya di desktop. */
 @utility glass-header {
-  background: oklch(1 0 0 / 0.72);
-  backdrop-filter: blur(16px) saturate(180%);
+  background: oklch(1 0 0 / 0.96);
   border-bottom: 1px solid oklch(0.36 0.15 25 / 0.1);
   box-shadow: 0 8px 30px -18px oklch(0.36 0.15 25 / 0.3);
 
   @variant dark {
-    background: oklch(0.129 0.042 264.695 / 0.78);
+    background: oklch(0.129 0.042 264.695 / 0.96);
     border-bottom-color: oklch(1 0 0 / 0.08);
+  }
+
+  @media (min-width: 1024px) and (hover: hover) {
+    background: oklch(1 0 0 / 0.72);
+    backdrop-filter: blur(16px) saturate(180%);
+
+    @variant dark {
+      background: oklch(0.129 0.042 264.695 / 0.78);
+    }
   }
 }
 
@@ -531,12 +540,10 @@
     oklch(0.9 0.13 95) 45%,
     oklch(0.68 0.16 78) 90%
   );
-  background-position: 0% center;
   background-size: 200% auto;
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
-  animation: text-shimmer 3.5s linear infinite;
 }
 
 @utility bg-hero-gradient {
@@ -588,8 +595,10 @@
   background-image: var(--gradient-mesh);
 }
 
+/* Denyut box-shadow = repaint tiap frame; cukup 3x di awal untuk menarik
+   perhatian, tidak berdenyut selamanya (mahal di HP low-end). */
 @utility pulse-glow {
-  animation: pmb-pulse 2.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: pmb-pulse 2.6s cubic-bezier(0.4, 0, 0.6, 1) 3;
 }
 
 @utility fade-in-up {
@@ -897,7 +906,6 @@
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
-  animation: text-shimmer 3.5s linear infinite;
 }
 
 @keyframes text-shimmer {
@@ -909,29 +917,198 @@
   }
 }
 
-@keyframes typewriter-blink {
-  0%,
-  50% {
-    opacity: 1;
-  }
-  50.01%,
-  100% {
+/* ------------------------------------------------------------------ */
+/* Performa & rombak UI (2026-09)                                      */
+/* ------------------------------------------------------------------ */
+
+/*
+ * Reveal saat scroll — konten SELALU terlihat di HTML hasil SSR (tidak
+ * menunggu JavaScript). Setelah hydrate, Reveal.tsx hanya menambahkan
+ * .reveal-pending ke elemen yang MASIH di bawah layar, lalu melepasnya lewat
+ * IntersectionObserver begitu elemen masuk viewport. Di HP lambat yang JS-nya
+ * belum jalan, pengunjung tetap langsung melihat seluruh isi halaman.
+ */
+.reveal {
+  transition:
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s),
+    translate 0.6s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0s);
+}
+.reveal.reveal-pending {
+  opacity: 0;
+  translate: 0 var(--reveal-y, 24px);
+  transition: none;
+}
+
+/* Animasi masuk hero — CSS murni, main sejak paint pertama tanpa menunggu hydrate. */
+@keyframes hero-enter {
+  from {
     opacity: 0;
+    translate: 0 24px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+.hero-enter {
+  animation: hero-enter 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--enter-delay, 0s);
+}
+
+/* Teks berganti (pola RotatingText React Bits) — semua kalimat ditumpuk di
+   satu sel grid, jadi tinggi judul = kalimat terpanjang dan tidak loncat. */
+.rotating-text {
+  display: inline-grid;
+}
+.rotating-text > span {
+  grid-area: 1 / 1;
+  transition:
+    opacity 0.5s ease,
+    filter 0.5s ease,
+    translate 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.rotating-text > span[data-active="false"] {
+  opacity: 0;
+  filter: blur(6px);
+  translate: 0 0.35em;
+}
+
+/* Marquee testimoni (diadaptasi dari 21st.dev "Testimonial Marquee"). */
+@keyframes marquee-left {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+@keyframes marquee-right {
+  from {
+    transform: translate3d(-100%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+.marquee-track {
+  animation: marquee-left var(--marquee-duration, 40s) linear infinite;
+}
+.marquee-track[data-direction="right"] {
+  animation-name: marquee-right;
+}
+.marquee-row:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Kartu spotlight (pola SpotlightCard React Bits) — posisi cahaya ditulis
+   langsung ke CSS variable oleh use-spotlight.ts, tanpa re-render React. */
+.spotlight {
+  position: relative;
+  isolation: isolate;
+}
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(
+    420px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    var(--spot-color, oklch(0.78 0.17 85 / 0.16)),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+/* Pola grid tipis (CSS murni) — pengganti latar WebGL di footer & stats. */
+@utility bg-grid-faint {
+  background-image:
+    linear-gradient(to right, oklch(1 0 0 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(1 0 0 / 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* Footer: maroon pekat → hitam (mode gelap: near-black senada hero). */
+@utility bg-footer {
+  background-image:
+    radial-gradient(90% 60% at 15% 0%, oklch(0.36 0.15 25 / 0.55), transparent 70%),
+    linear-gradient(to bottom, oklch(0.2 0.09 24), oklch(0.1 0.04 22));
+
+  @variant dark {
+    background-image:
+      radial-gradient(90% 60% at 15% 0%, oklch(0.3 0.08 25 / 0.35), transparent 70%),
+      linear-gradient(to bottom, oklch(0.12 0.025 24), oklch(0.06 0.01 22));
   }
 }
 
-.typewriter-cursor {
-  display: inline-block;
-  width: 3px;
-  margin-left: 3px;
-  height: 0.9em;
-  vertical-align: -0.1em;
-  background: currentColor;
-  animation: typewriter-blink 1s step-end infinite;
+/* Wordmark raksasa di dasar footer (pola 21st.dev "Large Name Footer"). */
+@utility footer-wordmark {
+  background-image: linear-gradient(to bottom, oklch(1 0 0 / 0.16), oklch(1 0 0 / 0.02));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Progress bar scroll di header — scroll-driven animation (tanpa JS). */
+@keyframes scroll-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.scroll-progress {
+  transform: scaleX(0);
+}
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    animation: scroll-progress linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+
+/* Carousel geser horizontal di HP (kartu dosen & fasilitas). */
+@utility snap-carousel {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 1rem;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  & > * {
+    scroll-snap-align: start;
+    flex: 0 0 auto;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .typewriter-cursor {
-    animation: none;
+  .reveal,
+  .reveal.reveal-pending {
+    opacity: 1;
+    translate: none;
+    transition: none;
+  }
+  .hero-enter,
+  .marquee-track,
+  .scroll-progress,
+  .pulse-glow {
+    animation: none !important;
+  }
+  .rotating-text > span {
+    transition: none;
+  }
+  /* Marquee diam → baris bisa digeser manual supaya semua kartu tetap terjangkau. */
+  .marquee-row {
+    overflow-x: auto;
   }
 }

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence, useScroll, useSpring } from "motion/react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   Menu,
@@ -24,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { NAV } from "@/lib/site-nav";
 import { SiteSearch } from "@/components/site/SiteSearch";
+import { ThemeToggle } from "@/components/site/ThemeToggle";
 import logo from "@/assets/logo-unisvet.png";
 
 const PORTALS = [
@@ -50,17 +50,7 @@ export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [openGroup, setOpenGroup] = useState<string | null>(null);
-  const [hovered, setHovered] = useState<string | null>(null);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const activeLabel = NAV.find(
-    (item) => pathname === item.to || (item.children?.some((c) => pathname === c.to) ?? false),
-  )?.label;
-  const { scrollYProgress } = useScroll();
-  const scrollProgress = useSpring(scrollYProgress, {
-    stiffness: 200,
-    damping: 30,
-    restDelta: 0.001,
-  });
 
   useEffect(() => {
     setOpen(false);
@@ -68,34 +58,44 @@ export function SiteHeader() {
   }, [pathname]);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    // Dibatasi satu kali per frame — event scroll bisa menembak puluhan kali per frame.
+    let frame = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => setScrolled(window.scrollY > 24));
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   return (
     <>
-      <motion.div
-        className="fixed inset-x-0 top-0 z-60 h-0.75 origin-left"
-        style={{ scaleX: scrollProgress, backgroundImage: "var(--gradient-gold)" }}
+      {/* Progress bar scroll: scroll-driven animation CSS (.scroll-progress),
+          tanpa listener JS — di browser tanpa dukungan, bar tidak tampil. */}
+      <div
+        className="scroll-progress fixed inset-x-0 top-0 z-60 h-0.75 origin-left"
+        style={{ backgroundImage: "var(--gradient-gold)" }}
         aria-hidden
       />
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-50 transition-all duration-300",
+          "fixed inset-x-0 top-0 z-50 transition-[padding,background-color,box-shadow] duration-300",
           scrolled ? "glass-header py-2" : "bg-transparent py-4",
         )}
       >
-        <AnimatePresence initial={false}>
-          {!scrolled ? (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.25 }}
-              className="overflow-hidden"
-            >
+        {/* Baris portal menyusut saat scroll — transisi grid-template-rows CSS. */}
+        <div
+          className={cn(
+            "grid transition-[grid-template-rows,opacity] duration-300",
+            scrolled ? "grid-rows-[0fr] opacity-0" : "grid-rows-[1fr] opacity-100",
+          )}
+          inert={scrolled}
+        >
+            <div className="overflow-hidden">
               <div className="mx-auto mb-3 hidden max-w-7xl items-center justify-end gap-2 px-4 sm:px-6 md:flex lg:px-8">
                 <a
                   href={PUSAT_DATA.href}
@@ -118,25 +118,24 @@ export function SiteHeader() {
                   </a>
                 ))}
               </div>
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
+            </div>
+        </div>
 
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          <Link to="/" className="flex items-center gap-3">
-            <span className="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl bg-hero-foreground shadow-[var(--shadow-card)]">
+          <Link to="/" className="flex min-w-0 items-center gap-2.5 sm:gap-3">
+            <span className="inline-flex size-12 shrink-0 sm:size-14 items-center justify-center rounded-2xl bg-hero-foreground shadow-[var(--shadow-card)]">
               <img
                 src={logo}
                 alt="Logo Universitas Ivet Semarang"
                 width={56}
                 height={56}
-                className="h-11 w-11 object-contain"
+                className="h-9 w-9 object-contain sm:h-11 sm:w-11"
               />
             </span>
-            <span className="leading-tight">
+            <span className="min-w-0 leading-tight">
               <span
                 className={cn(
-                  "block text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors",
+                  "block truncate text-[10px] font-semibold uppercase tracking-[0.12em] transition-colors sm:text-[11px] sm:tracking-[0.18em]",
                   scrolled ? "text-muted-foreground" : "text-hero-foreground/70",
                 )}
               >
@@ -144,7 +143,7 @@ export function SiteHeader() {
               </span>
               <span
                 className={cn(
-                  "block text-base font-bold tracking-tight transition-colors",
+                  "block truncate text-[15px] font-bold tracking-tight transition-colors sm:text-base",
                   scrolled ? "text-primary" : "text-hero-foreground",
                 )}
               >
@@ -152,7 +151,7 @@ export function SiteHeader() {
               </span>
               <span
                 className={cn(
-                  "block text-[10px] font-medium tracking-wide transition-colors",
+                  "hidden text-[10px] font-medium tracking-wide transition-colors sm:block",
                   scrolled ? "text-muted-foreground" : "text-hero-foreground/60",
                 )}
               >
@@ -161,24 +160,12 @@ export function SiteHeader() {
             </span>
           </Link>
 
-          <nav
-            className="hidden items-center gap-0.5 xl:flex"
-            onMouseLeave={() => setHovered(null)}
-          >
+          <nav className="hidden items-center gap-0.5 xl:flex">
             {NAV.map((item) => {
               const active =
                 pathname === item.to || (item.children?.some((c) => pathname === c.to) ?? false);
-              // Garis kuning ikut kursor saat hover; begitu pointer keluar dari
-              // nav, hovered jadi null dan garis kembali ke halaman aktif —
-              // layoutId yang sama membuat framer-motion menganimasikan
-              // perpindahannya secara otomatis.
-              const showIndicator = (hovered ?? activeLabel) === item.label;
               return (
-                <div
-                  key={item.label}
-                  className="group relative"
-                  onMouseEnter={() => setHovered(item.label)}
-                >
+                <div key={item.label} className="group relative">
                   <Link
                     to={item.to}
                     className={cn(
@@ -186,36 +173,26 @@ export function SiteHeader() {
                       scrolled
                         ? active
                           ? "text-primary"
-                          : "text-foreground/75 hover:text-primary"
+                          : "text-foreground/75 hover:bg-secondary hover:text-primary"
                         : active
                           ? "text-hero-foreground"
-                          : "text-hero-foreground/85 hover:text-hero-foreground",
+                          : "text-hero-foreground/85 hover:bg-hero-foreground/10 hover:text-hero-foreground",
                     )}
                   >
-                    {hovered === item.label ? (
-                      <motion.span
-                        layoutId="nav-hover-pill"
-                        className={cn(
-                          "absolute inset-0 -z-10 rounded-full",
-                          scrolled ? "bg-secondary" : "bg-hero-foreground/10",
-                        )}
-                        transition={{ type: "spring", stiffness: 420, damping: 34 }}
-                      />
-                    ) : null}
                     {item.label}
                     {item.children ? (
                       <ChevronDown className="size-3.5 transition-transform group-hover:rotate-180" />
                     ) : null}
-                    {showIndicator ? (
-                      <motion.span
-                        layoutId="nav-active-indicator"
-                        className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-accent"
-                        transition={{ type: "spring", stiffness: 380, damping: 32 }}
-                      />
-                    ) : null}
+                    <span
+                      className={cn(
+                        "absolute inset-x-3 -bottom-0.5 h-0.5 origin-center rounded-full bg-accent transition-transform duration-300",
+                        active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-60",
+                      )}
+                      aria-hidden
+                    />
                   </Link>
                   {item.children ? (
-                    <div className="invisible absolute left-0 top-full w-64 translate-y-2 pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                    <div className="invisible absolute left-0 top-full w-64 translate-y-2 pt-2 opacity-0 transition-[opacity,translate,visibility] duration-200 group-hover:visible group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:translate-y-0 group-hover:opacity-100">
                       <div className="overflow-hidden rounded-2xl border border-border bg-card p-2 shadow-[var(--shadow-lift)]">
                         {item.children.map((child) => (
                           <Link
@@ -235,12 +212,23 @@ export function SiteHeader() {
             })}
           </nav>
 
-          <div className="flex items-center gap-2">
-            <SiteSearch
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+            {/* Di HP pencarian ada di dalam menu, supaya nama prodi muat satu baris. */}
+            <div className="hidden sm:block">
+              <SiteSearch
+                className={cn(
+                  scrolled
+                    ? "text-primary hover:bg-secondary"
+                    : "text-hero-foreground hover:bg-hero-foreground/10",
+                )}
+              />
+            </div>
+            <ThemeToggle
+              variant="inline"
               className={cn(
                 scrolled
-                  ? "text-primary hover:bg-secondary"
-                  : "text-hero-foreground hover:bg-hero-foreground/10",
+                  ? "border-border text-primary hover:bg-secondary"
+                  : "border-hero-foreground/25 text-hero-foreground hover:bg-hero-foreground/10",
               )}
             />
             <Button asChild variant="pmb" size="pill" className="pulse-glow hidden sm:inline-flex">
@@ -250,7 +238,8 @@ export function SiteHeader() {
             </Button>
             <button
               type="button"
-              aria-label="Buka menu"
+              aria-label={open ? "Tutup menu" : "Buka menu"}
+              aria-expanded={open}
               onClick={() => setOpen((v) => !v)}
               className={cn(
                 "inline-flex size-10 items-center justify-center rounded-full border transition-colors xl:hidden",
@@ -264,15 +253,14 @@ export function SiteHeader() {
           </div>
         </div>
 
-        <AnimatePresence>
-          {open ? (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-              className="overflow-hidden xl:hidden"
-            >
+        <div
+          className={cn(
+            "grid transition-[grid-template-rows,opacity] duration-300 ease-out xl:hidden",
+            open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
+          )}
+          inert={!open}
+        >
+            <div className="overflow-hidden">
               <div className="mx-4 mt-3 max-h-[72vh] space-y-2 overflow-y-auto rounded-3xl border border-border bg-card p-3 shadow-[var(--shadow-lift)]">
                 {NAV.map((item) => {
                   const Icon = NAV_ICONS[item.label] ?? Info;
@@ -333,15 +321,14 @@ export function SiteHeader() {
                         />
                       </button>
 
-                      <AnimatePresence initial={false}>
-                        {expanded ? (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                            className="overflow-hidden"
-                          >
+                      <div
+                        className={cn(
+                          "grid transition-[grid-template-rows,opacity] duration-300",
+                          expanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
+                        )}
+                        inert={!expanded}
+                      >
+                          <div className="overflow-hidden">
                             <div className="relative mx-3 mb-3 ml-[27px] space-y-0.5 pl-4 before:absolute before:bottom-2 before:left-0 before:top-2 before:w-px before:bg-gradient-to-b before:from-accent/50 before:via-border before:to-transparent before:content-['']">
                               {item.children.map((child) => {
                                 const active = pathname === child.to;
@@ -369,9 +356,8 @@ export function SiteHeader() {
                                 );
                               })}
                             </div>
-                          </motion.div>
-                        ) : null}
-                      </AnimatePresence>
+                          </div>
+                      </div>
                     </div>
                   );
                 })}
@@ -403,9 +389,8 @@ export function SiteHeader() {
                   </Link>
                 </Button>
               </div>
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
+            </div>
+        </div>
       </header>
     </>
   );

@@ -4,7 +4,6 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
-  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -12,7 +11,6 @@ import { type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
-import { ThemeToggle } from "@/components/site/ThemeToggle";
 
 function NotFoundComponent() {
   return (
@@ -91,7 +89,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap",
+        // Font variable (satu file per subset untuk seluruh rentang ketebalan);
+        // Fraunces dihapus — font serif terpisah hanya dipakai di satu tempat.
+        href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400..800&family=JetBrains+Mono:wght@500..700&display=swap",
       },
       {
         rel: "stylesheet",
@@ -117,7 +117,7 @@ const THEME_INIT_SCRIPT = `
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="id">
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <HeadContent />
@@ -133,18 +133,11 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  // Tombol tema mengambang dirender sekali di sini (di luar SiteHeader) supaya
-  // selalu ada terlepas dari halaman/scroll — TAPI disembunyikan di admin,
-  // yang selalu gelap sendiri (lihat admin-theme di styles.css) dan tidak
-  // punya konsep toggle terang/gelap sama sekali.
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isAdmin = pathname.startsWith("/admin");
 
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
-      {isAdmin ? null : <ThemeToggle />}
     </QueryClientProvider>
   );
 }

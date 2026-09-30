@@ -134,8 +134,10 @@ export default function Silk({
     const container = containerRef.current;
     if (!container) return;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    // Shader latar yang lembut tidak butuh antialias maupun DPR 2 — keduanya
+    // melipatgandakan kerja GPU per frame tanpa beda yang terlihat.
+    const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: "low-power" });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setClearColor(0x000000, 0);
     container.appendChild(renderer.domElement);
@@ -181,22 +183,38 @@ export default function Silk({
 
     let rafId = 0;
     let last = performance.now();
+    let inView = true;
     const tick = () => {
       const now = performance.now();
-      const delta = (now - last) / 1000;
+      // Delta dibatasi supaya animasi tidak "melompat" setelah jeda panjang.
+      const delta = Math.min((now - last) / 1000, 0.1);
       last = now;
       uniforms.uTime.value += 0.1 * delta;
       renderer.render(scene, camera);
       rafId = requestAnimationFrame(tick);
     };
-    if (reduceMotion) {
-      renderer.render(scene, camera);
-    } else {
-      rafId = requestAnimationFrame(tick);
-    }
+    // Loop hanya berjalan saat kanvas terlihat & tab aktif — sebelumnya
+    // terus merender tiap frame walau sudah di-scroll jauh.
+    const sync = () => {
+      cancelAnimationFrame(rafId);
+      if (!reduceMotion && inView && document.visibilityState === "visible") {
+        last = performance.now();
+        rafId = requestAnimationFrame(tick);
+      }
+    };
+    const io = new IntersectionObserver(([entry]) => {
+      inView = !!entry?.isIntersecting;
+      sync();
+    });
+    io.observe(container);
+    document.addEventListener("visibilitychange", sync);
+    renderer.render(scene, camera);
+    sync();
 
     return () => {
       cancelAnimationFrame(rafId);
+      io.disconnect();
+      document.removeEventListener("visibilitychange", sync);
       resizeObserver.disconnect();
       material.dispose();
       quad.geometry.dispose();

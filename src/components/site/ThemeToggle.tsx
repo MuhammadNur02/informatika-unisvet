@@ -12,15 +12,17 @@ function applyTheme(dark: boolean) {
 }
 
 /**
- * Tombol mengambang (fixed terhadap viewport, bukan bagian dari header/nav)
- * supaya selalu gampang dijangkau di layar mana pun — mobile maupun desktop —
- * tanpa harus buka menu hamburger dulu atau cuma muncul di breakpoint
- * tertentu seperti sebelumnya. Warnanya sengaja solid/opaque (bg-card,
- * bukan transparan menyatu ke header) karena sekarang bisa melayang di atas
- * section apa saja tergantung posisi scroll — perlu tetap kebaca sendiri
- * terlepas dari apa yang ada di belakangnya.
+ * Tombol terang/gelap. Varian "inline" dipasang di SiteHeader (header-nya
+ * fixed, jadi tetap selalu terjangkau). Varian "floating" dulu melayang di
+ * pojok kanan bawah, tapi di HP menutupi foto hero & konten lain.
  */
-export function ThemeToggle({ className }: { className?: string }) {
+export function ThemeToggle({
+  className,
+  variant = "floating",
+}: {
+  className?: string;
+  variant?: "floating" | "inline";
+}) {
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
@@ -31,17 +33,20 @@ export function ThemeToggle({ className }: { className?: string }) {
     <button
       type="button"
       aria-label={dark ? "Aktifkan mode terang" : "Aktifkan mode gelap"}
+      aria-pressed={dark}
       onClick={() => {
         const next = !dark;
         setDark(next);
         applyTheme(next);
       }}
       className={cn(
-        "fixed bottom-5 right-5 z-40 inline-flex size-12 items-center justify-center rounded-full border border-border bg-card text-primary shadow-[var(--shadow-lift)] transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-[var(--shadow-glow)] sm:bottom-6 sm:right-6",
+        variant === "inline"
+          ? "inline-flex size-10 shrink-0 items-center justify-center rounded-full border transition-colors"
+          : "fixed bottom-5 right-5 z-40 inline-flex size-12 items-center justify-center rounded-full border border-border bg-card text-primary shadow-[var(--shadow-lift)] transition-[translate,border-color,box-shadow] duration-300 hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-[var(--shadow-glow)] sm:bottom-6 sm:right-6",
         className,
       )}
     >
-      {dark ? <Sun className="size-5" /> : <Moon className="size-5" />}
+      {dark ? <Sun className="size-[18px]" /> : <Moon className="size-[18px]" />}
     </button>
   );
 }
