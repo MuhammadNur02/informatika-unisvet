@@ -56,11 +56,11 @@ function HeroImage({ src, alt, isDefault }: { src: string; alt: string; isDefaul
 
 const DEFAULT_HERO_IMAGE = "/banner-kampus.jpg";
 
-// Data lama dari sebelum migrasi keluar dari Lovable masih bisa menyimpan
-// path proxy aset platform (/__l5e/assets-v1/...) yang tidak pernah resolve
-// di luar editor Lovable — jangan pernah tampilkan path itu, pakai foto
-// default. URL asli yang diunggah lewat dashboard admin tidak pernah
-// berbentuk seperti ini, jadi pengecekan ini aman.
+// Data lama dari sebelum migrasi ke hosting sendiri masih bisa menyimpan
+// path proxy aset platform lama (/__l5e/assets-v1/...) yang tidak pernah
+// resolve di luar editor platform itu — jangan pernah tampilkan path itu,
+// pakai foto default. URL asli yang diunggah lewat dashboard admin tidak
+// pernah berbentuk seperti ini, jadi pengecekan ini aman.
 function resolveHeroImage(url: string | undefined) {
   return url && !url.startsWith("/__l5e/") ? url : DEFAULT_HERO_IMAGE;
 }
